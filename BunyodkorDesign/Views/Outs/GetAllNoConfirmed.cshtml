@@ -1,0 +1,34 @@
+﻿@using Application.Common.Dtos.OutDtos;
+@using Domain.Entities;
+@{
+    Layout = "_UserLayout";
+}
+@model List<Out>
+<h1 class="justify-content-center">Tasdiqlanmagan chiqimlar </h1>
+<table class="table table-success table-striped">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Date</th>
+            <th scope="col">Price</th>
+            <th scope="col">OutType</th>
+            <th scope="col">Reason</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int count = 1;
+            foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row">@count</th>
+                    <td><span>@item.Date.Day</span><spap>.<span>@item.Date.Month</span><span>.</span><span>@item.Date.Year</span></td>
+                    <td>@item.Price</td>
+                    <td>@item.OutType.Name</td>
+                    <td>@item.Reason</td>
+                </tr>
+                count++;
+            }
+        }
+    </tbody>
+</table>

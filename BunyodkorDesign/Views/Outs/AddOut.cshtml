@@ -1,0 +1,104 @@
+﻿ @using Application.Common.Dtos.OutDtos;
+@{
+    Layout = "_UserLayout";
+}
+@model AddOutDto
+@{
+    List<Domain.Entities.OutType>? outTypes = (List<Domain.Entities.OutType>)ViewData["OutTypes"]!;
+}
+<style>
+    form {
+        background-color: #fff;
+        max-width: 670px;
+        margin: 50px auto;
+        padding: 30px 20px;
+        box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .form-control {
+        text-align: left;
+        margin-bottom: 25px;
+    }
+
+        .form-control label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .form-control input,
+        .form-control select,
+        .form-control textarea {
+            border: 1px solid #777;
+            border-radius: 2px;
+            font-family: inherit;
+            padding: 10px;
+            display: block;
+            width: 95%;
+        }
+
+            .form-control input[type="radio"],
+            .form-control input[type="checkbox"] {
+                display: inline-block;
+                width: auto;
+            }
+</style>
+
+<!-- Create Form -->
+<form id="form" asp-action="AddOut" method="post">
+
+    <!-- Details -->
+    <div class="form-control">
+        <label for="Price" id="Price">
+            Summa
+        </label>
+
+        <!-- Input Type Text -->
+        <input type="number" id="Price" name="Price"
+               placeholder="Enter a summa" />
+    </div>
+    <div class="form-control">
+        <label for="OutTypeId" id="OutTypeId">
+            Chiqim turi
+        </label>
+
+        <!-- Dropdown options -->
+        <select name="OutTypeId" id="OutTypeId">
+            @{
+                if (outTypes is null)
+                {
+                    <option value="@null">Boshqa xarajatlar</option>
+                }
+                else
+                {
+                    foreach (var outType in outTypes)
+                    {
+                        <option value="@outType.Id">@outType.Name</option>
+                    }
+                }
+            }
+
+        </select>
+    </div>
+    <div class="form-control">
+        <label for="comment">
+            Chiqim sababi
+        </label>
+
+        <!-- multi-line text input control -->
+        <textarea name="Reason" id="Reason"
+                  placeholder="Enter your reason here"></textarea>
+    </div>
+
+    <!-- Multi-line Text Input Control -->
+    <button type="submit" style="    background-color: #05c46b;
+        border: 1px solid #777;
+        border-radius: 2px;
+        font-family: inherit;
+        font-size: 21px;
+        display: block;
+        width: 40%;
+        margin-top: 50px;
+        margin-bottom: 20px;">
+        Submit
+    </button>
+</form>
