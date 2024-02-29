@@ -29,7 +29,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-grid gap-2">
-                                            <a asp-action="AddOut" asp-controller="Out" class="btn btn-primary"><h4 class="text-center">Chiqimlarni tasdiqlash</h4></a>
+                                            <a asp-action="ConfirmOut" asp-controller="Out" class="btn btn-primary"><h4 class="text-center">Chiqimlarni tasdiqlash</h4></a>
                                         </div>
                                     </div>
                                 </div>
@@ -84,7 +84,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-grid gap-2">
-                                            <a asp-action="AddOut" asp-controller="Out" class="btn btn-primary"><h4 class="text-center">Yangi kirim qo'shish</h4></a>
+                                            <a asp-action="AddIn" asp-controller="In" class="btn btn-primary"><h4 class="text-center">Yangi kirim qo'shish</h4></a>
                                         </div>
                                     </div>
                                 </div>
@@ -95,7 +95,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-grid gap-2">
-                                            <a asp-action="GetAllConfirmed" asp-controller="Out" class="btn btn-success"><h4 class="text-center">Tasdiqlangan kirimlar</h4></a>
+                                            <a asp-action="GetAllConfirmedForAdmin" asp-controller="In" class="btn btn-success"><h4 class="text-center">Tasdiqlangan kirimlar</h4></a>
                                         </div>
                                     </div>
                                 </div>
@@ -106,7 +106,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-grid gap-2">
-                                            <a asp-action="GetAllNoConfirmed" asp-controller="Out" class="btn btn-danger"><h4 class="text-center">Tasdiqlanmagan kirimlar</h4></a>
+                                            <a asp-action="GetAllNoConfirmedForAdmin" asp-controller="In" class="btn btn-danger"><h4 class="text-center">Tasdiqlanmagan kirimlar</h4></a>
                                         </div>
                                     </div>
                                 </div>

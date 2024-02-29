@@ -55,31 +55,47 @@ public class OutController : Controller
 
     }
 
+
+
     [Authorize]
     public IActionResult Choose() => View();
+
+
+
     [Authorize]
     public IActionResult GetAllConfirmed()
     {
         List<Out> outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == true).ToList();
         return View(outs);
     }
+
+
     [Authorize]
     public IActionResult GetAllNoConfirmed()
     {
         List<Out> outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == false).ToList();
         return View(outs);
     }
-    ///Admin Action
+
+
+
+
+
+    ///<<=====        Admin Action        ========>>
     [Authorize]
     public IActionResult ConfirmOut(Guid constructionId)
     {
         return View();
     }
+
+
     [Authorize]
     public IActionResult GetAllConfirmedForAdmin(Guid constructionId)
     {
         return View();
     }
+
+
     public IActionResult GetAllNoConfirmedForAdmin(Guid constructionId)
     {
         return View();
