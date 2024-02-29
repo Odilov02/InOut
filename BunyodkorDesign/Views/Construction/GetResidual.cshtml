@@ -1,0 +1,40 @@
+﻿@using Domain.Entities;
+@{
+    Layout = "_UserLayout";
+}
+@model Construction;
+@{
+    if (Model is not null)
+    {
+        <div class="card my-5 text-center">
+            <div class="card-header">
+                <h4>Oxirgi kirim qilingan vaqti</h4>
+                <h4>@Model.InDate</h4>
+            </div>
+            <div class="card-body">
+                <h2 class="card-title">Umumiy qolgan summa</h2>
+                <h1>@Model.User.Residual</h1>
+            </div>
+            <div class="card-footer">
+                <h4>Oxirgi chiqim qilingan vaqti</h4>
+                <h4>@Model.OutDate</h4>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card my-5 text-center">
+            <div class="card-header px-5">
+                <br /> <br />
+            </div>
+            <div class="card-body px-5">
+                <br />
+                <h1>Sizda hech qanday Obyekt mavjud emas!</h1>
+                <br />
+            </div>
+            <div class="card-footer px-5">
+                <br /> <br />
+            </div>
+        </div>
+    }
+}

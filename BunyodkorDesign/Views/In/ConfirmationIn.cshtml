@@ -1,0 +1,45 @@
+﻿@using Application.Common.Dtos.OutDtos;
+@using Domain.Entities;
+@{
+    Layout = "_UserLayout";
+}
+@model List<In>
+<h1 class="p-4">Kirimlarni tasdiqlang! </h1>
+<form asp-action="ConfirmationIn" method="post">
+    <table class="table table-success table-striped">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Date</th>
+                <th scope="col">Price</th>
+                <th scope="col">Reason</th>
+                <th scope="col">tasdiqlash</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int count = 1;
+                foreach (var item in Model)
+                {
+                    int index = count - 1;
+                    <tr>
+                        <th scope="row">@count</th>
+                        <td><span>@item.Date.Day</span><spap>.<span>@item.Date.Month</span><span>.</span><span>@item.Date.Year</span></td>
+                        <td>@item.Price</td>
+                        <td>@item.Reason</td>
+                        <td>
+                            <input type="hidden" name="insDto[@index].Id" value="@item.Id" />
+                            <div class="form-check">
+                                <input name="insDto[@index].IsConfirm" class="form-check-input" type="checkbox" value="true" id="flexCheckChecked" checked>
+                            </div>
+                        </td>
+                    </tr>
+                    count++;
+                }
+            }
+        </tbody>
+    </table>
+    <div class="d-grid gap-2 col-3 mx-auto">
+        <button class="btn btn-success py-3" type="submit">Submit</button>
+    </div>
+</form>

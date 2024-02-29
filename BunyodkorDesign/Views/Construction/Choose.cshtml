@@ -1,0 +1,123 @@
+﻿@{
+    Layout = "_AdminLayout";
+}
+<br /><br />
+<div class="row">
+    <div class="col-2"></div>
+    <div class ="col-8">
+        <div class="accordion row pt-3 pb-2" id="accordionExample">
+            <div class="accordion-item">
+                <br />
+                <br />
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <div class="col-sm-11 ">
+                            <div class="card">
+                                <div class="card-body">
+                                    <br />
+                                    <h4 class="card-title text-center">Chiqimlar</h4>
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="row py-2">
+                            <div class="col-sm-11 ">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-grid gap-2">
+                                            <a asp-action="AddOut" asp-controller="Out" class="btn btn-primary"><h4 class="text-center">Chiqimlarni tasdiqlash</h4></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row pt-3 pb-2">
+                            <div class="col-sm-11 ">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-grid gap-2">
+                                            <a asp-action="GetAllConfirmed" asp-controller="Out" class="btn btn-success"><h4 class="text-center">Tasdiqlangan chiqimlar</h4></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                            </div>
+                        </div>
+                        <div class="row py-2">
+                            <div class="col-sm-11 ">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-grid gap-2">
+                                            <a asp-action="GetAllNoConfirmed" asp-controller="Out" class="btn btn-danger"><h4 class="text-center">Tasdiqlanmagan chiqimlar</h4></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                       
+                        <div class="col-sm-11 ">
+                            <div class="card">
+                                <div class="card-body">
+                                    <br />
+                                    <h4 class="card-title text-center">Kirimlar</h4>
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="row py-2">
+                            <div class="col-sm-11 ">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-grid gap-2">
+                                            <a asp-action="AddOut" asp-controller="Out" class="btn btn-primary"><h4 class="text-center">Yangi kirim qo'shish</h4></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row pt-3 pb-2">
+                            <div class="col-sm-11 ">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-grid gap-2">
+                                            <a asp-action="GetAllConfirmed" asp-controller="Out" class="btn btn-success"><h4 class="text-center">Tasdiqlangan kirimlar</h4></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row py-2">
+                            <div class="col-sm-11 ">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-grid gap-2">
+                                            <a asp-action="GetAllNoConfirmed" asp-controller="Out" class="btn btn-danger"><h4 class="text-center">Tasdiqlanmagan kirimlar</h4></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+            </div>
+        </div>
+    </div>
+    <div class="col-2"></div>
+</div>

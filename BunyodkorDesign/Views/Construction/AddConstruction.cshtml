@@ -1,0 +1,106 @@
+﻿@using Application.Common.Dtos.ConstructionDtos
+ @using Application.Common.Dtos.OutDtos;
+@{
+    Layout = "_AdminLayout";
+}
+@model AddConstructionDto;
+@{
+    List<Domain.Entities.User>? users = (List<Domain.Entities.User>)ViewData["users"]!;
+}
+<style>
+    form {
+        background-color: #fff;
+        max-width: 670px;
+        margin: 50px auto;
+        padding: 30px 20px;
+        box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .form-control {
+        text-align: left;
+        margin-bottom: 25px;
+    }
+
+        .form-control label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .form-control input,
+        .form-control select,
+        .form-control textarea {
+            border: 1px solid #777;
+            border-radius: 2px;
+            font-family: inherit;
+            padding: 10px;
+            display: block;
+            width: 95%;
+        }
+
+            .form-control input[type="radio"],
+            .form-control input[type="checkbox"] {
+                display: inline-block;
+                width: auto;
+            }
+
+</style>
+
+<!-- Create Form -->
+<form id="form" asp-action="AddConstruction" method="post">
+
+    <!-- Details -->
+    <div class="form-control">
+        <label for="FullName" id="FullName">
+            Obyekt nomi
+        </label>
+
+        <!-- Input Type Text -->
+        <input type="text" id="Price" name="FullName"
+               placeholder="Enter a name" />
+    </div>
+    <div class="form-control">
+        <label for="UserId" id="UserId">
+            obyekt uchun masul shaxs
+        </label>
+
+        <!-- Dropdown options -->
+        <select name="UserId" id="UserId">
+            @{
+
+                if (users is null)
+                {
+                    <option value="@null">User Mavjud emas</option>
+                }
+                else
+                {
+                    foreach (var item in users)
+                    {
+                        <option value="@item.Id">@item.FullName</option>
+                    }
+                }
+            }
+        </select>
+    </div>
+    <div class="form-control">
+        <label for="Description">
+            Obyekt haqida malumot
+        </label>
+
+        <!-- multi-line text input control -->
+        <textarea name="Description" id="Description"
+                  placeholder="Enter Description"></textarea>
+    </div>
+
+    <!-- Multi-line Text Input Control -->
+    <button type="submit" style="    background-color: #05c46b;
+        border: 1px solid #777;
+        border-radius: 2px;
+        font-family: inherit;
+        font-size: 21px;
+        display: block;
+        width: 40%;
+        margin-top: 50px;
+        margin-bottom: 20px;">
+        Submit
+    </button>
+</form>
