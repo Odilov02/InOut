@@ -1,10 +1,12 @@
 ﻿@{
     Layout = "_AdminLayout";
 }
-<br /><br />
+@model Guid;
+<br />
+<br />
 <div class="row">
     <div class="col-2"></div>
-    <div class ="col-8">
+    <div class="col-8">
         <div class="accordion row pt-3 pb-2" id="accordionExample">
             <div class="accordion-item">
                 <br />
@@ -29,7 +31,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-grid gap-2">
-                                            <a asp-action="ConfirmOut" asp-controller="Out" class="btn btn-primary"><h4 class="text-center">Chiqimlarni tasdiqlash</h4></a>
+                                            <a asp-route-constructionId="@Model" asp-action="ConfirmOut" asp-controller="Out" class="btn btn-primary"><h4 class="text-center">Chiqimlarni tasdiqlash</h4></a>
                                         </div>
                                     </div>
                                 </div>
@@ -40,7 +42,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-grid gap-2">
-                                            <a asp-action="GetAllConfirmedForAdmin" asp-controller="Out" class="btn btn-success"><h4 class="text-center">Tasdiqlangan chiqimlar</h4></a>
+                                            <a asp-route-constructionId="@Model" asp-action="GetAllConfirmedForAdmin" asp-controller="Out" class="btn btn-success"><h4 class="text-center">Tasdiqlangan chiqimlar</h4></a>
                                         </div>
                                     </div>
                                 </div>
@@ -53,7 +55,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-grid gap-2">
-                                            <a asp-action="GetAllNoConfirmedForAdmin" asp-controller="Out" class="btn btn-danger"><h4 class="text-center">Tasdiqlanmagan chiqimlar</h4></a>
+                                            <a asp-route-constructionId="@Model" asp-action="GetAllNoConfirmedForAdmin" asp-controller="Out" class="btn btn-danger"><h4 class="text-center">Tasdiqlanmagan chiqimlar</h4></a>
                                         </div>
                                     </div>
                                 </div>
@@ -65,7 +67,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                       
+
                         <div class="col-sm-11 ">
                             <div class="card">
                                 <div class="card-body">
@@ -84,7 +86,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-grid gap-2">
-                                            <a asp-action="AddIn" asp-controller="In" class="btn btn-primary"><h4 class="text-center">Yangi kirim qo'shish</h4></a>
+                                            <a asp-route-constructionId="@Model" asp-action="AddIn" asp-controller="In" class="btn btn-primary"><h4 class="text-center">Yangi kirim qo'shish</h4></a>
                                         </div>
                                     </div>
                                 </div>
@@ -95,7 +97,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-grid gap-2">
-                                            <a asp-action="GetAllConfirmedForAdmin" asp-controller="In" class="btn btn-success"><h4 class="text-center">Tasdiqlangan kirimlar</h4></a>
+                                            <a asp-route-constructionId="@Model" asp-action="GetAllConfirmedForAdmin" asp-controller="In" class="btn btn-success"><h4 class="text-center">Tasdiqlangan kirimlar</h4></a>
                                         </div>
                                     </div>
                                 </div>
@@ -106,7 +108,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-grid gap-2">
-                                            <a asp-action="GetAllNoConfirmedForAdmin" asp-controller="In" class="btn btn-danger"><h4 class="text-center">Tasdiqlanmagan kirimlar</h4></a>
+                                            <a asp-route-constructionId="@Model" asp-action="GetAllNoConfirmedForAdmin" asp-controller="In" class="btn btn-danger"><h4 class="text-center">Tasdiqlanmagan kirimlar</h4></a>
                                         </div>
                                     </div>
                                 </div>

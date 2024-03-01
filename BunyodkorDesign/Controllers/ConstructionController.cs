@@ -62,9 +62,5 @@ public class ConstructionController : Controller
         }
         return View();
     }
-    public  IActionResult Choose(Guid constructionId)
-    {
-        string param1 = Request.Query["constructionId"]!;
-        return View();
-    }
+    public  IActionResult Choose(Guid constructionId)=> View(constructionId);
 }

@@ -83,21 +83,40 @@ public class OutController : Controller
 
     ///<<=====        Admin Action        ========>>
     [Authorize]
-    public IActionResult ConfirmOut(Guid constructionId)
+    public async Task<IActionResult> ConfirmOut(Guid constructionId)
     {
-        return View();
+        var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
+        var outs = _appDbContext.Outs.Where(x => x.User.Id == construction!.User.Id && x.IsConfirmed == false).ToList();
+        return View(outs);
     }
-
 
     [Authorize]
-    public IActionResult GetAllConfirmedForAdmin(Guid constructionId)
+    [HttpPost]
+    public async Task<IActionResult> ConfirmOut(List<ConfirmationOut?> outsDto)
+    {
+
+        List<Out> outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == false && outsDto.Any(y => y.Id == x.Id && y.IsConfirm == true)).ToList();
+        foreach (var item in outs) item.IsConfirmed = true;
+        _appDbContext.Outs.UpdateRange(outs);
+        var result = await _appDbContext.SaveChangesAsync();
+        if (result > 0)
+            return RedirectToAction("Choose", "Construction");
+        outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == false).ToList();
+        return View(outs);
+    }
+    [Authorize]
+    public IActionResult GetAllConfirmedForAdmin(Guid constructionId) => View(constructionId);
+
+    [Authorize]
+    public IActionResult GetAllNoConfirmedForAdmin(Guid constructionId) => View(constructionId);
+
+    [Authorize]
+    [HttpPost]
+    public IActionResult GetAllNoConfirmedForAdmin(int constructionId)
     {
         return View();
     }
 
 
-    public IActionResult GetAllNoConfirmedForAdmin(Guid constructionId)
-    {
-        return View();
-    }
+
 }
