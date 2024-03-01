@@ -78,9 +78,6 @@ public class OutController : Controller
     }
 
 
-
-
-
     ///<<=====        Admin Action        ========>>
     [Authorize]
     public async Task<IActionResult> ConfirmOut(Guid constructionId)
@@ -94,13 +91,14 @@ public class OutController : Controller
     [HttpPost]
     public async Task<IActionResult> ConfirmOut(List<ConfirmationOut?> outsDto)
     {
-
         List<Out> outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == false && outsDto.Any(y => y.Id == x.Id && y.IsConfirm == true)).ToList();
         foreach (var item in outs) item.IsConfirmed = true;
         _appDbContext.Outs.UpdateRange(outs);
         var result = await _appDbContext.SaveChangesAsync();
         if (result > 0)
-            return RedirectToAction("Choose", "Construction");
+        {
+            return RedirectToAction("Choose", "Construction", new { constructionId = outs[0].User.Construction!.Id });
+        }
         outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == false).ToList();
         return View(outs);
     }
