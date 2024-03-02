@@ -18,13 +18,13 @@ public class OutController : Controller
         _mapper = mapper;
     }
 
-    [Authorize]
+    [Authorize(Roles = "User")]
     public IActionResult AddOut()
     {
         ViewData["OutTypes"] = _appDbContext.OutTypes.ToList();
         return View();
     }
-    [Authorize]
+    [Authorize(Roles = "User")]
     [HttpPost]
     public async Task<IActionResult> AddOut(AddOutDto OutDto)
     {
@@ -45,24 +45,18 @@ public class OutController : Controller
         @out.Date = DateTime.Now;
         await _appDbContext.Outs.AddAsync(@out);
         var result = await _appDbContext.SaveChangesAsync();
-        if (result == 1)
+        if (result > 0)
             return View("Choose");
         else
         {
             ViewData["OutTypes"] = _appDbContext.OutTypes.ToList();
             return View(OutDto);
         }
-
     }
-
-
-
-    [Authorize]
+    [Authorize(Roles = "User")]
     public IActionResult Choose() => View();
 
-
-
-    [Authorize]
+    [Authorize(Roles = "User")]
     public IActionResult GetAllConfirmed()
     {
         List<Out> outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == true).ToList();
@@ -70,7 +64,7 @@ public class OutController : Controller
     }
 
 
-    [Authorize]
+    [Authorize(Roles = "User")]
     public IActionResult GetAllNoConfirmed()
     {
         List<Out> outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == false).ToList();
@@ -79,7 +73,8 @@ public class OutController : Controller
 
 
     ///<<=====        Admin Action        ========>>
-    [Authorize]
+
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> ConfirmOut(Guid constructionId)
     {
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
@@ -87,7 +82,8 @@ public class OutController : Controller
         return View(outs);
     }
 
-    [Authorize]
+
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> ConfirmOut(List<ConfirmationOut?> outsDto)
     {
@@ -102,19 +98,20 @@ public class OutController : Controller
         outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == false).ToList();
         return View(outs);
     }
-    [Authorize]
+
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllConfirmedForAdmin(Guid constructionId)
     {
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
-        var outs =await _appDbContext.Outs.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == true).ToListAsync();
+        var outs = await _appDbContext.Outs.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == true).ToListAsync();
         return View(outs);
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllNoConfirmedForAdmin(Guid constructionId)
     {
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
-        var outs =await _appDbContext.Outs.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == true).ToListAsync();
+        var outs = await _appDbContext.Outs.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == true).ToListAsync();
         return View(outs);
     }
 }

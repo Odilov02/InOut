@@ -19,7 +19,6 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
         Guid adminId = Guid.NewGuid();
         Guid roleId = Guid.NewGuid();
 
@@ -27,14 +26,14 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
         {
             Name = "SuperAdmin",
             NormalizedName = "SuperAdmin",
-            Id = roleId,
+            Id = Guid.NewGuid(),
         });
 
         builder.Entity<Role>().HasData(new Role
         {
             Name = "Admin",
             NormalizedName = "Admin",
-            Id = Guid.NewGuid()
+            Id = roleId,
         });
 
         builder.Entity<Role>().HasData(new Role
@@ -50,13 +49,14 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
             FullName = "Diyorbek Odilov",
             UserName = "DiyorbekOdilov19",
             Password = "DiyorbekOdilov19".stringHash(),
+            SecurityStamp = Guid.NewGuid().ToString()
         });
-
         builder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
         {
             RoleId = roleId,
             UserId = adminId
         });
+        base.OnModelCreating(builder);
     }
 }
 

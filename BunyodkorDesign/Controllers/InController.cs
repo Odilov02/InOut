@@ -18,17 +18,18 @@ public class InController : Controller
         _mapper = mapper;
     }
 
-    [Authorize]
+    [Authorize(Roles = "User")]
     public IActionResult Choose() => View();
 
-    [Authorize]
+    [Authorize(Roles = "User")]
     public IActionResult GetAllConfirmed()
     {
         List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true).ToList();
         return View(ins);
     }
 
-    [Authorize]
+
+    [Authorize(Roles = "User")]
     public IActionResult GetAllNoConfirmed()
     {
         List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false).ToList();
@@ -40,19 +41,18 @@ public class InController : Controller
 
 
 
-    [Authorize]
+
+    [Authorize(Roles = "User")]
     public IActionResult ConfirmationIn()
     {
         List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false).ToList();
         return View(ins);
     }
 
-
-    [Authorize]
+    [Authorize(Roles = "User")]
     [HttpPost]
     public async Task<IActionResult> ConfirmationIn(List<ConfirmationIn?> insDto)
     {
-
         List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && insDto.Any(y => y.Id == x.Id && y.IsConfirm == true)).ToList();
         foreach (var item in ins)
         {
@@ -67,12 +67,12 @@ public class InController : Controller
     }
 
     ///Admin Action
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public IActionResult AddIn(Guid constructionId)
     {
         return View();
     }
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddIn(AddInDto inDto)
     {
@@ -97,15 +97,14 @@ public class InController : Controller
             return View(inDto);
         }
     }
-
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public IActionResult GetAllNoConfirmedForAdmin(Guid constructionId)
     {
         List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false).ToList();
         return View(ins);
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public IActionResult GetAllConfirmedForAdmin(Guid constructionId)
     {
         List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true).ToList();

@@ -1,4 +1,5 @@
 ﻿using Application.Common.DTOs.UserDTOs;
+using Application.Common.Extentions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using AutoMapper;
@@ -39,24 +40,6 @@ public class UserController : Controller
     }
 
 
-    //public IActionResult Login() => View();
-    //[HttpPost]
-    //public async Task<IActionResult> Login(UserCridential userCridential)
-    //{
-    //    if (!ModelState.IsValid)
-    //        return View(userCridential);
-    //    var users = _userManager.Users.ToList();
-    //    User? user = await _userManager.Users.FirstOrDefaultAsync(x => x.Password == userCridential.Password && x.UserName == userCridential.UserName);
-    //    if (user == null) return View();
-    //    await _signInManager.SignInAsync(user, true);
-    //    if (HttpContext.Session.GetString("UserId") is not null)
-    //        HttpContext.Session.Remove("UserId");
-    //    HttpContext.Session.SetString("UserId", user.Id.ToString());
-    //    ViewData["FullName"] = user.FullName;
-    //    ViewData["PhoneNumber"] = user.PhoneNumber;
-    //    return RedirectToAction("Choose", "Out");
-    //}
-
     public async Task<IActionResult> LogOut()
     {
         HttpContext.Session.Remove("UserId");
@@ -70,15 +53,17 @@ public class UserController : Controller
         if (!ModelState.IsValid)
             return View(userCridential);
         var users = _userManager.Users.ToList();
-        User? user = await _userManager.Users.FirstOrDefaultAsync(x => x.Password == userCridential.Password && x.UserName == userCridential.UserName);
+        User? user = await _userManager.Users.FirstOrDefaultAsync(x => x.Password == userCridential.Password.stringHash() && x.UserName == userCridential.UserName);
         if (user == null) return View(userCridential);
         await _signInManager.SignInAsync(user, true);
         if (HttpContext.Session.GetString("UserId") is not null)
             HttpContext.Session.Remove("UserId");
         HttpContext.Session.SetString("UserId", user.Id.ToString());
-        ViewData["FullName"] = user.FullName;
-        ViewData["PhoneNumber"] = user.PhoneNumber;
-
-        return RedirectToAction("GetAllConstruction", "Construction");
+        List<string> roles = (await _userManager.GetRolesAsync(user)).ToList();
+        if (roles.Contains("Admin"))
+            return RedirectToAction("GetAllConstruction", "Construction");
+        else if (roles.Contains("User"))
+            return RedirectToAction("Choose", "Out");
+        return View(userCridential);
     }
 }

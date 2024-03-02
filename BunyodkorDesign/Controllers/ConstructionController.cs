@@ -22,7 +22,7 @@ public class ConstructionController : Controller
         _mapper = mapper;
     }
 
-    [Authorize]
+    [Authorize(Roles = "User")]
     public async Task<IActionResult> GetResidual()
     {
         var userId = HttpContext.Session.GetString("UserId");
@@ -30,37 +30,53 @@ public class ConstructionController : Controller
         return View(construction);
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllConstruction()
     {
         var constructions = await _appDbContext.Constructions.ToListAsync();
         return View(constructions);
     }
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AddConstruction()
     {
-
-        ViewData["users"] = await _userManager.Users.Where(x => x.Construction == null).ToListAsync();
+        var usersAll = _userManager.Users.ToList();
+        List<User> users = new List<User>();
+        foreach (var user in usersAll)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles.Count==0)
+                users.Add(user);
+        }
+        ViewData["users"] = users;
         return View();
     }
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddConstruction(AddConstructionDto constructionDto)
     {
         if (!ModelState.IsValid)
         {
-            ViewData["users"] = await _userManager.Users.Where(x => x.Construction == null).ToListAsync();
+            var usersAll = _userManager.Users.ToList();
+            List<User> users = new List<User>();
+            foreach (var user in usersAll)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.Count == 0)
+                    users.Add(user);
+            }
+            ViewData["users"] = users;
             return View(constructionDto);
         }
-        var construction=_mapper.Map<Construction>(constructionDto);  
-       // construction.User= await _userManager.Users.FirstOrDefaultAsync(x => x.Id == constructionDto.userId);
-      await  _appDbContext.Constructions.AddAsync(construction);
-        var result =await _appDbContext.SaveChangesAsync();
-        if(result>0)
+        var construction = _mapper.Map<Construction>(constructionDto);
+        await _appDbContext.Constructions.AddAsync(construction);
+        var result = await _appDbContext.SaveChangesAsync();
+        if (result > 0)
         {
+          await _userManager.AddToRoleAsync(construction.User, "Admin");
             return RedirectToAction("GetAllConstruction");
         }
         return View();
     }
-    public  IActionResult Choose(Guid constructionId)=> View(constructionId);
+    [Authorize(Roles = "Admin")]
+    public IActionResult Choose(Guid constructionId) => View(constructionId);
 }
