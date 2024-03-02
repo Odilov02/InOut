@@ -103,18 +103,18 @@ public class OutController : Controller
         return View(outs);
     }
     [Authorize]
-    public IActionResult GetAllConfirmedForAdmin(Guid constructionId) => View(constructionId);
-
-    [Authorize]
-    public IActionResult GetAllNoConfirmedForAdmin(Guid constructionId) => View(constructionId);
-
-    [Authorize]
-    [HttpPost]
-    public IActionResult GetAllNoConfirmedForAdmin(int constructionId)
+    public async Task<IActionResult> GetAllConfirmedForAdmin(Guid constructionId)
     {
-        return View();
+        var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
+        var outs =await _appDbContext.Outs.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == true).ToListAsync();
+        return View(outs);
     }
 
-
-
+    [Authorize]
+    public async Task<IActionResult> GetAllNoConfirmedForAdmin(Guid constructionId)
+    {
+        var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
+        var outs =await _appDbContext.Outs.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == true).ToListAsync();
+        return View(outs);
+    }
 }

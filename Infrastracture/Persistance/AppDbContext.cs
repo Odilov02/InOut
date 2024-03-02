@@ -1,4 +1,6 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common.Extentions;
+using Application.Common.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Reflection;
 
@@ -17,6 +19,44 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        base.OnModelCreating(builder);
+
+        Guid adminId = Guid.NewGuid();
+        Guid roleId = Guid.NewGuid();
+
+        builder.Entity<Role>().HasData(new Role
+        {
+            Name = "SuperAdmin",
+            NormalizedName = "SuperAdmin",
+            Id = roleId,
+        });
+
+        builder.Entity<Role>().HasData(new Role
+        {
+            Name = "Admin",
+            NormalizedName = "Admin",
+            Id = Guid.NewGuid()
+        });
+
+        builder.Entity<Role>().HasData(new Role
+        {
+            Name = "User",
+            NormalizedName = "User",
+            Id = Guid.NewGuid()
+        });
+
+        builder.Entity<User>().HasData(new User
+        {
+            Id = adminId,
+            FullName = "Diyorbek Odilov",
+            UserName = "DiyorbekOdilov19",
+            Password = "DiyorbekOdilov19".stringHash(),
+        });
+
+        builder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+        {
+            RoleId = roleId,
+            UserId = adminId
+        });
     }
 }
+

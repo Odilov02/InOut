@@ -18,10 +18,8 @@ public class InController : Controller
         _mapper = mapper;
     }
 
-
     [Authorize]
     public IActionResult Choose() => View();
-
 
     [Authorize]
     public IActionResult GetAllConfirmed()
@@ -29,7 +27,6 @@ public class InController : Controller
         List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true).ToList();
         return View(ins);
     }
-
 
     [Authorize]
     public IActionResult GetAllNoConfirmed()
@@ -63,7 +60,7 @@ public class InController : Controller
         }
         _appDbContext.Ins.UpdateRange(ins);
         var result = await _appDbContext.SaveChangesAsync();
-        if (result>0)
+        if (result > 0)
             return RedirectToAction("Choose", "In");
         ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false).ToList();
         return View(ins);
@@ -93,8 +90,8 @@ public class InController : Controller
         @in.Date = DateTime.Now;
         await _appDbContext.Ins.AddAsync(@in);
         var result = await _appDbContext.SaveChangesAsync();
-        if (result == 1)
-            return View("Choose");
+        if (result > 0)
+            return RedirectToAction("Choose", "Construction", new { constructionId = user.Construction!.Id });
         else
         {
             return View(inDto);
@@ -105,13 +102,13 @@ public class InController : Controller
     public IActionResult GetAllNoConfirmedForAdmin(Guid constructionId)
     {
         List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false).ToList();
-        return View();
+        return View(ins);
     }
 
     [Authorize]
     public IActionResult GetAllConfirmedForAdmin(Guid constructionId)
     {
-        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false).ToList();
-        return View();
+        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true).ToList();
+        return View(ins);
     }
 }
