@@ -20,51 +20,52 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
     {
         builder.Entity<OutType>().HasData(new OutType
         {
+            Id=Guid.NewGuid(),
             Name = "O'zimizni ishchilar xarajatlari",
             Descraption = "O'zimizni ishchilar xarajatlari"
         },
         new OutType
         {
+            Id = Guid.NewGuid(),
             Name = "Oziq ovqat",
             Descraption = "Oziq ovqat"
         },
         new OutType
         {
+            Id = Guid.NewGuid(),
             Name = "Ish xaqlari",
             Descraption = "Ish xaqlari"
         },
         new OutType
         {
+            Id = Guid.NewGuid(),
             Name = "Transport boyicha",
             Descraption = "Transport boyicha"
         },
         new OutType
         {
+            Id = Guid.NewGuid(),
             Name = "Hujjatlar va ofis boyicha",
             Descraption = "Hujjatlar va ofis boyicha"
         },
         new OutType
         {
+            Id = Guid.NewGuid(),
             Name = "Qurilish materiallari",
             Descraption = "Qurilish materiallari"
         },
         new OutType
         {
+            Id = Guid.NewGuid(),
             Name = "Ish qurollari",
             Descraption = "Ish qurollari"
         },
         new OutType
         {
+            Id = Guid.NewGuid(),
             Name = "Boshqa mayda xarajatlar",
             Descraption = "Boshqa mayda xarajatlar"
         });
-
-        builder.Entity<OutType>().HasData(new OutType
-        {
-            Name = "",
-            Descraption = ""
-        });
-
 
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         Guid adminId = Guid.NewGuid();

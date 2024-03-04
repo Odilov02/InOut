@@ -8,6 +8,4 @@ public class ConfirmationOut
     public Guid Id { get; set; }
     [NotNull]
     public bool IsConfirmed { get; set; }
-    [NotNull]
-    public Guid ConstructionId { get; set; }
 }

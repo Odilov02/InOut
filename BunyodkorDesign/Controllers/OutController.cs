@@ -87,7 +87,7 @@ public class OutController : Controller
     }
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<IActionResult> ConfirmOut(List<ConfirmationOut?> outDtos)
+    public async Task<IActionResult> ConfirmOut(List<ConfirmationOut> outDtos)
     {
         string constructionId = HttpContext.Session.GetString("ConstructionId")!;
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id.ToString() == constructionId);
@@ -127,7 +127,7 @@ public class OutController : Controller
     public async Task<IActionResult> GetAllNoConfirmedForAdmin(Guid constructionId)
     {
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
-        var outs = await _appDbContext.Outs.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == true).ToListAsync();
+        var outs = await _appDbContext.Outs.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == false).ToListAsync();
         return View(outs);
     }
 }
