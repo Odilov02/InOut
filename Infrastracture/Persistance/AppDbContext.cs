@@ -18,6 +18,54 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
     }
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.Entity<OutType>().HasData(new OutType
+        {
+            Name = "O'zimizni ishchilar xarajatlari",
+            Descraption = "O'zimizni ishchilar xarajatlari"
+        },
+        new OutType
+        {
+            Name = "Oziq ovqat",
+            Descraption = "Oziq ovqat"
+        },
+        new OutType
+        {
+            Name = "Ish xaqlari",
+            Descraption = "Ish xaqlari"
+        },
+        new OutType
+        {
+            Name = "Transport boyicha",
+            Descraption = "Transport boyicha"
+        },
+        new OutType
+        {
+            Name = "Hujjatlar va ofis boyicha",
+            Descraption = "Hujjatlar va ofis boyicha"
+        },
+        new OutType
+        {
+            Name = "Qurilish materiallari",
+            Descraption = "Qurilish materiallari"
+        },
+        new OutType
+        {
+            Name = "Ish qurollari",
+            Descraption = "Ish qurollari"
+        },
+        new OutType
+        {
+            Name = "Boshqa mayda xarajatlar",
+            Descraption = "Boshqa mayda xarajatlar"
+        });
+
+        builder.Entity<OutType>().HasData(new OutType
+        {
+            Name = "",
+            Descraption = ""
+        });
+
+
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         Guid adminId = Guid.NewGuid();
         Guid roleId = Guid.NewGuid();
@@ -34,7 +82,7 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
             Name = "Admin",
             NormalizedName = "ADMIN",
             Id = roleId,
-            ConcurrencyStamp =Guid.NewGuid().ToString(),
+            ConcurrencyStamp = Guid.NewGuid().ToString(),
         });
         builder.Entity<Role>().HasData(new Role
         {

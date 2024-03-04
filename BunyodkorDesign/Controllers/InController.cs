@@ -28,7 +28,6 @@ public class InController : Controller
         return View(ins);
     }
 
-
     [Authorize(Roles = "User")]
     public IActionResult GetAllNoConfirmed()
     {
@@ -36,16 +35,11 @@ public class InController : Controller
         return View(ins);
     }
 
-
-
-
-
-
-
     [Authorize(Roles = "User")]
-    public IActionResult ConfirmationIn()
+    public async Task<IActionResult> ConfirmationIn()
     {
-        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false).ToList();
+        var userId = (HttpContext.Session.GetString("UserId"));
+        List<In?> ins = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList();
         return View(ins);
     }
 
@@ -53,11 +47,22 @@ public class InController : Controller
     [HttpPost]
     public async Task<IActionResult> ConfirmationIn(List<ConfirmationIn?> insDto)
     {
-        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && insDto.Any(y => y.Id == x.Id && y.IsConfirm == true)).ToList();
+        var userId = (HttpContext.Session.GetString("UserId"));
+        if(!ModelState.IsValid)
+        {
+            List<In?> insdto = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList();
+            return View(insdto);
+        }
+        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && insDto.Any(y => y.Id == x.Id && y.IsConfirmed == true)).ToList();
+        var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId);
         foreach (var item in ins)
         {
             item.IsConfirmed = true;
+            user!.Residual = +item.Price;
+            user.Construction!.In = +item.Price;
+            user.Construction.InDate = DateTime.Now;
         }
+
         _appDbContext.Ins.UpdateRange(ins);
         var result = await _appDbContext.SaveChangesAsync();
         if (result > 0)

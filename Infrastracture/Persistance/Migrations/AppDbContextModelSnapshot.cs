@@ -198,20 +198,20 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e288528e-e591-4a3c-aa88-67cb400528f4"),
+                            Id = new Guid("a4a836c5-d4e5-47e1-958c-4af1a0242753"),
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = new Guid("5e6adc7b-d031-43c5-8736-5e83042457d1"),
-                            ConcurrencyStamp = "5c0d34d0-c732-4db3-b7bd-1e24b37e6346",
+                            Id = new Guid("18b7e85f-1e5d-4c4d-82e0-b98cdbdeedf8"),
+                            ConcurrencyStamp = "404ade71-b267-493f-84d0-3d0b873ba0a3",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("4f96ad08-c52c-4360-9e8e-f269101db4e6"),
+                            Id = new Guid("0ee7677e-71c4-4566-a221-ab80de3a3e85"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -295,16 +295,16 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9a1a3dad-3e18-4453-8697-7cac70e5ff6a"),
+                            Id = new Guid("4e5e1425-6eb6-44b0-b0a2-ce8f15d3595f"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7a0fc95c-1cb8-4caf-9911-d2fc4bb8b4be",
+                            ConcurrencyStamp = "6c8730ec-903b-4851-a476-912b12dcfdec",
                             EmailConfirmed = false,
                             FullName = "Diyorbek Odilov",
                             LockoutEnabled = false,
                             Password = "839045bc366f3119171d91d4565bb7e6d29c12b5af9c5a6cc8cf1bb14a871740",
                             PhoneNumberConfirmed = false,
                             Residual = 0L,
-                            SecurityStamp = "b54e7e14-e331-4940-a083-0df6c1a73b8f",
+                            SecurityStamp = "29c419a7-24b7-4378-9d28-265ed2ad6cc4",
                             TwoFactorEnabled = false,
                             UserName = "DiyorbekOdilov19"
                         });
@@ -396,8 +396,8 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("9a1a3dad-3e18-4453-8697-7cac70e5ff6a"),
-                            RoleId = new Guid("5e6adc7b-d031-43c5-8736-5e83042457d1")
+                            UserId = new Guid("4e5e1425-6eb6-44b0-b0a2-ce8f15d3595f"),
+                            RoleId = new Guid("18b7e85f-1e5d-4c4d-82e0-b98cdbdeedf8")
                         });
                 });
 

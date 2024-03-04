@@ -21,7 +21,8 @@ public class OutController : Controller
     [Authorize(Roles = "User")]
     public IActionResult AddOut()
     {
-        ViewData["OutTypes"] = _appDbContext.OutTypes.ToList();
+        var outTypes= _appDbContext.OutTypes.ToList();
+        ViewData["OutTypes"] = outTypes;
         return View();
     }
     [Authorize(Roles = "User")]
@@ -78,25 +79,40 @@ public class OutController : Controller
     public async Task<IActionResult> ConfirmOut(Guid constructionId)
     {
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
-        var outs = _appDbContext.Outs.Where(x => x.User.Id == construction!.User.Id && x.IsConfirmed == false).ToList();
+        List<Out> outs = _appDbContext.Outs.Where(x => x.User.Id == construction!.User.Id && x.IsConfirmed == false).ToList();
+        if (HttpContext.Session.GetString("ConstructionId") is not null)
+            HttpContext.Session.Remove("ConstructionId");
+        HttpContext.Session.SetString("ConstructionId", constructionId.ToString());
         return View(outs);
     }
-
-
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<IActionResult> ConfirmOut(List<ConfirmationOut?> outsDto)
+    public async Task<IActionResult> ConfirmOut(List<ConfirmationOut?> outDtos)
     {
-        List<Out> outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == false && outsDto.Any(y => y.Id == x.Id && y.IsConfirm == true)).ToList();
-        foreach (var item in outs) item.IsConfirmed = true;
-        _appDbContext.Outs.UpdateRange(outs);
+        string constructionId = HttpContext.Session.GetString("ConstructionId")!;
+        var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id.ToString() == constructionId);
+        if (!ModelState.IsValid)
+        {
+            List<Out> outs = _appDbContext.Outs.Where(x => x.User.Id == construction!.User.Id && x.IsConfirmed == false).ToList();
+            return View(outs);
+        }
+        List<Out> entities = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == false && outDtos.Any(y => y.Id == x.Id && y.IsConfirmed == true)).ToList();
+        foreach (var item in entities)
+        {
+            item!.IsConfirmed = true;
+            construction!.User!.Residual = -item.Price;
+            construction.Out = -item.Price;
+            construction.OutDate = DateTime.Now;
+        }
+        _appDbContext.Outs.UpdateRange(entities!);
         var result = await _appDbContext.SaveChangesAsync();
         if (result > 0)
         {
-            return RedirectToAction("Choose", "Construction", new { constructionId = outs[0].User.Construction!.Id });
+            return RedirectToAction("Choose", "Construction", new { constructionId = constructionId });
         }
-        outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == false).ToList();
-        return View(outs);
+        entities = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == false && x.User.Id == construction!.User.Id).ToList()!;
+        HttpContext.Session.Remove("ConstructionId");
+        return View(entities);
     }
 
     [Authorize(Roles = "Admin")]

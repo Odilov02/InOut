@@ -7,5 +7,5 @@ public class ConfirmationIn
     [NotNull]
     public Guid Id { get; set; }
     [NotNull]
-    public bool IsConfirm { get; set; }
+    public bool IsConfirmed { get; set; }
 }
