@@ -32,6 +32,7 @@ public class UserController : Controller
         if (!ModelState.IsValid)
             return View(userRegister);
         User user = _Mapper.Map<User>(userRegister);
+        user.Password = user.Password.stringHash();
         var result = await _userManager.CreateAsync(user);
         if (result.Succeeded)
             return View("Login");

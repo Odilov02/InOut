@@ -7,5 +7,5 @@ public class User : IdentityUser<Guid>
     public virtual ICollection<In?> Ins { get; set; }
     public virtual ICollection<Out?> Outs { get; set; }
     public virtual Construction? Construction { get; set; }
-    public int Residual { get; set; }
+    public long Residual { get; set; }
 }

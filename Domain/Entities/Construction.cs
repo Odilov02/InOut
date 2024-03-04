@@ -4,8 +4,8 @@ public class Construction:BaseEntity
 {
     public string  FullName { get; set; }
     public string Description { get; set; }
-    public int In { get; set; }
-    public int Out { get; set; }
+    public long In { get; set; }
+    public long Out { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime OutDate { get; set; }
     public DateTime InDate { get; set; }

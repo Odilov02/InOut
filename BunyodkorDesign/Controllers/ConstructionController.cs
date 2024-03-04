@@ -44,7 +44,7 @@ public class ConstructionController : Controller
         foreach (var user in usersAll)
         {
             var roles = await _userManager.GetRolesAsync(user);
-            if (roles.Count==0)
+            if (roles.Count == 0)
                 users.Add(user);
         }
         ViewData["users"] = users;
@@ -58,21 +58,24 @@ public class ConstructionController : Controller
         {
             var usersAll = _userManager.Users.ToList();
             List<User> users = new List<User>();
-            foreach (var user in usersAll)
+            foreach (var item in usersAll)
             {
-                var roles = await _userManager.GetRolesAsync(user);
+                var roles = await _userManager.GetRolesAsync(item);
                 if (roles.Count == 0)
-                    users.Add(user);
+                    users.Add(item);
             }
             ViewData["users"] = users;
             return View(constructionDto);
         }
         var construction = _mapper.Map<Construction>(constructionDto);
+        var user = _userManager.Users.FirstOrDefault(x => x.Id == construction.UserId);
+        var c = _appDbContext.Constructions.ToList();
+        var u = _appDbContext.Users.ToList();
         await _appDbContext.Constructions.AddAsync(construction);
-        var result = await _appDbContext.SaveChangesAsync();
+        var result =  await _appDbContext.SaveChangesAsync();
         if (result > 0)
         {
-          await _userManager.AddToRoleAsync(construction.User, "Admin");
+            await _userManager.AddToRoleAsync(user!, "User");
             return RedirectToAction("GetAllConstruction");
         }
         return View();

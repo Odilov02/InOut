@@ -55,8 +55,9 @@
         </label>
 
         <!-- Input Type Text -->
-        <input type="text" id="Price" name="FullName"
+        <input type="text" id="FullName" name="FullName"
                placeholder="Enter a name" />
+        <span asp-validation-for="FullName"></span>
     </div>
     <div class="form-control">
         <label for="UserId" id="UserId">
@@ -66,7 +67,6 @@
         <!-- Dropdown options -->
         <select name="UserId" id="UserId">
             @{
-
                 if (users is null)
                 {
                     <option value="@null">User Mavjud emas</option>
@@ -80,6 +80,7 @@
                 }
             }
         </select>
+        <span asp-validation-for="UserId"></span>
     </div>
     <div class="form-control">
         <label for="Description">

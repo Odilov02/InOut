@@ -25,21 +25,21 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
         builder.Entity<Role>().HasData(new Role
         {
             Name = "SuperAdmin",
-            NormalizedName = "SuperAdmin",
+            NormalizedName = "SUPERADMIN",
             Id = Guid.NewGuid(),
         });
 
         builder.Entity<Role>().HasData(new Role
         {
             Name = "Admin",
-            NormalizedName = "Admin",
+            NormalizedName = "ADMIN",
             Id = roleId,
+            ConcurrencyStamp =Guid.NewGuid().ToString(),
         });
-
         builder.Entity<Role>().HasData(new Role
         {
             Name = "User",
-            NormalizedName = "User",
+            NormalizedName = "USER",
             Id = Guid.NewGuid()
         });
 

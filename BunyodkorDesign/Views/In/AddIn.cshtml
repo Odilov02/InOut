@@ -56,8 +56,9 @@
         </label>
 
         <!-- Input Type Text -->
-        <input type="number" id="Price" name="Price"
+        <input type="number" id="Price" min="0" name="Price"
                placeholder="Enter a summa" />
+        <span asp-validation-for="Price"></span>
     </div>
     <div class="form-control">
         <label for="comment">
@@ -67,6 +68,7 @@
         <!-- multi-line text input control -->
         <textarea name="Reason" id="Reason"
                   placeholder="Enter your reason here"></textarea>
+        <span asp-validation-for="Reason"></span>
     </div>
 
     <!-- Multi-line Text Input Control -->

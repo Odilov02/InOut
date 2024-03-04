@@ -1,7 +1,11 @@
-﻿namespace Application.Common.Dtos.InDtos;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Application.Common.Dtos.InDtos;
 
 public class ConfirmationIn
 {
+    [NotNull]
     public Guid Id { get; set; }
+    [NotNull]
     public bool IsConfirm { get; set; }
 }
