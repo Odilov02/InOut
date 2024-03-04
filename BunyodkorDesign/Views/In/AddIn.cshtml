@@ -56,7 +56,8 @@
         </label>
 
         <!-- Input Type Text -->
-        <input type="number" id="Price" min="0" name="Price"
+        <input type="hidden" id="ConstructionId" name="ConstructionId" value="@Model.ConstructionId" />  
+               <input type="number" id="Price" min="0" name="Price"
                placeholder="Enter a summa" />
         <span asp-validation-for="Price"></span>
     </div>

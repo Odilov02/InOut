@@ -70,7 +70,11 @@ public class InController : Controller
     [Authorize(Roles = "Admin")]
     public IActionResult AddIn(Guid constructionId)
     {
-        return View();
+        var inDto = new AddInDto()
+        {
+            ConstructionId = constructionId
+        };
+        return View(inDto);
     }
     [Authorize(Roles = "Admin")]
     [HttpPost]
@@ -80,7 +84,7 @@ public class InController : Controller
         {
             return View(inDto);
         }
-        var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == HttpContext.Session.GetString("UserId"));
+        var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Construction!.Id == inDto.ConstructionId);
         if (user is null)
         {
             return View(inDto);
@@ -91,7 +95,7 @@ public class InController : Controller
         await _appDbContext.Ins.AddAsync(@in);
         var result = await _appDbContext.SaveChangesAsync();
         if (result > 0)
-            return RedirectToAction("Choose", "Construction", new { constructionId = user.Construction!.Id });
+            return RedirectToAction("Choose", "Construction", new { constructionId = inDto.ConstructionId });
         else
         {
             return View(inDto);
