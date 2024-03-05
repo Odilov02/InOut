@@ -58,8 +58,8 @@ public class InController : Controller
         foreach (var item in ins)
         {
             item.IsConfirmed = true;
-            user!.Residual = +item.Price;
-            user.Construction!.In = +item.Price;
+            user!.Residual += item.Price;
+            user.Construction!.In += item.Price;
             user.Construction.InDate = DateTime.Now;
         }
 

@@ -100,8 +100,8 @@ public class OutController : Controller
         foreach (var item in entities)
         {
             item!.IsConfirmed = true;
-            construction!.User!.Residual = -item.Price;
-            construction.Out = -item.Price;
+            construction!.User!.Residual -= item.Price;
+            construction.Out -= item.Price;
             construction.OutDate = DateTime.Now;
         }
         _appDbContext.Outs.UpdateRange(entities!);

@@ -264,35 +264,35 @@ namespace Infrastructure.Persistance.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("098cb645-629d-4725-84c1-bc2c66d9bbc9"), "cb850992-bc9f-4930-b2ea-2604604899bf", "Admin", "ADMIN" },
-                    { new Guid("4c6e1365-bbdc-499b-9b34-1d4d164494ea"), null, "User", "USER" },
-                    { new Guid("e06db251-c20e-445b-a1b8-799d58adbcce"), null, "SuperAdmin", "SUPERADMIN" }
+                    { new Guid("0ca5debc-be2b-4a38-a3ab-0d880ee42f78"), null, "User", "USER" },
+                    { new Guid("f58828fd-e869-4c92-9d64-c157373de9c9"), "23f3733d-23dc-4994-864b-7c97f688b1bf", "Admin", "ADMIN" },
+                    { new Guid("f69f06a9-3d68-46f4-b82d-26d516d0a8c9"), null, "SuperAdmin", "SUPERADMIN" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "Password", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Residual", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("e268feef-e1e6-4faf-a059-aed1caaead29"), 0, "dfbae193-e7a8-4876-8b2a-4f3147dcd1ca", null, false, "Diyorbek Odilov", false, null, null, null, "839045bc366f3119171d91d4565bb7e6d29c12b5af9c5a6cc8cf1bb14a871740", null, null, false, 0L, "80141c6c-383c-4b37-91e5-1aaa9b9b1494", false, "DiyorbekOdilov19" });
+                values: new object[] { new Guid("714cbe52-27d0-4901-bd7c-081bc1a3c319"), 0, "a68678aa-37fc-4be4-ac42-8ae259034da3", null, false, "Diyorbek Odilov", false, null, null, null, "839045bc366f3119171d91d4565bb7e6d29c12b5af9c5a6cc8cf1bb14a871740", null, null, false, 0L, "67d63e04-95a5-4dc4-a8fd-9d8e07bb9871", false, "DiyorbekOdilov19" });
 
             migrationBuilder.InsertData(
                 table: "OutTypes",
                 columns: new[] { "Id", "Descraption", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("34a7ce1c-9726-4344-b555-fadad581897e"), "Transport boyicha", "Transport boyicha" },
-                    { new Guid("528c2dd3-b8e1-4879-b264-e9c4e681c736"), "Ish xaqlari", "Ish xaqlari" },
-                    { new Guid("87f12e93-9287-4195-ba7f-f62363a3abed"), "Qurilish materiallari", "Qurilish materiallari" },
-                    { new Guid("8a343212-2d45-4722-b571-afcf8ebe574e"), "Hujjatlar va ofis boyicha", "Hujjatlar va ofis boyicha" },
-                    { new Guid("9d897e1e-774b-4ff6-bf10-adc08227078c"), "Ish qurollari", "Ish qurollari" },
-                    { new Guid("dab1b925-1916-46d7-abd3-b76c300cbdc5"), "O'zimizni ishchilar xarajatlari", "O'zimizni ishchilar xarajatlari" },
-                    { new Guid("def9633b-5026-406d-823f-149c5e2094f9"), "Oziq ovqat", "Oziq ovqat" },
-                    { new Guid("e9e9e086-7ada-42d1-b1e2-934deb238908"), "Boshqa mayda xarajatlar", "Boshqa mayda xarajatlar" }
+                    { new Guid("1c16386c-4a16-4eeb-92c9-978b5d4345c5"), "Oziq ovqat", "Oziq ovqat" },
+                    { new Guid("31f9ef00-319c-47c9-8c34-b88ca76f6c48"), "Qurilish materiallari", "Qurilish materiallari" },
+                    { new Guid("40ba035c-757d-4377-a409-97a7459238ef"), "Ish xaqlari", "Ish xaqlari" },
+                    { new Guid("59e80f32-17e0-4a70-afd5-049f3916bc09"), "Transport boyicha", "Transport boyicha" },
+                    { new Guid("5a128dd1-2abc-4acc-8a78-7714f26497d6"), "Hujjatlar va ofis boyicha", "Hujjatlar va ofis boyicha" },
+                    { new Guid("876d5045-9d31-4d4a-8c21-c1a772f61746"), "O'zimizni ishchilar xarajatlari", "O'zimizni ishchilar xarajatlari" },
+                    { new Guid("8fbbf129-b6d4-40f9-a88d-0f6e121d12d7"), "Boshqa mayda xarajatlar", "Boshqa mayda xarajatlar" },
+                    { new Guid("d6304123-9ced-4487-a755-6a27218d4b27"), "Ish qurollari", "Ish qurollari" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { new Guid("098cb645-629d-4725-84c1-bc2c66d9bbc9"), new Guid("e268feef-e1e6-4faf-a059-aed1caaead29") });
+                values: new object[] { new Guid("f58828fd-e869-4c92-9d64-c157373de9c9"), new Guid("714cbe52-27d0-4901-bd7c-081bc1a3c319") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
