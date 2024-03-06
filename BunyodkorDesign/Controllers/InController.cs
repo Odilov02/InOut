@@ -29,9 +29,10 @@ public class InController : Controller
     }
 
     [Authorize(Roles = "User")]
-    public IActionResult GetAllNoConfirmed()
+    public async Task<IActionResult> GetAllNoConfirmed()
     {
-        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false).ToList();
+        var userId = (HttpContext.Session.GetString("UserId"));
+        List<In?> ins = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList();
         return View(ins);
     }
 
@@ -107,16 +108,18 @@ public class InController : Controller
         }
     }
     [Authorize(Roles = "Admin")]
-    public IActionResult GetAllNoConfirmedForAdmin(Guid constructionId)
+    public async Task<IActionResult> GetAllNoConfirmedForAdmin(Guid constructionId)
     {
-        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false).ToList();
+        var construction=await _appDbContext.Constructions.FirstOrDefaultAsync(x=>x.Id==constructionId);
+        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false&&x.User.Id==construction!.UserId).ToList();
         return View(ins);
     }
 
     [Authorize(Roles = "Admin")]
-    public IActionResult GetAllConfirmedForAdmin(Guid constructionId)
+    public async Task<IActionResult> GetAllConfirmedForAdmin(Guid constructionId)
     {
-        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true).ToList();
+        var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
+        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true && x.User.Id == construction!.UserId).ToList();
         return View(ins);
     }
 }

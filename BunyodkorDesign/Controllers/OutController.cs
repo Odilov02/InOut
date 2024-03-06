@@ -60,7 +60,8 @@ public class OutController : Controller
     [Authorize(Roles = "User")]
     public IActionResult GetAllConfirmed()
     {
-        List<Out> outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == true).ToList();
+        var userId = (HttpContext.Session.GetString("UserId"));
+        List<Out> outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == true&&x.UserId.ToString()==userId).ToList();
         return View(outs);
     }
 
@@ -68,7 +69,8 @@ public class OutController : Controller
     [Authorize(Roles = "User")]
     public IActionResult GetAllNoConfirmed()
     {
-        List<Out> outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == false).ToList();
+        var userId = (HttpContext.Session.GetString("UserId"));
+        List<Out> outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).ToList();
         return View(outs);
     }
 

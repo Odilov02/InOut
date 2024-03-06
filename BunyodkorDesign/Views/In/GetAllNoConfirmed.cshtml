@@ -6,7 +6,7 @@
 <br />
 <div class="row py-2">
     <div class="col-6">
-        <h1 class="justify-content-center">Tasdiqlangan chiqimlar </h1>
+        <h1 class="justify-content-center">Tasdiqlanmagan chiqimlar </h1>
     </div>
     <div class="col-3 py-2">
         <div class="contianer">
@@ -39,7 +39,7 @@
             {
                 <tr class="Search">
                     <th scope="row">@count</th>
-                    <td><span>@item.Date</span></td>
+                    <td><span>@item.Date.ToString("HH:mm dd.MM.yyyy")</span></td>
                     <td class="price">@item.Price</td>
                     <td>@item.Reason</td>
                 </tr>
