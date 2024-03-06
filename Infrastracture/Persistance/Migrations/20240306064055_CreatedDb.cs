@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Persistance.Migrations
 {
     /// <inheritdoc />
-    public partial class createdDb : Migration
+    public partial class CreatedDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -184,9 +184,9 @@ namespace Infrastructure.Persistance.Migrations
                     Description = table.Column<string>(type: "text", nullable: true),
                     In = table.Column<long>(type: "bigint", nullable: false),
                     Out = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    OutDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    InDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    OutDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    InDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -208,10 +208,10 @@ namespace Infrastructure.Persistance.Migrations
                     Reason = table.Column<string>(type: "text", nullable: false),
                     Price = table.Column<long>(type: "bigint", nullable: false),
                     IsConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Lasted = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Lasted = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     LastedBy = table.Column<string>(type: "text", nullable: true)
                 },
@@ -234,11 +234,11 @@ namespace Infrastructure.Persistance.Migrations
                     Reason = table.Column<string>(type: "text", nullable: false),
                     Price = table.Column<long>(type: "bigint", nullable: false),
                     IsConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     OutTypeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Lasted = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Lasted = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     LastedBy = table.Column<string>(type: "text", nullable: true)
                 },
@@ -264,35 +264,35 @@ namespace Infrastructure.Persistance.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("0ca5debc-be2b-4a38-a3ab-0d880ee42f78"), null, "User", "USER" },
-                    { new Guid("f58828fd-e869-4c92-9d64-c157373de9c9"), "23f3733d-23dc-4994-864b-7c97f688b1bf", "Admin", "ADMIN" },
-                    { new Guid("f69f06a9-3d68-46f4-b82d-26d516d0a8c9"), null, "SuperAdmin", "SUPERADMIN" }
+                    { new Guid("7431a0ef-efc2-4c0b-b3f3-6f501bcdd64b"), "14d5e730-7333-4694-80f1-8dc6033da40c", "Admin", "ADMIN" },
+                    { new Guid("d325cace-fbbf-40a5-ad41-325697f95221"), null, "User", "USER" },
+                    { new Guid("fd51bb4b-f47b-4e82-9330-19434fae8d13"), null, "SuperAdmin", "SUPERADMIN" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "Password", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Residual", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("714cbe52-27d0-4901-bd7c-081bc1a3c319"), 0, "a68678aa-37fc-4be4-ac42-8ae259034da3", null, false, "Diyorbek Odilov", false, null, null, null, "839045bc366f3119171d91d4565bb7e6d29c12b5af9c5a6cc8cf1bb14a871740", null, null, false, 0L, "67d63e04-95a5-4dc4-a8fd-9d8e07bb9871", false, "DiyorbekOdilov19" });
+                values: new object[] { new Guid("1b0daf1c-6b82-4cde-b7a1-185d05c2f761"), 0, "89d0752f-7c49-4089-bb2f-8acc2ffc6c6b", null, false, "Diyorbek Odilov", false, null, null, null, "839045bc366f3119171d91d4565bb7e6d29c12b5af9c5a6cc8cf1bb14a871740", null, null, false, 0L, "498c463d-ac5e-4b39-a0d5-336bb9fc9ce5", false, "DiyorbekOdilov19" });
 
             migrationBuilder.InsertData(
                 table: "OutTypes",
                 columns: new[] { "Id", "Descraption", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("1c16386c-4a16-4eeb-92c9-978b5d4345c5"), "Oziq ovqat", "Oziq ovqat" },
-                    { new Guid("31f9ef00-319c-47c9-8c34-b88ca76f6c48"), "Qurilish materiallari", "Qurilish materiallari" },
-                    { new Guid("40ba035c-757d-4377-a409-97a7459238ef"), "Ish xaqlari", "Ish xaqlari" },
-                    { new Guid("59e80f32-17e0-4a70-afd5-049f3916bc09"), "Transport boyicha", "Transport boyicha" },
-                    { new Guid("5a128dd1-2abc-4acc-8a78-7714f26497d6"), "Hujjatlar va ofis boyicha", "Hujjatlar va ofis boyicha" },
-                    { new Guid("876d5045-9d31-4d4a-8c21-c1a772f61746"), "O'zimizni ishchilar xarajatlari", "O'zimizni ishchilar xarajatlari" },
-                    { new Guid("8fbbf129-b6d4-40f9-a88d-0f6e121d12d7"), "Boshqa mayda xarajatlar", "Boshqa mayda xarajatlar" },
-                    { new Guid("d6304123-9ced-4487-a755-6a27218d4b27"), "Ish qurollari", "Ish qurollari" }
+                    { new Guid("118422e8-af2f-4822-997a-de181d874b6c"), "O'zimizni ishchilar xarajatlari", "O'zimizni ishchilar xarajatlari" },
+                    { new Guid("12f30246-9c23-476d-a956-ec292be40def"), "Transport boyicha", "Transport boyicha" },
+                    { new Guid("216fed74-d16f-4e01-9a3c-a5e66e89373a"), "Ish qurollari", "Ish qurollari" },
+                    { new Guid("443fdee6-dc63-42b6-9604-9c626f34b3ea"), "Oziq ovqat", "Oziq ovqat" },
+                    { new Guid("7e5b5731-1cb4-4d6d-a194-a7be46dd3bd2"), "Boshqa mayda xarajatlar", "Boshqa mayda xarajatlar" },
+                    { new Guid("819ff82a-697d-47d2-a074-d593f8827c25"), "Ish xaqlari", "Ish xaqlari" },
+                    { new Guid("aae8a514-229c-4622-8442-8841c68d28d6"), "Qurilish materiallari", "Qurilish materiallari" },
+                    { new Guid("dc991a40-71ea-43fb-8313-9317025d88be"), "Hujjatlar va ofis boyicha", "Hujjatlar va ofis boyicha" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { new Guid("f58828fd-e869-4c92-9d64-c157373de9c9"), new Guid("714cbe52-27d0-4901-bd7c-081bc1a3c319") });
+                values: new object[] { new Guid("7431a0ef-efc2-4c0b-b3f3-6f501bcdd64b"), new Guid("1b0daf1c-6b82-4cde-b7a1-185d05c2f761") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

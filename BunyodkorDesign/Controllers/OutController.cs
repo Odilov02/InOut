@@ -21,7 +21,7 @@ public class OutController : Controller
     [Authorize(Roles = "User")]
     public IActionResult AddOut()
     {
-        var outTypes= _appDbContext.OutTypes.ToList();
+        var outTypes = _appDbContext.OutTypes.ToList();
         ViewData["OutTypes"] = outTypes;
         return View();
     }
@@ -115,11 +115,11 @@ public class OutController : Controller
         return View(entities);
     }
 
-    [Authorize(Roles = "Admin")]
+     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllConfirmedForAdmin(Guid constructionId)
     {
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
-        var outs = await _appDbContext.Outs.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == true).ToListAsync();
+        List<Out> outs = await _appDbContext.Outs.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == true).ToListAsync();
         return View(outs);
     }
 

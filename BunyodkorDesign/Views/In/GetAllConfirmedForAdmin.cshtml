@@ -4,8 +4,27 @@
     Layout = "_AdminLayout";
 }
 @model List<In>
-<h1 class="justify-content-center">Tasdiqlangan kirimlar </h1>
-<table class="table table-success table-striped">
+<br />
+<div class="row py-2">
+    <div class="col-6">
+        <h1 class="justify-content-center">Tasdiqlangan kirimlar </h1>
+    </div>
+    <div class="col-3 py-2">
+        <div class="contianer">
+            <div class="form-group">
+                <div class="input-group" value=" ">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+                    <input type="text" id="Search" placeholder="Search" class="form-control ">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3 py-2">
+        <button class="btn btn-success" onclick="exportToExcel()">Downland</button>
+    </div>
+</div>
+
+<table id="dataTable" class="table table-success table-striped">
     <thead>
         <tr>
             <th scope="col"></th>
@@ -19,14 +38,83 @@
             int count = 1;
             foreach (var item in Model)
             {
-                <tr>
+                <tr class="Search">
                     <th scope="row">@count</th>
-                    <td><span>@item.Date.Day</span><spap>.<span>@item.Date.Month</span><span>.</span><span>@item.Date.Year</span></td>
-                    <td>@item.Price</td>
+                    <td><span>@item.Date</span></td>
+                    <td class="price">@item.Price</td>
                     <td>@item.Reason</td>
                 </tr>
                 count++;
             }
+            <tr class="total-row">
+                <th scope="row">Jami</th>
+                <td></td>
+                <td id="totalPrice" colspan="3"></td>
+            </tr>
         }
     </tbody>
 </table>
+<script>
+    $(document).ready(function () {
+        function contains(text_one, text_two) {
+            return text_one.indexOf(text_two) != -1;
+        }
+
+        $("#Search").keyup(function () {
+            var searchtext = $("#Search").val().toLowerCase();
+
+            // Barcha yashirilgan qatorlarni olib tashlash
+            var hiddenRows = $(".Search:hidden");
+
+            // Barcha yashirilgan qatorlarni hiddenRowsContainer ga joylashtirish
+            $("#hiddenRowsContainer").empty(); // Avvalgi ma'lumotlarni tozalash
+            $("#hiddenRowsContainer").append(hiddenRows);
+
+            var totalAmount = 0;
+
+            $(".Search:visible .price").each(function () {
+                var price = parseFloat($(this).text());
+                totalAmount += price;
+            });
+
+            // Jami pricelarni chiqarish
+            $("#totalPrice").text(totalAmount);
+
+            $(".Search").each(function () {
+                if (!contains($(this).text().toLowerCase(), searchtext)) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+            });
+        });
+    });
+    function exportToExcel() {
+        const table = document.getElementById('dataTable');
+        const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+
+        function s2ab(s) {
+            const buf = new ArrayBuffer(s.length);
+            const view = new Uint8Array(buf);
+            for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        }
+
+        const blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
+        const fileName = "data.xlsx";
+
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, fileName);
+        } else {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            document.body.appendChild(a);
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+    }
+</script>
