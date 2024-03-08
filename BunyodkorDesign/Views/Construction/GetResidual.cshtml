@@ -8,15 +8,15 @@
     {
         <div class="card my-5 text-center">
             <div class="card-header">
-                <h4>Oxirgi kirim qilingan vaqti</h4>
+                <h4>Охирги қирим қилинган вакти</h4>
                 <h4>@Model.InDate.ToString("HH:mm dd.MM.yyyy")</h4>
             </div>
             <div class="card-body">
-                <h2 class="card-title">Umumiy qolgan summa</h2>
-                <h1>@Model.User.Residual</h1>
+                <h2 class="card-title">Умумий қолган сумма‌‌</h2>
+                <h1 id="formattedNumber">@Model.User.Residual</h1>
             </div>
             <div class="card-footer">
-                <h4>Oxirgi chiqim qilingan vaqti</h4>
+                <h4>Охирги чиқим қилинган вакти</h4>
                 <h4>@Model.OutDate.ToString("HH:mm dd.MM.yyyy")</h4>
             </div>
         </div>
@@ -29,7 +29,7 @@
             </div>
             <div class="card-body px-5">
                 <br />
-                <h1>Sizda hech qanday Obyekt mavjud emas!</h1>
+                <h1>Сизда хеч қандай объект мавжуд эмас!</h1>
                 <br />
             </div>
             <div class="card-footer px-5">
@@ -38,3 +38,14 @@
         </div>
     }
 }
+<script>
+    // Sonni o'qib olish
+    var numberElement = document.getElementById('formattedNumber');
+    var number = parseInt(numberElement.innerText);
+
+    // Formatlash va probel qo'shish
+    var formattedNumber = number.toLocaleString('en').replace(/,/g, ' ');
+
+    // HTML-ga chiqarish
+    numberElement.innerText = formattedNumber;
+</script>

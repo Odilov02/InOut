@@ -5,7 +5,7 @@
 }
 @model UserCridential;
  <!-- Design by foolishdeveloper.com -->
-    <title>Glassmorphism login Form Tutorial in html css</title>
+   
  
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -141,16 +141,16 @@ button{
         <div class="shape"></div>
     </div>
    <form method="post" asp-action="Login">
-        <h3>Login Here</h3>
+    <h3>Тизимга кириш</h3>
       <div>
-        <label for="Username">Username</label>
-        <input type="text" placeholder="Email or Phone" id="UserName" name="UserName">
+        <label for="Username">Логин</label>
+        <input type="text" placeholder="Логин киритинг..." id="UserName" name="UserName">
         <span asp-validation-for="UserName"></span>
       </div>
         <div>
-        <label for="Password">Password</label>
-        <input type="password" placeholder="Password" id="Password" name="Password">
+        <label for="Password">Парол</label>
+        <input type="password" placeholder="Рарол киритинг..." id="Password" name="Password">
         <span asp-validation-for="Password"></span>
         </div>
-        <button type="submit">Log In</button>
+    <button type="submit">Кириш</button>
     </form>

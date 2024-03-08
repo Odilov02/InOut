@@ -7,20 +7,20 @@
 <br />
 <div class="row py-2">
     <div class="col-6">
-        <h1 class="justify-content-center">Tasdiqlangan kirimlar </h1>
+        <h1 class="justify-content-center">Тасдиқланган киримлар </h1>
     </div>
     <div class="col-3 py-2">
         <div class="contianer">
             <div class="form-group">
                 <div class="input-group" value=" ">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
-                    <input type="text" id="Search" placeholder="Search" class="form-control ">
+                    <input type="text" id="Search" placeholder="Қидирмоқ..." class="form-control ">
                 </div>
             </div>
         </div>
     </div>
     <div class="col-3 py-2">
-        <button class="btn btn-success" onclick="exportToExcel()">Downland</button>
+        <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
 </div>
 
@@ -28,9 +28,9 @@
     <thead>
         <tr>
             <th scope="col"></th>
-            <th scope="col">Date</th>
-            <th scope="col">Price</th>
-            <th scope="col">Reason</th>
+            <th scope="col">Вакти</th>
+            <th scope="col">Нархи</th>
+            <th scope="col">Сабаби</th>
         </tr>
     </thead>
     <tbody>
@@ -47,7 +47,7 @@
                 count++;
             }
             <tr class="total-row">
-                <th scope="row">Jami</th>
+                <th scope="row">Жами</th>
                 <td></td>
                 <td id="totalPrice" colspan="3"></td>
             </tr>

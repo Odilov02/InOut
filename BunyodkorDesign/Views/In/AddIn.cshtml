@@ -52,23 +52,23 @@
     <!-- Details -->
     <div class="form-control">
         <label for="Price" id="Price">
-            Summa
+            Сумма
         </label>
 
         <!-- Input Type Text -->
         <input type="hidden" id="ConstructionId" name="ConstructionId" value="@Model.ConstructionId" />  
                <input type="number" id="Price" min="0" name="Price"
-               placeholder="Enter a summa" />
+               placeholder="Суммани киритинг..." />
         <span asp-validation-for="Price"></span>
     </div>
     <div class="form-control">
         <label for="comment">
-            Chiqim sababi
+            Кирим сабаби
         </label>
 
         <!-- multi-line text input control -->
         <textarea name="Reason" id="Reason"
-                  placeholder="Enter your reason here"></textarea>
+                  placeholder="Кирим сабабини киритинг..."></textarea>
         <span asp-validation-for="Reason"></span>
     </div>
 
@@ -82,6 +82,6 @@
         width: 40%;
         margin-top: 50px;
         margin-bottom: 20px;">
-        Submit
+        Сақлаш
     </button>
 </form>

@@ -7,20 +7,20 @@
 <br />
 <div class="row py-2">
     <div class="col-6">
-        <h1 >Kirimlarni tasdiqlang! </h1>
+        <h1>Киримларни тасдиклаш! </h1>
     </div>
     <div class="col-3 py-2">
         <div class="contianer">
             <div class="form-group">
                 <div class="input-group" value=" ">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
-                    <input type="text" id="Search" placeholder="Search" class="form-control ">
+                    <input type="text" id="Search" placeholder="Қидирмоқ..." class="form-control ">
                 </div>
             </div>
         </div>
     </div>
     <div class="col-3 py-2">
-        <button class="btn btn-success" onclick="exportToExcel()">Downland</button>
+        <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
 </div>
 <form asp-action="ConfirmationIn" method="post">
@@ -28,10 +28,10 @@
         <thead>
             <tr>
                 <th scope="col"></th>
-                <th scope="col">Date</th>
-                <th scope="col">Price</th>
-                <th scope="col">Reason</th>
-                <th scope="col">tasdiqlash</th>
+                <th scope="col">Вакти</th>
+                <th scope="col">Нархи</th>
+                <th scope="col">Сабаби</th>
+                <th scope="col">Tасдиклаш</th>
             </tr>
         </thead>
         <tbody>
@@ -55,7 +55,7 @@
                     count++;
                 }
                 <tr class="total-row">
-                    <th scope="row">Jami</th>
+                    <th scope="row">Жами</th>
                     <td></td>
                     <td id="totalPrice" colspan="3"></td>
                 </tr>
@@ -63,7 +63,7 @@
         </tbody>
     </table>
     <div class="d-grid gap-2 col-3 mx-auto">
-        <button class="btn btn-success py-3" type="submit">Submit</button>
+        <button class="btn btn-success py-3" type="submit">Сақлаш</button>
     </div>
 </form>
 <script>

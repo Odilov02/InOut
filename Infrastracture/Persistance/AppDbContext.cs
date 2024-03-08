@@ -21,50 +21,50 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
         builder.Entity<OutType>().HasData(new OutType
         {
             Id=Guid.NewGuid(),
-            Name = "O'zimizni ishchilar xarajatlari",
-            Descraption = "O'zimizni ishchilar xarajatlari"
+            Name = "У́зимизни ишчилар харажатлари",
+            Descraption = "У́зимизни ишчилар харажатлари"
         },
         new OutType
         {
             Id = Guid.NewGuid(),
-            Name = "Oziq ovqat",
-            Descraption = "Oziq ovqat"
+            Name = "Озик-овкат харажатлари",
+            Descraption = "Озик-овкат харажатлари"
         },
         new OutType
         {
             Id = Guid.NewGuid(),
-            Name = "Ish xaqlari",
-            Descraption = "Ish xaqlari"
+            Name = "Иш хаклари",
+            Descraption = "Иш хаклари"
         },
         new OutType
         {
             Id = Guid.NewGuid(),
-            Name = "Transport boyicha",
-            Descraption = "Transport boyicha"
+            Name = "Транспорт харажатлари",
+            Descraption = "Транспорт харажатлари"
         },
         new OutType
         {
             Id = Guid.NewGuid(),
-            Name = "Hujjatlar va ofis boyicha",
-            Descraption = "Hujjatlar va ofis boyicha"
+            Name = "Хужжатлар ва офис харажатлари",
+            Descraption = "Хужжатлар ва офис харажатлари"
         },
         new OutType
         {
             Id = Guid.NewGuid(),
-            Name = "Qurilish materiallari",
-            Descraption = "Qurilish materiallari"
+            Name = "Курилиш материаллар харажатлари",
+            Descraption = "Курилиш материаллар харажатлари"
         },
         new OutType
         {
             Id = Guid.NewGuid(),
-            Name = "Ish qurollari",
-            Descraption = "Ish qurollari"
+            Name = "Иш куроллар харажатлари",
+            Descraption = "Иш куроллар харажатлари"
         },
         new OutType
         {
             Id = Guid.NewGuid(),
-            Name = "Boshqa mayda xarajatlar",
-            Descraption = "Boshqa mayda xarajatlar"
+            Name = "Бошка майда харажатлар",
+            Descraption = "Бошка майда харажатлар"
         });
 
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

@@ -51,17 +51,17 @@
     <!-- Details -->
     <div class="form-control">
         <label for="FullName" id="FullName">
-            Obyekt nomi
+            Объект номи
         </label>
 
         <!-- Input Type Text -->
         <input type="text" id="FullName" name="FullName"
-               placeholder="Enter a name" />
+               placeholder="Объект номини киритинг..." />
         <span asp-validation-for="FullName"></span>
     </div>
     <div class="form-control">
         <label for="UserId" id="UserId">
-            obyekt uchun masul shaxs
+            Объект учун масъул шахс
         </label>
 
         <!-- Dropdown options -->
@@ -69,7 +69,11 @@
             @{
                 if (users is null)
                 {
-                    <option value="@null">User Mavjud emas</option>
+                    <option value="@null">Фойдаланувчи мавжуд эмас</option>
+                }
+              else  if (users.ToList().Count==0)
+                {
+                    <option value="@null">Фойдаланувчи мавжуд эмас</option>
                 }
                 else
                 {
@@ -84,12 +88,12 @@
     </div>
     <div class="form-control">
         <label for="Description">
-            Obyekt haqida malumot
+            Объект хакида маълумот
         </label>
 
         <!-- multi-line text input control -->
         <textarea name="Description" id="Description"
-                  placeholder="Enter Description"></textarea>
+                  placeholder="Объект хакида маълумот киритинг..."></textarea>
     </div>
 
     <!-- Multi-line Text Input Control -->
@@ -102,6 +106,6 @@
         width: 40%;
         margin-top: 50px;
         margin-bottom: 20px;">
-        Submit
+        Сақлаш
     </button>
 </form>
