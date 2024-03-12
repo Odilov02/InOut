@@ -59,9 +59,14 @@ namespace Infrastructure.Persistance.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
+                    b.Property<Guid>("SpendTypeId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ConstructionId");
+
+                    b.HasIndex("SpendTypeId");
 
                     b.ToTable("AdminSpends");
                 });
@@ -71,6 +76,9 @@ namespace Infrastructure.Persistance.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<long>("ContractPrice")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
@@ -181,20 +189,20 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("272ec034-a375-4d87-8d7e-6fac9b96329b"),
+                            Id = new Guid("495f4c2f-50de-4e30-b5e8-965c0f4d9ac2"),
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = new Guid("a6a878b4-3afd-4c60-89a5-68f28fd6607d"),
-                            ConcurrencyStamp = "d059e24c-4cd3-4c0c-83a0-450d96325aa5",
+                            Id = new Guid("f3fbc1e6-de5f-4580-9146-ad0f40a70b05"),
+                            ConcurrencyStamp = "9fdeec60-2c3c-4b80-b433-1ec5f24042d0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("a54e75a2-a44d-4df6-ae66-39d9c92d9f24"),
+                            Id = new Guid("f9842634-6bd5-4fb4-93aa-e3ab67a68b21"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -270,49 +278,49 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7ea1cd7a-963c-4807-98ec-be7ff9608fa9"),
+                            Id = new Guid("6c408a40-4d35-4a99-822a-cfe03cc99998"),
                             Descraption = "У́зимизни ишчилар харажатлари",
                             Name = "У́зимизни ишчилар харажатлари"
                         },
                         new
                         {
-                            Id = new Guid("965464f0-4945-457f-8353-21ae2343a812"),
+                            Id = new Guid("5052114b-4545-484f-b870-6efa7fbde676"),
                             Descraption = "Озик-овкат харажатлари",
                             Name = "Озик-овкат харажатлари"
                         },
                         new
                         {
-                            Id = new Guid("714c1467-1b76-471f-a354-ac31fb952c85"),
+                            Id = new Guid("72345e12-709a-491d-9732-5326a4ca765d"),
                             Descraption = "Иш хаклари",
                             Name = "Иш хаклари"
                         },
                         new
                         {
-                            Id = new Guid("5be03e4a-6e73-4ec5-978d-01a0403e02a2"),
+                            Id = new Guid("d3634221-3cad-413b-98dc-c6493b8b96ab"),
                             Descraption = "Транспорт харажатлари",
                             Name = "Транспорт харажатлари"
                         },
                         new
                         {
-                            Id = new Guid("dd650ecf-a2a7-41fd-9a05-9a135b9d5ca7"),
+                            Id = new Guid("38cd7585-610d-4f6d-8739-6f3902d94e62"),
                             Descraption = "Хужжатлар ва офис харажатлари",
                             Name = "Хужжатлар ва офис харажатлари"
                         },
                         new
                         {
-                            Id = new Guid("1244c413-c131-4602-a578-477d58e9a4c5"),
+                            Id = new Guid("50a8e668-6eab-4d7f-a1f0-8be18115c259"),
                             Descraption = "Курилиш материаллар харажатлари",
                             Name = "Курилиш материаллар харажатлари"
                         },
                         new
                         {
-                            Id = new Guid("1c7ba95e-4b5d-488d-909f-8e468a1abf3a"),
+                            Id = new Guid("0ae6e8f1-1c83-418a-8552-a58c37e0b229"),
                             Descraption = "Иш куроллар харажатлари",
                             Name = "Иш куроллар харажатлари"
                         },
                         new
                         {
-                            Id = new Guid("1837cb66-dc10-4041-b9c7-cf9c48a640d5"),
+                            Id = new Guid("de161803-d490-44fa-a347-67a091564da1"),
                             Descraption = "Бошка майда харажатлар",
                             Name = "Бошка майда харажатлар"
                         });
@@ -407,9 +415,9 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("24bbb5ff-f6ff-4e0e-89cc-a9a9ab6f1c86"),
+                            Id = new Guid("dcd54040-0a67-4a5e-8e09-a18b02a10370"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6e6d5022-8398-4a0f-b0d5-582363ac156a",
+                            ConcurrencyStamp = "7d52a3cb-2c9e-48be-901e-171b28402967",
                             EmailConfirmed = false,
                             FullName = "Diyorbek Odilov",
                             LockoutEnabled = false,
@@ -417,7 +425,7 @@ namespace Infrastructure.Persistance.Migrations
                             PhoneNumber = "+998942922288",
                             PhoneNumberConfirmed = false,
                             Residual = 0L,
-                            SecurityStamp = "6c431065-e2ac-4940-90d8-9c11b6008478",
+                            SecurityStamp = "6c9779ce-72ce-4da2-8cab-b8777bb73cca",
                             TwoFactorEnabled = false,
                             UserName = "DiyorbekOdilov19"
                         });
@@ -509,8 +517,8 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("24bbb5ff-f6ff-4e0e-89cc-a9a9ab6f1c86"),
-                            RoleId = new Guid("a6a878b4-3afd-4c60-89a5-68f28fd6607d")
+                            UserId = new Guid("dcd54040-0a67-4a5e-8e09-a18b02a10370"),
+                            RoleId = new Guid("f3fbc1e6-de5f-4580-9146-ad0f40a70b05")
                         });
                 });
 
@@ -541,7 +549,15 @@ namespace Infrastructure.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.SpendType", "SpendType")
+                        .WithMany("AdminSpends")
+                        .HasForeignKey("SpendTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Construction");
+
+                    b.Navigation("SpendType");
                 });
 
             modelBuilder.Entity("Domain.Entities.Construction", b =>
@@ -643,6 +659,8 @@ namespace Infrastructure.Persistance.Migrations
 
             modelBuilder.Entity("Domain.Entities.SpendType", b =>
                 {
+                    b.Navigation("AdminSpends");
+
                     b.Navigation("Spends");
                 });
 

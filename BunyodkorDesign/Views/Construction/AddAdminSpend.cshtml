@@ -3,6 +3,9 @@
     Layout = "_AdminLayout";
 }
 @model AdminSpend
+@{
+    List<Domain.Entities.SpendType>? spendTypes = (List<Domain.Entities.SpendType>)ViewData["SpendTypes"]!;
+}
 <style>
     /* Styling the Form (Color, Padding, Shadow) */
     form {
@@ -60,6 +63,30 @@
                <input type="number" id="Price" min="0" name="Price"
                placeholder="Суммани киритинг..." />
         <span asp-validation-for="Price"></span>
+    </div>
+    <div class="form-control">
+        <label for="SpendTypeId" id="SpendTypeId">
+            Чиқим тури
+        </label>
+
+        <!-- Dropdown options -->
+        <select name="SpendTypeId" id="SpendTypeId">
+            @{
+                if (spendTypes is null)
+                {
+                    <option value="@null">Бошка харажатлар</option>
+                }
+                else
+                {
+                    foreach (var outType in spendTypes)
+                    {
+                        <option value="@outType.Id">@outType.Name</option>
+                    }
+                }
+            }
+
+        </select>
+        <span asp-validation-for="SpendTypeId"></span>
     </div>
     <div class="form-control">
         <label for="comment">

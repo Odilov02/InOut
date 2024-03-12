@@ -12,4 +12,5 @@ public class Construction:BaseEntity
     public Guid UserId { get; set; }
     public virtual User User { get; set; }
     public virtual ICollection<AdminSpend?> AdminSpends { get; set; }
+    public  long ContractPrice { get; set; }
 }

@@ -68,6 +68,15 @@
             $("#hiddenRowsContainer").empty(); // Avvalgi ma'lumotlarni tozalash
             $("#hiddenRowsContainer").append(hiddenRows);
 
+         
+
+            $(".Search").each(function () {
+                if (!contains($(this).text().toLowerCase(), searchtext)) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+            });
             var totalAmount = 0;
 
             $(".Search:visible .price").each(function () {
@@ -77,14 +86,6 @@
 
             // Jami pricelarni chiqarish
             $("#totalPrice").text(totalAmount);
-
-            $(".Search").each(function () {
-                if (!contains($(this).text().toLowerCase(), searchtext)) {
-                    $(this).hide();
-                } else {
-                    $(this).show();
-                }
-            });
         });
     });
     function exportToExcel() {

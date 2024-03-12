@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 namespace Application.Common.Dtos.ConstructionDtos;
+#nullable disable
 public class AddConstructionDto
 {
     [NotNull]
@@ -12,4 +13,5 @@ public class AddConstructionDto
     [NotNull]
     [MaxLength (200)]
     public string Description { get; set; }
+    public long ContractPrice { get; set; }
 }

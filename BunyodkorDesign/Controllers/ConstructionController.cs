@@ -92,6 +92,8 @@ public class ConstructionController : Controller
         {
             ConstructionId = constructionId
         };
+        var spendTypes = _appDbContext.SpendTypes.ToList();
+        ViewData["SpendTypes"] = spendTypes;
         return View(adminSpend);
     }
 
@@ -99,11 +101,18 @@ public class ConstructionController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AddAdminSpend(AdminSpend adminSpend)
     {
+            var spendTypes = _appDbContext.SpendTypes.ToList();
         if (!ModelState.IsValid)
+        {
+            ViewData["SpendTypes"] = spendTypes;
             return View(adminSpend);
+        }
         Construction? construction = _appDbContext.Constructions.FirstOrDefault(x => x.Id == adminSpend.ConstructionId);
         if (construction == null)
+        {
+            ViewData["SpendTypes"] = spendTypes;
             return View(adminSpend);
+        }
         _appDbContext.AdminSpends.Add(adminSpend);
         var result = await _appDbContext.SaveChangesAsync();
         if (result > 0)
@@ -112,8 +121,9 @@ public class ConstructionController : Controller
             construction.SpendDate = DateTime.Now;
             _appDbContext.Constructions.Update(construction);
             await _appDbContext.SaveChangesAsync();
-            return RedirectToAction("GetAllConstruction", new { constructionId = adminSpend.ConstructionId } );
+            return RedirectToAction("GetAllConstruction", new { constructionId = adminSpend.ConstructionId });
         }
+        ViewData["SpendTypes"] = spendTypes;
         return View(adminSpend);
     }
 }

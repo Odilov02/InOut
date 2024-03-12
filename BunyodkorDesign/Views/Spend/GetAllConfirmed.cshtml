@@ -88,6 +88,15 @@
                     $(this).show();
                 }
             });
+            var totalAmount = 0;
+
+            $(".Search:visible .price").each(function () {
+                var price = parseFloat($(this).text());
+                totalAmount += price;
+            });
+
+            // Jami pricelarni chiqarish
+            $("#totalPrice").text(totalAmount);
         });
     });
     function exportToExcel() {

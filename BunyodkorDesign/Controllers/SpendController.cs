@@ -1,5 +1,6 @@
 ﻿using Application.Common.Dtos.SpendDtos;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using AutoMapper;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -59,7 +60,7 @@ public class SpendController : Controller
     public IActionResult GetAllConfirmed()
     {
         var userId = (HttpContext.Session.GetString("UserId"));
-        List<Spend> spends = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == true&&x.UserId.ToString()==userId).ToList();
+        List<Spend> spends = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == true && x.UserId.ToString() == userId).ToList();
         return View(spends);
     }
 
@@ -113,12 +114,44 @@ public class SpendController : Controller
         return View(entities);
     }
 
-     [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllConfirmedForAdmin(Guid constructionId)
     {
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
+        List<AllSpend> allSpends = new List<AllSpend>();
         List<Spend> spends = await _appDbContext.Spends.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == true).ToListAsync();
-        return View(spends);
+        if (spends is not null)
+        {
+            foreach (var item in spends)
+            {
+                AllSpend allSpend = new AllSpend()
+                {
+                    AdminOrUser = "P",
+                    Date = item.Date,
+                    Price = item.Price,
+                    Reason = item.Reason,
+                    SpendType = item.SpendType.Name
+                };
+                allSpends.Add(allSpend);
+            }
+        }
+        var spendAdmin = _appDbContext.AdminSpends.Where(x => x.ConstructionId == constructionId).ToList();
+        if (spendAdmin is not null)
+        {
+            foreach (var item in spendAdmin)
+            {
+                AllSpend allSpend = new AllSpend()
+                {
+                    AdminOrUser = "A",
+                    Date = item.CreatedDate,
+                    Price = item.Price,
+                    Reason = item.Reason,
+                    SpendType = item.SpendType.Name
+                };
+                allSpends.Add(allSpend);
+            }
+        }
+        return View(allSpends);
     }
 
     [Authorize(Roles = "Admin")]

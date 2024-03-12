@@ -60,10 +60,19 @@
         <span asp-validation-for="FullName"></span>
     </div>
     <div class="form-control">
+        <label for="ContractPrice" id="ContractPrice">
+            ContractPrice
+        </label>
+
+        <!-- Input Type Text -->
+        <input type="number" id="ContractPrice" name="ContractPrice"
+               placeholder="ContractPrice киритинг..." />
+        <span asp-validation-for="ContractPrice"></span>
+    </div>
+    <div class="form-control">
         <label for="UserId" id="UserId">
             Объект учун масъул шахс
         </label>
-
         <!-- Dropdown options -->
         <select name="UserId" id="UserId">
             @{
