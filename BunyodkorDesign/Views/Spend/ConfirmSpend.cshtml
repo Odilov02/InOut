@@ -1,11 +1,11 @@
 ﻿@using Domain.Entities;
 @{
-    Layout = "_UserLayout";
+    Layout = "_AdminLayout";
 }
-@model List<In>
-<div class="row py-2">
+@model List<Spend>
+<div class="row py-4">
     <div class="col-6">
-        <h1 class="justify-content-center">Тасдиқланган киримлар </h1>
+        <h1>Чиқимларни тасдиқлаш! </h1>
     </div>
     <div class="col-3 py-2">
         <div class="contianer">
@@ -21,37 +21,52 @@
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
 </div>
-
-<table id="dataTable" class="table table-success table-striped">
-    <thead>
-        <tr>
-            <th scope="col"></th>
-            <th scope="col">Вакти</th>
-            <th scope="col">Нархи</th>
-            <th scope="col">Сабаби</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            int count = 1;
-            foreach (var item in Model)
-            {
-                <tr class="Search">
-                    <th scope="row">@count</th>
-                    <td><span>@item.Date.ToString("HH:mm dd.MM.yyyy")</span></td>
-                    <td class="price">@item.Price</td>
-                    <td>@item.Reason</td>
-                </tr>
-                count++;
-            }
-            <tr class="total-row">
-                <th scope="row">Жами</th>
-                <td></td>
-                <td id="totalPrice" colspan="3"></td>
+<form asp-action="ConfirmSpend" method="post">
+    <table id="dataTable" class="table table-success table-striped">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Вакти</th>
+                <th scope="col">Нархи</th>
+                <th scope="col">Чиқим тури</th>
+                <th scope="col">Сабаби</th>
+                <th scope="col">Тасдиқлаш</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @{
+                int count = 1;
+                foreach (var item in Model)
+                {
+                    int index = count - 1;
+                    <tr class="Search">
+                        <th scope="row">@count</th>
+                        <td><span>@item.Date.ToString("HH:mm dd.MM.yyyy")</span></td>
+                        <td class="price">@item.Price</td>
+                        <td>@item.SpendType.Name</td>
+                        <td>@item.Reason</td>
+                        <td>
+                            <input type="hidden" name="outDtos[@index].Id" value="@item.Id" />
+                            <div class="form-check">
+                                <input name="outDtos[@index].IsConfirmed" class="form-check-input" type="checkbox" value="true" id="flexCheckChecked" checked>
+                            </div>
+                        </td>
+                    </tr>
+                    count++;
+                }
+                <tr class="total-row">
+                    <th scope="row">Жами</th>
+                    <td></td>
+                    <td id="totalPrice" colspan="3"></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="d-grid gap-2 col-3 mx-auto">
+        <button class="btn btn-success py-3" type="submit">Сақлаш</button>
+    </div>
+</form>
 <script>
     $(document).ready(function () {
         function contains(text_one, text_two) {

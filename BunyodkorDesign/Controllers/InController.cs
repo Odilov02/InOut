@@ -24,15 +24,16 @@ public class InController : Controller
     [Authorize(Roles = "User")]
     public IActionResult GetAllConfirmed()
     {
-        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true).ToList();
+        var userId = (HttpContext.Session.GetString("UserId"));
+        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true && x.User.Id.ToString() == userId).ToList();
         return View(ins);
     }
 
     [Authorize(Roles = "User")]
-    public async Task<IActionResult> GetAllNoConfirmed()
+    public IActionResult GetAllNoConfirmed()
     {
         var userId = (HttpContext.Session.GetString("UserId"));
-        List<In?> ins = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList();
+        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && x.User.Id.ToString() == userId).ToList();
         return View(ins);
     }
 
@@ -49,7 +50,7 @@ public class InController : Controller
     public async Task<IActionResult> ConfirmationIn(List<ConfirmationIn?> insDto)
     {
         var userId = (HttpContext.Session.GetString("UserId"));
-        if(!ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
             List<In?> insdto = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList();
             return View(insdto);
@@ -110,8 +111,8 @@ public class InController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllNoConfirmedForAdmin(Guid constructionId)
     {
-        var construction=await _appDbContext.Constructions.FirstOrDefaultAsync(x=>x.Id==constructionId);
-        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false&&x.User.Id==construction!.UserId).ToList();
+        var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
+        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && x.User.Id == construction!.UserId).ToList();
         return View(ins);
     }
 

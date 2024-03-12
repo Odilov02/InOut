@@ -1,0 +1,46 @@
+﻿@{
+    Layout = "_UserLayout";
+}
+<div class="row py-2">
+    <div class="col-sm-3">
+    </div>
+    <div class="col-sm-6 ">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title py-3">Янги чиқим қу́шиш</h4>
+                <a asp-action="AddSpend" asp-controller="Spend" class="btn btn-primary mx-3 my-2"><h4>Кириш</h4></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+    </div>
+</div>
+<div class="row pt-3 pb-2">
+    <div class="col-sm-3">
+    </div>
+    <div class="col-sm-6 ">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title py-3">Тасдиқланган чиқимларни батафсил ку́риш</h4>
+                <a asp-action="GetAllConfirmed" asp-controller="Spend" class="btn btn-success mx-3 my-2"><h4>Кириш</h4></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+    </div>
+</div>
+<div class="row py-2">
+    <div class="col-sm-3">
+    </div>
+    <div class="col-sm-6 ">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title py-3">Тасдиқланмаган чиқимларни батафсил ку́риш</h4>
+                <a asp-action="GetAllNoConfirmed" asp-controller="Spend" class="btn btn-danger mx-3 my-2"><h4>Кириш</h4></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+    </div>
+</div>
+

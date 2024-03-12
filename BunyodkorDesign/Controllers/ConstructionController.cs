@@ -69,10 +69,8 @@ public class ConstructionController : Controller
         }
         var construction = _mapper.Map<Construction>(constructionDto);
         var user = _userManager.Users.FirstOrDefault(x => x.Id == construction.UserId);
-        var c = _appDbContext.Constructions.ToList();
-        var u = _appDbContext.Users.ToList();
         await _appDbContext.Constructions.AddAsync(construction);
-        var result =  await _appDbContext.SaveChangesAsync();
+        var result = await _appDbContext.SaveChangesAsync();
         if (result > 0)
         {
             await _userManager.AddToRoleAsync(user!, "User");
@@ -82,4 +80,40 @@ public class ConstructionController : Controller
     }
     [Authorize(Roles = "Admin")]
     public IActionResult Choose(Guid constructionId) => View(constructionId);
+    public IActionResult GetAllDetails()
+    {
+        List<Construction> constructions = _appDbContext.Constructions.ToList();
+        return View(constructions);
+    }
+    [Authorize(Roles = "Admin")]
+    public IActionResult AddAdminSpend(Guid constructionId)
+    {
+        var adminSpend = new AdminSpend()
+        {
+            ConstructionId = constructionId
+        };
+        return View(adminSpend);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> AddAdminSpend(AdminSpend adminSpend)
+    {
+        if (!ModelState.IsValid)
+            return View(adminSpend);
+        Construction? construction = _appDbContext.Constructions.FirstOrDefault(x => x.Id == adminSpend.ConstructionId);
+        if (construction == null)
+            return View(adminSpend);
+        _appDbContext.AdminSpends.Add(adminSpend);
+        var result = await _appDbContext.SaveChangesAsync();
+        if (result > 0)
+        {
+            construction.Spend += adminSpend.Price;
+            construction.SpendDate = DateTime.Now;
+            _appDbContext.Constructions.Update(construction);
+            await _appDbContext.SaveChangesAsync();
+            return RedirectToAction("GetAllConstruction", new { constructionId = adminSpend.ConstructionId } );
+        }
+        return View(adminSpend);
+    }
 }

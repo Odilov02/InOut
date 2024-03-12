@@ -9,58 +9,59 @@ namespace Infrastructure.Persistance;
 public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
 {
     public DbSet<In> Ins { get; set; }
-    public DbSet<Out> Outs { get; set; }
+    public DbSet<Spend> Spends { get; set; }
+    public DbSet<AdminSpend> AdminSpends { get; set; }
     public DbSet<Construction> Constructions { get; set; }
-    public DbSet<OutType> OutTypes { get; set; }
+    public DbSet<SpendType> SpendTypes { get; set; }
     public AppDbContext(DbContextOptions<AppDbContext> options)
        : base(options)
     {
     }
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<OutType>().HasData(new OutType
+        builder.Entity<SpendType>().HasData(new SpendType
         {
             Id=Guid.NewGuid(),
             Name = "У́зимизни ишчилар харажатлари",
             Descraption = "У́зимизни ишчилар харажатлари"
         },
-        new OutType
+        new SpendType
         {
             Id = Guid.NewGuid(),
             Name = "Озик-овкат харажатлари",
             Descraption = "Озик-овкат харажатлари"
         },
-        new OutType
+        new SpendType
         {
             Id = Guid.NewGuid(),
             Name = "Иш хаклари",
             Descraption = "Иш хаклари"
         },
-        new OutType
+        new SpendType
         {
             Id = Guid.NewGuid(),
             Name = "Транспорт харажатлари",
             Descraption = "Транспорт харажатлари"
         },
-        new OutType
+        new SpendType
         {
             Id = Guid.NewGuid(),
             Name = "Хужжатлар ва офис харажатлари",
             Descraption = "Хужжатлар ва офис харажатлари"
         },
-        new OutType
+        new SpendType
         {
             Id = Guid.NewGuid(),
             Name = "Курилиш материаллар харажатлари",
             Descraption = "Курилиш материаллар харажатлари"
         },
-        new OutType
+        new SpendType
         {
             Id = Guid.NewGuid(),
             Name = "Иш куроллар харажатлари",
             Descraption = "Иш куроллар харажатлари"
         },
-        new OutType
+        new SpendType
         {
             Id = Guid.NewGuid(),
             Name = "Бошка майда харажатлар",
@@ -97,9 +98,10 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
             Id = adminId,
             FullName = "Diyorbek Odilov",
             UserName = "DiyorbekOdilov19",
+            PhoneNumber="+998942922288",
             Password = "DiyorbekOdilov19".stringHash(),
             SecurityStamp = Guid.NewGuid().ToString()
-        });
+        });;
         builder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
         {
             RoleId = roleId,

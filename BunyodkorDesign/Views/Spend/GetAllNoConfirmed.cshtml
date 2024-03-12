@@ -1,13 +1,15 @@
-﻿@using Domain.Entities;
+﻿@using Application.Common.Dtos.SpendDtos;
+@using Domain.Entities;
 @{
     Layout = "_UserLayout";
 }
-@model List<In>
+@model List<Spend>
+<br />
 <div class="row py-2">
     <div class="col-6">
-        <h1 class="justify-content-center">Тасдиқланган киримлар </h1>
+        <h1 class="justify-content-center">Тасдиқланмаган чиқимлар </h1>
     </div>
-    <div class="col-3 py-2">
+    <div class="col-3 py-3">
         <div class="contianer">
             <div class="form-group">
                 <div class="input-group" value=" ">
@@ -28,6 +30,7 @@
             <th scope="col"></th>
             <th scope="col">Вакти</th>
             <th scope="col">Нархи</th>
+            <th scope="col">Чиқим тури</th>
             <th scope="col">Сабаби</th>
         </tr>
     </thead>
@@ -40,6 +43,7 @@
                     <th scope="row">@count</th>
                     <td><span>@item.Date.ToString("HH:mm dd.MM.yyyy")</span></td>
                     <td class="price">@item.Price</td>
+                    <td>@item.SpendType.Name</td>
                     <td>@item.Reason</td>
                 </tr>
                 count++;
@@ -68,6 +72,14 @@
             $("#hiddenRowsContainer").empty(); // Avvalgi ma'lumotlarni tozalash
             $("#hiddenRowsContainer").append(hiddenRows);
 
+
+            $(".Search").each(function () {
+                if (!contains($(this).text().toLowerCase(), searchtext)) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+            });
             var totalAmount = 0;
 
             $(".Search:visible .price").each(function () {
@@ -77,14 +89,6 @@
 
             // Jami pricelarni chiqarish
             $("#totalPrice").text(totalAmount);
-
-            $(".Search").each(function () {
-                if (!contains($(this).text().toLowerCase(), searchtext)) {
-                    $(this).hide();
-                } else {
-                    $(this).show();
-                }
-            });
         });
     });
     function exportToExcel() {

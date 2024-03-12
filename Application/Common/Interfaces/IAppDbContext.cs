@@ -7,8 +7,9 @@ public interface IAppDbContext
 {
     EntityEntry Entry(object entity);
     DbSet<In> Ins { get; }
-    DbSet<Out> Outs { get; }
-    DbSet<OutType> OutTypes { get; }
+    DbSet<Spend> Spends { get; }
+    DbSet<AdminSpend> AdminSpends { get; }
+    DbSet<SpendType> SpendTypes { get; }
     DbSet<Construction> Constructions { get; }
     DbSet<User> Users { get; }
     Task<int> SaveChangesAsync(CancellationToken token = default);

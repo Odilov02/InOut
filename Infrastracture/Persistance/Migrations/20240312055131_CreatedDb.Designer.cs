@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Persistance.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240306064055_CreatedDb")]
+    [Migration("20240312055131_CreatedDb")]
     partial class CreatedDb
     {
         /// <inheritdoc />
@@ -28,6 +28,47 @@ namespace Infrastructure.Persistance.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Entities.AdminSpend", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ConstructionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("Lasted")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("LastedBy")
+                        .HasColumnType("text");
+
+                    b.Property<long>("Price")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValue(0L);
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConstructionId");
+
+                    b.ToTable("AdminSpends");
+                });
+
             modelBuilder.Entity("Domain.Entities.Construction", b =>
                 {
                     b.Property<Guid>("Id")
@@ -35,25 +76,29 @@ namespace Infrastructure.Persistance.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("FullName")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<long>("In")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("InDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<long>("Out")
+                    b.Property<long>("Spend")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("OutDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("SpendDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -73,29 +118,32 @@ namespace Infrastructure.Persistance.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsConfirmed")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("Lasted")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("LastedBy")
                         .HasColumnType("text");
 
                     b.Property<long>("Price")
-                        .HasColumnType("bigint");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValue(0L);
 
                     b.Property<string>("Reason")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -105,121 +153,6 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Ins");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Out", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("Lasted")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("OutTypeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<long>("Price")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OutTypeId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Outs");
-                });
-
-            modelBuilder.Entity("Domain.Entities.OutType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Descraption")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OutTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("118422e8-af2f-4822-997a-de181d874b6c"),
-                            Descraption = "O'zimizni ishchilar xarajatlari",
-                            Name = "O'zimizni ishchilar xarajatlari"
-                        },
-                        new
-                        {
-                            Id = new Guid("443fdee6-dc63-42b6-9604-9c626f34b3ea"),
-                            Descraption = "Oziq ovqat",
-                            Name = "Oziq ovqat"
-                        },
-                        new
-                        {
-                            Id = new Guid("819ff82a-697d-47d2-a074-d593f8827c25"),
-                            Descraption = "Ish xaqlari",
-                            Name = "Ish xaqlari"
-                        },
-                        new
-                        {
-                            Id = new Guid("12f30246-9c23-476d-a956-ec292be40def"),
-                            Descraption = "Transport boyicha",
-                            Name = "Transport boyicha"
-                        },
-                        new
-                        {
-                            Id = new Guid("dc991a40-71ea-43fb-8313-9317025d88be"),
-                            Descraption = "Hujjatlar va ofis boyicha",
-                            Name = "Hujjatlar va ofis boyicha"
-                        },
-                        new
-                        {
-                            Id = new Guid("aae8a514-229c-4622-8442-8841c68d28d6"),
-                            Descraption = "Qurilish materiallari",
-                            Name = "Qurilish materiallari"
-                        },
-                        new
-                        {
-                            Id = new Guid("216fed74-d16f-4e01-9a3c-a5e66e89373a"),
-                            Descraption = "Ish qurollari",
-                            Name = "Ish qurollari"
-                        },
-                        new
-                        {
-                            Id = new Guid("7e5b5731-1cb4-4d6d-a194-a7be46dd3bd2"),
-                            Descraption = "Boshqa mayda xarajatlar",
-                            Name = "Boshqa mayda xarajatlar"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Role", b =>
@@ -251,22 +184,140 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("fd51bb4b-f47b-4e82-9330-19434fae8d13"),
+                            Id = new Guid("272ec034-a375-4d87-8d7e-6fac9b96329b"),
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = new Guid("7431a0ef-efc2-4c0b-b3f3-6f501bcdd64b"),
-                            ConcurrencyStamp = "14d5e730-7333-4694-80f1-8dc6033da40c",
+                            Id = new Guid("a6a878b4-3afd-4c60-89a5-68f28fd6607d"),
+                            ConcurrencyStamp = "d059e24c-4cd3-4c0c-83a0-450d96325aa5",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("d325cace-fbbf-40a5-ad41-325697f95221"),
+                            Id = new Guid("a54e75a2-a44d-4df6-ae66-39d9c92d9f24"),
                             Name = "User",
                             NormalizedName = "USER"
+                        });
+                });
+
+            modelBuilder.Entity("Domain.Entities.Spend", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("Lasted")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("LastedBy")
+                        .HasColumnType("text");
+
+                    b.Property<long>("Price")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValue(0L);
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("SpendTypeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SpendTypeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Spends");
+                });
+
+            modelBuilder.Entity("Domain.Entities.SpendType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Descraption")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SpendTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7ea1cd7a-963c-4807-98ec-be7ff9608fa9"),
+                            Descraption = "У́зимизни ишчилар харажатлари",
+                            Name = "У́зимизни ишчилар харажатлари"
+                        },
+                        new
+                        {
+                            Id = new Guid("965464f0-4945-457f-8353-21ae2343a812"),
+                            Descraption = "Озик-овкат харажатлари",
+                            Name = "Озик-овкат харажатлари"
+                        },
+                        new
+                        {
+                            Id = new Guid("714c1467-1b76-471f-a354-ac31fb952c85"),
+                            Descraption = "Иш хаклари",
+                            Name = "Иш хаклари"
+                        },
+                        new
+                        {
+                            Id = new Guid("5be03e4a-6e73-4ec5-978d-01a0403e02a2"),
+                            Descraption = "Транспорт харажатлари",
+                            Name = "Транспорт харажатлари"
+                        },
+                        new
+                        {
+                            Id = new Guid("dd650ecf-a2a7-41fd-9a05-9a135b9d5ca7"),
+                            Descraption = "Хужжатлар ва офис харажатлари",
+                            Name = "Хужжатлар ва офис харажатлари"
+                        },
+                        new
+                        {
+                            Id = new Guid("1244c413-c131-4602-a578-477d58e9a4c5"),
+                            Descraption = "Курилиш материаллар харажатлари",
+                            Name = "Курилиш материаллар харажатлари"
+                        },
+                        new
+                        {
+                            Id = new Guid("1c7ba95e-4b5d-488d-909f-8e468a1abf3a"),
+                            Descraption = "Иш куроллар харажатлари",
+                            Name = "Иш куроллар харажатлари"
+                        },
+                        new
+                        {
+                            Id = new Guid("1837cb66-dc10-4041-b9c7-cf9c48a640d5"),
+                            Descraption = "Бошка майда харажатлар",
+                            Name = "Бошка майда харажатлар"
                         });
                 });
 
@@ -292,7 +343,8 @@ namespace Infrastructure.Persistance.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -316,13 +368,16 @@ namespace Infrastructure.Persistance.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
                     b.Property<long>("Residual")
-                        .HasColumnType("bigint");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValue(0L);
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
@@ -331,6 +386,7 @@ namespace Infrastructure.Persistance.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
@@ -343,21 +399,28 @@ namespace Infrastructure.Persistance.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
+
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
                     b.ToTable("AspNetUsers", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1b0daf1c-6b82-4cde-b7a1-185d05c2f761"),
+                            Id = new Guid("24bbb5ff-f6ff-4e0e-89cc-a9a9ab6f1c86"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "89d0752f-7c49-4089-bb2f-8acc2ffc6c6b",
+                            ConcurrencyStamp = "6e6d5022-8398-4a0f-b0d5-582363ac156a",
                             EmailConfirmed = false,
                             FullName = "Diyorbek Odilov",
                             LockoutEnabled = false,
                             Password = "839045bc366f3119171d91d4565bb7e6d29c12b5af9c5a6cc8cf1bb14a871740",
+                            PhoneNumber = "+998942922288",
                             PhoneNumberConfirmed = false,
                             Residual = 0L,
-                            SecurityStamp = "498c463d-ac5e-4b39-a0d5-336bb9fc9ce5",
+                            SecurityStamp = "6c431065-e2ac-4940-90d8-9c11b6008478",
                             TwoFactorEnabled = false,
                             UserName = "DiyorbekOdilov19"
                         });
@@ -449,8 +512,8 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("1b0daf1c-6b82-4cde-b7a1-185d05c2f761"),
-                            RoleId = new Guid("7431a0ef-efc2-4c0b-b3f3-6f501bcdd64b")
+                            UserId = new Guid("24bbb5ff-f6ff-4e0e-89cc-a9a9ab6f1c86"),
+                            RoleId = new Guid("a6a878b4-3afd-4c60-89a5-68f28fd6607d")
                         });
                 });
 
@@ -471,6 +534,17 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.AdminSpend", b =>
+                {
+                    b.HasOne("Domain.Entities.Construction", "Construction")
+                        .WithMany("AdminSpends")
+                        .HasForeignKey("ConstructionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Construction");
                 });
 
             modelBuilder.Entity("Domain.Entities.Construction", b =>
@@ -495,21 +569,21 @@ namespace Infrastructure.Persistance.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Out", b =>
+            modelBuilder.Entity("Domain.Entities.Spend", b =>
                 {
-                    b.HasOne("Domain.Entities.OutType", "OutType")
-                        .WithMany("Outs")
-                        .HasForeignKey("OutTypeId")
+                    b.HasOne("Domain.Entities.SpendType", "SpendType")
+                        .WithMany("Spends")
+                        .HasForeignKey("SpendTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.User", "User")
-                        .WithMany("Outs")
+                        .WithMany("Spends")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("OutType");
+                    b.Navigation("SpendType");
 
                     b.Navigation("User");
                 });
@@ -565,9 +639,14 @@ namespace Infrastructure.Persistance.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Entities.OutType", b =>
+            modelBuilder.Entity("Domain.Entities.Construction", b =>
                 {
-                    b.Navigation("Outs");
+                    b.Navigation("AdminSpends");
+                });
+
+            modelBuilder.Entity("Domain.Entities.SpendType", b =>
+                {
+                    b.Navigation("Spends");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -576,7 +655,7 @@ namespace Infrastructure.Persistance.Migrations
 
                     b.Navigation("Ins");
 
-                    b.Navigation("Outs");
+                    b.Navigation("Spends");
                 });
 #pragma warning restore 612, 618
         }

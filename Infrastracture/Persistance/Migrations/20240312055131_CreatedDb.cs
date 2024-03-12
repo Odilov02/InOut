@@ -33,10 +33,10 @@ namespace Infrastructure.Persistance.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FullName = table.Column<string>(type: "text", nullable: false),
+                    FullName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
-                    Residual = table.Column<long>(type: "bigint", nullable: false),
-                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Residual = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
+                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -44,7 +44,7 @@ namespace Infrastructure.Persistance.Migrations
                     PasswordHash = table.Column<string>(type: "text", nullable: true),
                     SecurityStamp = table.Column<string>(type: "text", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
                     PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -57,16 +57,16 @@ namespace Infrastructure.Persistance.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OutTypes",
+                name: "SpendTypes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Descraption = table.Column<string>(type: "text", nullable: false)
+                    Descraption = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OutTypes", x => x.Id);
+                    table.PrimaryKey("PK_SpendTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -180,13 +180,13 @@ namespace Infrastructure.Persistance.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FullName = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
+                    FullName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     In = table.Column<long>(type: "bigint", nullable: false),
-                    Out = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    OutDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    InDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Spend = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    SpendDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    InDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -205,13 +205,13 @@ namespace Infrastructure.Persistance.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Reason = table.Column<string>(type: "text", nullable: false),
-                    Price = table.Column<long>(type: "bigint", nullable: false),
+                    Reason = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Price = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
                     IsConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Lasted = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Lasted = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     LastedBy = table.Column<string>(type: "text", nullable: true)
                 },
@@ -227,34 +227,59 @@ namespace Infrastructure.Persistance.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Outs",
+                name: "Spends",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Reason = table.Column<string>(type: "text", nullable: false),
-                    Price = table.Column<long>(type: "bigint", nullable: false),
+                    Price = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
                     IsConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    OutTypeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Lasted = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    SpendTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Lasted = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     LastedBy = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Outs", x => x.Id);
+                    table.PrimaryKey("PK_Spends", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Outs_AspNetUsers_UserId",
+                        name: "FK_Spends_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Outs_OutTypes_OutTypeId",
-                        column: x => x.OutTypeId,
-                        principalTable: "OutTypes",
+                        name: "FK_Spends_SpendTypes_SpendTypeId",
+                        column: x => x.SpendTypeId,
+                        principalTable: "SpendTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AdminSpends",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Price = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
+                    Reason = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    ConstructionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Lasted = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    LastedBy = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AdminSpends", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AdminSpends_Constructions_ConstructionId",
+                        column: x => x.ConstructionId,
+                        principalTable: "Constructions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -264,35 +289,40 @@ namespace Infrastructure.Persistance.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("7431a0ef-efc2-4c0b-b3f3-6f501bcdd64b"), "14d5e730-7333-4694-80f1-8dc6033da40c", "Admin", "ADMIN" },
-                    { new Guid("d325cace-fbbf-40a5-ad41-325697f95221"), null, "User", "USER" },
-                    { new Guid("fd51bb4b-f47b-4e82-9330-19434fae8d13"), null, "SuperAdmin", "SUPERADMIN" }
+                    { new Guid("272ec034-a375-4d87-8d7e-6fac9b96329b"), null, "SuperAdmin", "SUPERADMIN" },
+                    { new Guid("a54e75a2-a44d-4df6-ae66-39d9c92d9f24"), null, "User", "USER" },
+                    { new Guid("a6a878b4-3afd-4c60-89a5-68f28fd6607d"), "d059e24c-4cd3-4c0c-83a0-450d96325aa5", "Admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "Password", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Residual", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("1b0daf1c-6b82-4cde-b7a1-185d05c2f761"), 0, "89d0752f-7c49-4089-bb2f-8acc2ffc6c6b", null, false, "Diyorbek Odilov", false, null, null, null, "839045bc366f3119171d91d4565bb7e6d29c12b5af9c5a6cc8cf1bb14a871740", null, null, false, 0L, "498c463d-ac5e-4b39-a0d5-336bb9fc9ce5", false, "DiyorbekOdilov19" });
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "Password", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { new Guid("24bbb5ff-f6ff-4e0e-89cc-a9a9ab6f1c86"), 0, "6e6d5022-8398-4a0f-b0d5-582363ac156a", null, false, "Diyorbek Odilov", false, null, null, null, "839045bc366f3119171d91d4565bb7e6d29c12b5af9c5a6cc8cf1bb14a871740", null, "+998942922288", false, "6c431065-e2ac-4940-90d8-9c11b6008478", false, "DiyorbekOdilov19" });
 
             migrationBuilder.InsertData(
-                table: "OutTypes",
+                table: "SpendTypes",
                 columns: new[] { "Id", "Descraption", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("118422e8-af2f-4822-997a-de181d874b6c"), "O'zimizni ishchilar xarajatlari", "O'zimizni ishchilar xarajatlari" },
-                    { new Guid("12f30246-9c23-476d-a956-ec292be40def"), "Transport boyicha", "Transport boyicha" },
-                    { new Guid("216fed74-d16f-4e01-9a3c-a5e66e89373a"), "Ish qurollari", "Ish qurollari" },
-                    { new Guid("443fdee6-dc63-42b6-9604-9c626f34b3ea"), "Oziq ovqat", "Oziq ovqat" },
-                    { new Guid("7e5b5731-1cb4-4d6d-a194-a7be46dd3bd2"), "Boshqa mayda xarajatlar", "Boshqa mayda xarajatlar" },
-                    { new Guid("819ff82a-697d-47d2-a074-d593f8827c25"), "Ish xaqlari", "Ish xaqlari" },
-                    { new Guid("aae8a514-229c-4622-8442-8841c68d28d6"), "Qurilish materiallari", "Qurilish materiallari" },
-                    { new Guid("dc991a40-71ea-43fb-8313-9317025d88be"), "Hujjatlar va ofis boyicha", "Hujjatlar va ofis boyicha" }
+                    { new Guid("1244c413-c131-4602-a578-477d58e9a4c5"), "Курилиш материаллар харажатлари", "Курилиш материаллар харажатлари" },
+                    { new Guid("1837cb66-dc10-4041-b9c7-cf9c48a640d5"), "Бошка майда харажатлар", "Бошка майда харажатлар" },
+                    { new Guid("1c7ba95e-4b5d-488d-909f-8e468a1abf3a"), "Иш куроллар харажатлари", "Иш куроллар харажатлари" },
+                    { new Guid("5be03e4a-6e73-4ec5-978d-01a0403e02a2"), "Транспорт харажатлари", "Транспорт харажатлари" },
+                    { new Guid("714c1467-1b76-471f-a354-ac31fb952c85"), "Иш хаклари", "Иш хаклари" },
+                    { new Guid("7ea1cd7a-963c-4807-98ec-be7ff9608fa9"), "У́зимизни ишчилар харажатлари", "У́зимизни ишчилар харажатлари" },
+                    { new Guid("965464f0-4945-457f-8353-21ae2343a812"), "Озик-овкат харажатлари", "Озик-овкат харажатлари" },
+                    { new Guid("dd650ecf-a2a7-41fd-9a05-9a135b9d5ca7"), "Хужжатлар ва офис харажатлари", "Хужжатлар ва офис харажатлари" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { new Guid("7431a0ef-efc2-4c0b-b3f3-6f501bcdd64b"), new Guid("1b0daf1c-6b82-4cde-b7a1-185d05c2f761") });
+                values: new object[] { new Guid("a6a878b4-3afd-4c60-89a5-68f28fd6607d"), new Guid("24bbb5ff-f6ff-4e0e-89cc-a9a9ab6f1c86") });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AdminSpends_ConstructionId",
+                table: "AdminSpends",
+                column: "ConstructionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -326,6 +356,18 @@ namespace Infrastructure.Persistance.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_PhoneNumber",
+                table: "AspNetUsers",
+                column: "PhoneNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_UserName",
+                table: "AspNetUsers",
+                column: "UserName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -343,19 +385,22 @@ namespace Infrastructure.Persistance.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Outs_OutTypeId",
-                table: "Outs",
-                column: "OutTypeId");
+                name: "IX_Spends_SpendTypeId",
+                table: "Spends",
+                column: "SpendTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Outs_UserId",
-                table: "Outs",
+                name: "IX_Spends_UserId",
+                table: "Spends",
                 column: "UserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AdminSpends");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -372,22 +417,22 @@ namespace Infrastructure.Persistance.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Constructions");
-
-            migrationBuilder.DropTable(
                 name: "Ins");
 
             migrationBuilder.DropTable(
-                name: "Outs");
+                name: "Spends");
+
+            migrationBuilder.DropTable(
+                name: "Constructions");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "SpendTypes");
 
             migrationBuilder.DropTable(
-                name: "OutTypes");
+                name: "AspNetUsers");
         }
     }
 }

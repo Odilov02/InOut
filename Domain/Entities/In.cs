@@ -6,5 +6,6 @@ public class In : BaseAuditableEntity
     public long Price { get; set; }
     public bool IsConfirmed { get; set; }
     public DateTime Date { get; set; }
+    public Guid UserId { get; set; }
     public virtual User User { get; set; }
 }

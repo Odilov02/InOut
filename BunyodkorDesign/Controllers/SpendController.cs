@@ -1,4 +1,4 @@
-﻿using Application.Common.Dtos.OutDtos;
+﻿using Application.Common.Dtos.SpendDtos;
 using Application.Common.Interfaces;
 using AutoMapper;
 using Domain.Entities;
@@ -8,111 +8,107 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebUI.Controllers;
 
-public class OutController : Controller
+public class SpendController : Controller
 {
     private readonly IAppDbContext _appDbContext;
     private readonly IMapper _mapper;
-    public OutController(IAppDbContext appDbContext, IMapper mapper)
+    public SpendController(IAppDbContext appDbContext, IMapper mapper)
     {
         _appDbContext = appDbContext;
         _mapper = mapper;
     }
 
     [Authorize(Roles = "User")]
-    public IActionResult AddOut()
+    public IActionResult AddSpend()
     {
-        var outTypes = _appDbContext.OutTypes.ToList();
-        ViewData["OutTypes"] = outTypes;
+        var spendTypes = _appDbContext.SpendTypes.ToList();
+        ViewData["SpendTypes"] = spendTypes;
         return View();
     }
     [Authorize(Roles = "User")]
     [HttpPost]
-    public async Task<IActionResult> AddOut(AddOutDto OutDto)
+    public async Task<IActionResult> AddSpend(AddSpendDto SpendDto)
     {
         if (!ModelState.IsValid)
         {
-            ViewData["OutTypes"] = _appDbContext.OutTypes.ToList();
-            return View(OutDto);
+            ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
+            return View(SpendDto);
         }
         var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == HttpContext.Session.GetString("UserId"));
-        if (user is null)
-        {
-            ViewData["OutTypes"] = _appDbContext.OutTypes.ToList();
-            return View(OutDto);
-        }
-        Out @out = _mapper.Map<Out>(OutDto);
-        @out.User = user;
-        @out.OutType = (await _appDbContext.OutTypes.FirstOrDefaultAsync(x => x.Id == @out.OutType.Id))!;
-        @out.Date = DateTime.Now;
-        await _appDbContext.Outs.AddAsync(@out);
+
+        Spend spend = _mapper.Map<Spend>(SpendDto);
+        spend.SpendType = (await _appDbContext.SpendTypes.FirstOrDefaultAsync(x => x.Id == spend.SpendType.Id))!;
+        spend.Date = DateTime.Now;
+        spend.UserId = user!.Id;
+        await _appDbContext.Spends.AddAsync(spend);
         var result = await _appDbContext.SaveChangesAsync();
         if (result > 0)
             return View("Choose");
         else
         {
-            ViewData["OutTypes"] = _appDbContext.OutTypes.ToList();
-            return View(OutDto);
+            ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
+            return View(SpendDto);
         }
     }
     [Authorize(Roles = "User")]
-    public IActionResult Choose() => View();
-
+    public IActionResult Choose()
+    {
+        return View();
+    }
     [Authorize(Roles = "User")]
     public IActionResult GetAllConfirmed()
     {
         var userId = (HttpContext.Session.GetString("UserId"));
-        List<Out> outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == true&&x.UserId.ToString()==userId).ToList();
-        return View(outs);
+        List<Spend> spends = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == true&&x.UserId.ToString()==userId).ToList();
+        return View(spends);
     }
-
 
     [Authorize(Roles = "User")]
     public IActionResult GetAllNoConfirmed()
     {
         var userId = (HttpContext.Session.GetString("UserId"));
-        List<Out> outs = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).ToList();
-        return View(outs);
+        List<Spend> spends = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).ToList();
+        return View(spends);
     }
 
-
-    ///<<=====        Admin Action        ========>>
+    //<<=====        Admin Action        ========>>
 
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> ConfirmOut(Guid constructionId)
+    public async Task<IActionResult> ConfirmSpend(Guid constructionId)
     {
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
-        List<Out> outs = _appDbContext.Outs.Where(x => x.User.Id == construction!.User.Id && x.IsConfirmed == false).ToList();
+        List<Spend> spends = _appDbContext.Spends.Where(x => x.User.Id == construction!.User.Id && x.IsConfirmed == false).ToList();
         if (HttpContext.Session.GetString("ConstructionId") is not null)
             HttpContext.Session.Remove("ConstructionId");
         HttpContext.Session.SetString("ConstructionId", constructionId.ToString());
-        return View(outs);
+        return View(spends);
     }
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<IActionResult> ConfirmOut(List<ConfirmationOut> outDtos)
+    public async Task<IActionResult> ConfirmSpend(List<ConfirmationSpend> outDtos)
     {
         string constructionId = HttpContext.Session.GetString("ConstructionId")!;
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id.ToString() == constructionId);
         if (!ModelState.IsValid)
         {
-            List<Out> outs = _appDbContext.Outs.Where(x => x.User.Id == construction!.User.Id && x.IsConfirmed == false).ToList();
-            return View(outs);
+            List<Spend> spends = _appDbContext.Spends.Where(x => x.User.Id == construction!.User.Id && x.IsConfirmed == false).ToList();
+            return View(spends);
         }
-        List<Out> entities = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == false && outDtos.Any(y => y.Id == x.Id && y.IsConfirmed == true)).ToList();
+        List<Spend> entities = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && outDtos.Any(y => y.Id == x.Id && y.IsConfirmed == true)).ToList();
         foreach (var item in entities)
         {
             item!.IsConfirmed = true;
             construction!.User!.Residual -= item.Price;
-            construction.Out -= item.Price;
-            construction.OutDate = DateTime.Now;
+            construction.Spend += item.Price;
+            construction.SpendDate = DateTime.Now;
         }
-        _appDbContext.Outs.UpdateRange(entities!);
+        _appDbContext.Spends.UpdateRange(entities!);
         var result = await _appDbContext.SaveChangesAsync();
         if (result > 0)
         {
             return RedirectToAction("Choose", "Construction", new { constructionId = constructionId });
         }
-        entities = _appDbContext.Outs.ToList().Where(x => x.IsConfirmed == false && x.User.Id == construction!.User.Id).ToList()!;
+        entities = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && x.User.Id == construction!.User.Id).ToList()!;
         HttpContext.Session.Remove("ConstructionId");
         return View(entities);
     }
@@ -121,15 +117,15 @@ public class OutController : Controller
     public async Task<IActionResult> GetAllConfirmedForAdmin(Guid constructionId)
     {
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
-        List<Out> outs = await _appDbContext.Outs.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == true).ToListAsync();
-        return View(outs);
+        List<Spend> spends = await _appDbContext.Spends.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == true).ToListAsync();
+        return View(spends);
     }
 
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllNoConfirmedForAdmin(Guid constructionId)
     {
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
-        var outs = await _appDbContext.Outs.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == false).ToListAsync();
-        return View(outs);
+        var spends = await _appDbContext.Spends.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == false).ToListAsync();
+        return View(spends);
     }
 }

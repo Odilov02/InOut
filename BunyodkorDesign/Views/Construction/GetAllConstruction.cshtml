@@ -4,47 +4,97 @@
 }
 @model List<Construction>;
 <div class="row pt-3 pb-2">
-    <div class="col-sm-2">
+    <div class="col-sm-1 ">
     </div>
-    <div class="col-sm-8 ">
-        <div class="card">
+    <div class="col-sm-5">
+        <div class="card" style="background-color:rgb(173, 168, 238); ">
+            <div class="card-body">
+                <h4 class="card-title py-3 mx-4"> Umumiy malumotlar</h4>
+                <a asp-action="GetAllDetails" asp-controller="Construction" class="btn btn-info px-5 mx-4 my-2"><h4>Кириш</h4></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-5 ">
+        <div class="card" style="background-color:rgb(173, 168, 238);">
             <div class="card-body">
                 <h4 class="card-title py-3 mx-4">Янги объект қу́шиш</h4>
                 <a asp-action="AddConstruction" asp-controller="Construction" class="btn btn-info px-5 mx-4 my-2"><h4>Кириш</h4></a>
             </div>
         </div>
-    </div>
-    <div class="col-sm-2">
+        <div class="col-sm-1 ">
+        </div>
     </div>
 </div>
 @{
-    if(Model is not null)
+    if (Model is not null)
     {
-        foreach (var item in Model)
+        int count = Model.Count;
+        if (count % 2 == 1) count -= 1;
+     
+            @for (int i = 0; i < count; i += 2)
         {
             <div class="row pt-3 pb-2">
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                 </div>
-                <div class="col-sm-8 ">
-                    <div class="card">
+                <div class="col-sm-5 ">
+                    <div class="card" style="background-color:rgb(173, 168, 238);">
                         <div class="card-body">
-                            <h4 class="card-title py-3 mx-4">@item.FullName</h4>
+                            <h4 class="card-title py-3 mx-4">@Model[i].FullName</h4>
                             <div class="row">
-                            <div class="col-7">
-                                    <a asp-route-constructionId="@item.Id" asp-controller="Construction" asp-action="Choose" class="btn btn-success px-5 mx-4 my-2"><h4 class="mx-2">Кириш</h4></a>
-                            </div>
+                                <div class="col-7">
+                                    <a asp-route-constructionId="@Model[i].Id" asp-controller="Construction" asp-action="Choose" class="btn btn-success px-5 mx-4 my-2"><h4 class="mx-2">Кириш</h4></a>
+                                </div>
                                 <div class="col ">
-                                    <h5 class="mt-5 text-end"> @item.User.FullName</h5>
+                                    <h5 class="mt-5 text-end"> @Model[i].User.FullName</h5>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-5 ">
+                    <div class="card" style="background-color:rgb(173, 168, 238);">
+                        <div class="card-body">
+                            <h4 class="card-title py-3 mx-4">@Model[i+1].FullName</h4>
+                            <div class="row">
+                                <div class="col-7">
+                                    <a asp-route-constructionId="@Model[i+1].Id" asp-controller="Construction" asp-action="Choose" class="btn btn-success px-5 mx-4 my-2"><h4 class="mx-2">Кириш</h4></a>
+                                </div>
+                                <div class="col ">
+                                    <h5 class="mt-5 text-end"> @Model[i+1].User.FullName</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                </div>
+            </div>
+        }
+            
+            @if(Model.Count%2==1)
+        {
+             <div class="row pt-3 pb-2">
+            <div class="col-sm-3">
+            </div>
+                <div class="col-sm-6 ">
+                    <div class="card" style="background-color:rgb(173, 168, 238);">
+                        <div class="card-body">
+                            <h4 class="card-title py-3 mx-4">@Model[count].FullName</h4>
+                            <div class="row">
+                                <div class="col-7">
+                                    <a asp-route-constructionId="@Model[count].Id" asp-controller="Construction" asp-action="Choose" class="btn btn-success px-5 mx-4 my-2"><h4 class="mx-2">Кириш</h4></a>
+                                </div>
+                                <div class="col ">
+                                    <h5 class="mt-5 text-end"> @Model[count].User.FullName</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
                 </div>
             </div>
         }
     }
-
 }
 

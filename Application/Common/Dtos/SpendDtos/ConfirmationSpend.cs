@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Application.Common.Dtos.OutDtos;
+namespace Application.Common.Dtos.SpendDtos;
 
-public class ConfirmationOut
+public class ConfirmationSpend
 {
     [NotNull]
     public Guid Id { get; set; }

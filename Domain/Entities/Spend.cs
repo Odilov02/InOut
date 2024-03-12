@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities;
 
-public class Out : BaseAuditableEntity
+public class Spend : BaseAuditableEntity
 {
     public string Reason { get; set; }
     public long Price { get; set; }
@@ -8,5 +8,5 @@ public class Out : BaseAuditableEntity
     public DateTime Date { get; set; }
     public Guid UserId { get; set; }
     public virtual User User { get; set; }
-    public virtual OutType OutType { get; set; }
+    public virtual SpendType SpendType { get; set; }
 }

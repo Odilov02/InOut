@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Application.Common.Dtos.OutDtos;
+namespace Application.Common.Dtos.SpendDtos;
 
-public class AddOutDto
+public class AddSpendDto
 {
     [NotNull]
     [MaxLength(200)]
@@ -12,5 +12,5 @@ public class AddOutDto
     [Range(1, long.MaxValue)]
     public long Price { get; set; }
     [NotNull]
-    public Guid OutTypeId { get; set; }
+    public Guid SpendTypeId { get; set; }
 }

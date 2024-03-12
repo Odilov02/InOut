@@ -1,11 +1,10 @@
-﻿@using Application.Common.Dtos.ConstructionDtos
- @using Application.Common.Dtos.SpendDtos;
+﻿ @using Application.Common.Dtos.SpendDtos;
 @{
-    Layout = "_AdminLayout";
+    Layout = "_UserLayout";
 }
-@model AddConstructionDto;
+@model AddSpendDto
 @{
-    List<Domain.Entities.User>? users = (List<Domain.Entities.User>)ViewData["users"]!;
+    List<Domain.Entities.SpendType>? spendTypes = (List<Domain.Entities.SpendType>)ViewData["SpendTypes"]!;
 }
 <style>
     form {
@@ -42,58 +41,55 @@
                 display: inline-block;
                 width: auto;
             }
-
 </style>
 
 <!-- Create Form -->
-<form id="form" asp-action="AddConstruction" method="post">
+<form id="form" asp-action="AddSpend" method="post">
 
     <!-- Details -->
     <div class="form-control">
-        <label for="FullName" id="FullName">
-            Объект номи
+        <label for="Price" id="Price">
+            Сумма
         </label>
-
+      
         <!-- Input Type Text -->
-        <input type="text" id="FullName" name="FullName"
-               placeholder="Объект номини киритинг..." />
-        <span asp-validation-for="FullName"></span>
+        <input type="number" id="Price" name="Price"
+               placeholder="Чиқим суммасини киритинг..." />
+        <span asp-validation-for="Price"></span>
     </div>
     <div class="form-control">
-        <label for="UserId" id="UserId">
-            Объект учун масъул шахс
+        <label for="SpendTypeId" id="SpendTypeId">
+            Чиқим тури
         </label>
 
         <!-- Dropdown options -->
-        <select name="UserId" id="UserId">
+        <select name="SpendTypeId" id="SpendTypeId">
             @{
-                if (users is null)
+                if (spendTypes is null)
                 {
-                    <option value="@null">Фойдаланувчи мавжуд эмас</option>
-                }
-              else  if (users.ToList().Count==0)
-                {
-                    <option value="@null">Фойдаланувчи мавжуд эмас</option>
+                    <option value="@null">Бошка харажатлар</option>
                 }
                 else
                 {
-                    foreach (var item in users)
+                    foreach (var outType in spendTypes)
                     {
-                        <option value="@item.Id">@item.FullName</option>
+                        <option value="@outType.Id">@outType.Name</option>
                     }
                 }
             }
+
         </select>
-        <span asp-validation-for="UserId"></span>
+        <span asp-validation-for="SpendTypeId"></span>
     </div>
     <div class="form-control">
-        <label for="Description">
-            Объект хакида маълумот
+        <label for="comment">
+            Чиқим сабаби
         </label>
 
         <!-- multi-line text input control -->
-        <textarea name="Description" id="Description"
-                  placeholder="Объект хакида маълумот киритинг..."></textarea>
+        <textarea name="Reason" id="Reason"
+                  placeholder="Чиқим сабабини киритинг..."></textarea>
+        <span asp-validation-for="Reason"></span>
     </div>
 
     <!-- Multi-line Text Input Control -->

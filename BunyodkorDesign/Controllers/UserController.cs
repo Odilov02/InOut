@@ -64,7 +64,7 @@ public class UserController : Controller
         if (roles.Contains("Admin"))
             return RedirectToAction("GetAllConstruction", "Construction");
         else if (roles.Contains("User"))
-            return RedirectToAction("Choose", "Out");
+            return RedirectToAction("Choose", "Spend");
         return View(userCridential);
     }
 }

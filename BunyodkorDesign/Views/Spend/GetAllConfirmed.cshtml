@@ -1,11 +1,13 @@
-﻿@using Domain.Entities;
+﻿@using Application.Common.Dtos.SpendDtos;
+@using Domain.Entities;
 @{
     Layout = "_UserLayout";
 }
-@model List<In>
+@model List<Spend>
+<br />
 <div class="row py-2">
     <div class="col-6">
-        <h1 class="justify-content-center">Тасдиқланган киримлар </h1>
+        <h1 class="justify-content-center">Тасдиқланган чиқимлар</h1>
     </div>
     <div class="col-3 py-2">
         <div class="contianer">
@@ -21,13 +23,13 @@
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
 </div>
-
 <table id="dataTable" class="table table-success table-striped">
     <thead>
         <tr>
             <th scope="col"></th>
             <th scope="col">Вакти</th>
             <th scope="col">Нархи</th>
+            <th scope="col">Чиқим тури</th>
             <th scope="col">Сабаби</th>
         </tr>
     </thead>
@@ -40,6 +42,7 @@
                     <th scope="row">@count</th>
                     <td><span>@item.Date.ToString("HH:mm dd.MM.yyyy")</span></td>
                     <td class="price">@item.Price</td>
+                    <td>@item.SpendType.Name</td>
                     <td>@item.Reason</td>
                 </tr>
                 count++;

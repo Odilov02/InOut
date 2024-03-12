@@ -1,11 +1,13 @@
-﻿@using Domain.Entities;
+﻿@using Application.Common.Dtos.SpendDtos;
+@using Domain.Entities;
 @{
-    Layout = "_UserLayout";
+    Layout = "_AdminLayout";
 }
-@model List<In>
+@model List<Construction>
+<br />
 <div class="row py-2">
     <div class="col-6">
-        <h1 class="justify-content-center">Тасдиқланган киримлар </h1>
+        <h1 class="justify-content-center">Umumiy malumotlar </h1>
     </div>
     <div class="col-3 py-2">
         <div class="contianer">
@@ -26,9 +28,10 @@
     <thead>
         <tr>
             <th scope="col"></th>
-            <th scope="col">Вакти</th>
-            <th scope="col">Нархи</th>
-            <th scope="col">Сабаби</th>
+            <th scope="col">Nomi</th>
+            <th scope="col">Kirimi</th>
+            <th scope="col">Chiqimi</th>
+            <th scope="col">Qoldigi</th>
         </tr>
     </thead>
     <tbody>
@@ -38,16 +41,19 @@
             {
                 <tr class="Search">
                     <th scope="row">@count</th>
-                    <td><span>@item.Date.ToString("HH:mm dd.MM.yyyy")</span></td>
-                    <td class="price">@item.Price</td>
-                    <td>@item.Reason</td>
+                    <td><span>@item.FullName</span></td>
+                    <td class="price">@item.In</td>
+                    <td class="outs">@item.Spend</td>
+                    <td class="residual">@item.User.Residual</td>
                 </tr>
                 count++;
             }
             <tr class="total-row">
                 <th scope="row">Жами</th>
                 <td></td>
-                <td id="totalPrice" colspan="3"></td>
+                <td id="totalPrice"></td>
+                <td id="totalOuts"></td>
+                <td id="totalResidual"></td>
             </tr>
         }
     </tbody>
@@ -68,6 +74,16 @@
             $("#hiddenRowsContainer").empty(); // Avvalgi ma'lumotlarni tozalash
             $("#hiddenRowsContainer").append(hiddenRows);
 
+         
+
+            $(".Search").each(function () {
+                if (!contains($(this).text().toLowerCase(), searchtext)) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+            });
+
             var totalAmount = 0;
 
             $(".Search:visible .price").each(function () {
@@ -78,13 +94,26 @@
             // Jami pricelarni chiqarish
             $("#totalPrice").text(totalAmount);
 
-            $(".Search").each(function () {
-                if (!contains($(this).text().toLowerCase(), searchtext)) {
-                    $(this).hide();
-                } else {
-                    $(this).show();
-                }
+            var totalOuts = 0;
+
+            $(".Search:visible .outs").each(function () {
+                var outs = parseFloat($(this).text());
+                totalOuts += outs;
             });
+
+            // Jami outslarni chiqarish
+            $("#totalOuts").text(totalOuts);
+
+
+            var totalResidual = 0;
+
+            $(".Search:visible .residual").each(function () {
+                var Residual = parseFloat($(this).text());
+                totalResidual += Residual;
+            });
+
+            // Jami outslarni chiqarish
+            $("#totalResidual").text(totalResidual);
         });
     });
     function exportToExcel() {
@@ -116,3 +145,4 @@
         }
     }
 </script>
+

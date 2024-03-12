@@ -1,0 +1,87 @@
+﻿@using Domain.Entities;
+@{
+    Layout = "_AdminLayout";
+}
+@model AdminSpend
+<style>
+    /* Styling the Form (Color, Padding, Shadow) */
+    form {
+        background-color: #fff;
+        max-width: 670px;
+        margin: 50px auto;
+        padding: 30px 20px;
+        box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Styling form-control Class */
+    .form-control {
+        text-align: left;
+        margin-bottom: 25px;
+    }
+
+        /* Styling form-control Label */
+        .form-control label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Styling form-control input,
+                            select, textarea */
+        .form-control input,
+        .form-control select,
+        .form-control textarea {
+            border: 1px solid #777;
+            border-radius: 2px;
+            font-family: inherit;
+            padding: 10px;
+            display: block;
+            width: 95%;
+        }
+
+            /* Styling form-control Radio
+                            button and Checkbox */
+            .form-control input[type="radio"],
+            .form-control input[type="checkbox"] {
+                display: inline-block;
+                width: auto;
+            }
+</style>
+<!-- Create Form -->
+<form id="form" asp-action="AddAdminSpend" method="post">
+
+    <!-- Details -->
+    <div class="form-control">
+        <label for="Price" id="Price">
+            Сумма
+        </label>
+
+        <!-- Input Type Text -->
+        <input type="hidden" id="ConstructionId" name="ConstructionId" value="@Model.ConstructionId" />  
+               <input type="number" id="Price" min="0" name="Price"
+               placeholder="Суммани киритинг..." />
+        <span asp-validation-for="Price"></span>
+    </div>
+    <div class="form-control">
+        <label for="comment">
+            Чиким сабаби
+        </label>
+
+        <!-- multi-line text input control -->
+        <textarea name="Reason" id="Reason"
+                  placeholder="Чиким сабабини киритинг..."></textarea>
+        <span asp-validation-for="Reason"></span>
+    </div>
+
+    <!-- Multi-line Text Input Control -->
+    <button type="submit" style="background-color: #05c46b;
+        border: 1px solid #777;
+        border-radius: 2px;
+        font-family: inherit;
+        font-size: 21px;
+        display: block;
+        width: 40%;
+        margin-top: 50px;
+        margin-bottom: 20px;">
+        Сақлаш
+    </button>
+</form>
