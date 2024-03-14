@@ -4,6 +4,7 @@ using Application.Common.Interfaces;
 using Application.Common.Models;
 using AutoMapper;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -53,7 +54,6 @@ public class UserController : Controller
     {
         if (!ModelState.IsValid)
             return View(userCridential);
-        var users = _userManager.Users.ToList();
         User? user = await _userManager.Users.FirstOrDefaultAsync(x => x.Password == userCridential.Password.stringHash() && x.UserName == userCridential.UserName);
         if (user == null) return View(userCridential);
         await _signInManager.SignInAsync(user, true);
@@ -62,9 +62,56 @@ public class UserController : Controller
         HttpContext.Session.SetString("UserId", user.Id.ToString());
         List<string> roles = (await _userManager.GetRolesAsync(user)).ToList();
         if (roles.Contains("Admin"))
-            return RedirectToAction("GetAllConstruction", "Construction");
+            return RedirectToAction("GetAllConstruction", "Construction", new { userId = user.Id });
         else if (roles.Contains("User"))
-            return RedirectToAction("Choose", "Spend");
+            return RedirectToAction("Choose", "Spend", new { user = user });
         return View(userCridential);
     }
+    [Authorize]
+    public IActionResult UpdateLogin()
+    {
+        return View();
+    }
+    [Authorize]
+    [HttpPost]
+    public IActionResult UpdateLogin(UserCridential userCridential)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(userCridential);
+        }
+        var user = _appDbContext.Users.FirstOrDefault(x => x.UserName == userCridential.UserName && x.Password == userCridential.Password.stringHash());
+        if (user == null)
+            return View(userCridential);
+        UserUpdate userUpdate = new()
+        {
+            Id = user.Id
+        };
+        return View("UpdateUser", userUpdate);
+    }
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> UpdateUser(UserUpdate userUpdate)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(userUpdate);
+        }
+        var user = _appDbContext.Users.FirstOrDefault(x => x.Id == userUpdate.Id);
+        if (user == null)
+            return View(userUpdate);
+        user.UserName = userUpdate.UserName;
+        user.Password = userUpdate.Password.stringHash();
+        user.PhoneNumber = userUpdate.PhoneNumber;
+        user.FullName = userUpdate.FullName;
+        _appDbContext.Users.Update(user);
+        var result =await _appDbContext.SaveChangesAsync();
+        if(result>0)
+        {
+            return RedirectToAction("LogOut");
+        }
+        return View(userUpdate);
+    }
+
+
 }

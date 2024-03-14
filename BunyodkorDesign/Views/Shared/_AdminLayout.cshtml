@@ -28,7 +28,7 @@
                     </div>
                 </li>
                 <li class=" nav-item">
-                    <a class="btn px-4 btn-nav btn-outline-info" asp-action="" asp-controller="User">
+                    <a class="btn px-4 btn-nav btn-outline-info" asp-action="LogOut" asp-controller="User">
                         <h4>Чиқиш</h4>
                     </a>
                 </li>
@@ -44,20 +44,43 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="exampleModalLabel">Фойдаланувчи маълумотлари</h4>
+                    <h4 class="modal-title mx-3" id="exampleModalLabel">Фойдаланувчи маълумотлари</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Оркага"></button>
                 </div>
                 <div class="modal-body">
-                    <h3 id="fullName">Diyorbek Odilov</h3><br />
-                    <h3>+998942922288</h3>
+                    <h3 class="mx-4" id="fullName"></h3><br />
+                    <h3 class="mx-4" id="phoneNumber"></h3>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Оркага</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <a asp-controller="User" asp-action="UpdateLogin" class="btn btn-primary">O'zgartirish</a>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
+    </script>
 </body>
 </html>
+<script>
+        var fullName = '@(ViewData["FullName"] ?? "")';
+    if (fullName.trim() !== '') {
+        localStorage.setItem('fullName', fullName);
+    }
+
+    var phoneNumber = '@(ViewData["PhoneNumber"] ?? "")';
+    if (phoneNumber.trim() !== '') {
+        localStorage.setItem('phoneNumber', phoneNumber);
+    }
+
+    var fullNameItem = localStorage.getItem('fullName');
+    if (fullNameItem !== null && fullNameItem !== undefined && fullNameItem.trim() !== '') {
+        var fullNameDiv = document.getElementById('fullName');
+        fullNameDiv.innerText = fullNameItem;
+    }
+    var phoneNumberItem = localStorage.getItem('phoneNumber');
+    if (phoneNumberItem !== null && phoneNumberItem !== undefined && phoneNumberItem.trim() !== '') {
+        var phoneNumberDiv = document.getElementById('phoneNumber');
+        phoneNumberDiv.innerText = phoneNumberItem.replace(/(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/, '+$1 $2 $3 $4 $5');
+    }
+</script>

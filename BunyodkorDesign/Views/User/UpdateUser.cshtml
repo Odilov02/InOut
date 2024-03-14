@@ -1,0 +1,117 @@
+﻿@using Application.Common.Models;
+@{
+    Layout = "_Layout";
+}
+@model UserUpdate;
+<style>
+    /* Styling the Form (Color, Padding, Shadow) */
+    form {
+        background-color: #fff;
+        max-width: 670px;
+        margin: 50px auto;
+        padding: 30px 20px;
+        box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Styling form-control Class */
+    .form-control {
+        text-align: left;
+        margin-bottom: 25px;
+    }
+
+        /* Styling form-control Label */
+        .form-control label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Styling form-control input,
+                                select, textarea */
+        .form-control input,
+        .form-control select,
+        .form-control textarea {
+            border: 1px solid #777;
+            border-radius: 2px;
+            font-family: inherit;
+            padding: 10px;
+            display: block;
+            width: 95%;
+        }
+
+            /* Styling form-control Radio
+                                button and Checkbox */
+            .form-control input[type="radio"],
+            .form-control input[type="checkbox"] {
+                display: inline-block;
+                width: auto;
+            }
+</style>
+
+
+<form id="form" asp-action="UpdateUser" method="post">
+
+    <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+
+    <div class="form-control">
+        <label for="FullName" id="FullName">
+            FullName
+        </label>
+        <input type="text" id="FullName" name="FullName"
+               placeholder="FullName..." />
+        <span asp-validation-for="FullName"></span>
+    </div>
+
+
+    <div class="form-control">
+        <label for="UserName" id="UserName">
+            UserName
+        </label>
+        <input type="text" id="UserName" name="UserName"
+               placeholder="UserName..." />
+        <span asp-validation-for="UserName"></span>
+    </div>
+
+
+    <div class="form-control">
+        <label for="PhoneNumber" id="PhoneNumber">
+            PhoneNumber
+        </label>
+        <input type="text" id="PhoneNumber" name="PhoneNumber"
+               placeholder="PhoneNumber..." />
+        <span asp-validation-for="PhoneNumber"></span>
+    </div>
+
+
+    <div class="form-control">
+        <label for="Password" id="Password">
+            Password
+        </label>
+        <input type="text" id="Password" name="Password"
+               placeholder="Password..." />
+        <span asp-validation-for="Password"></span>
+    </div>
+
+
+
+    <div class="form-control">
+        <label for="ConfirmedPassword" id="ConfirmedPassword">
+            ConfirmedPassword
+        </label>
+        <input type="text" id="ConfirmedPassword" name="ConfirmedPassword"
+               placeholder="ConfirmedPassword..." />
+        <span asp-validation-for="ConfirmedPassword"></span>
+    </div>
+
+
+    <div class="row">
+        <div class="col-5">
+            <button type="submit" class="btn btn-success m-4 px-5">
+                Сақлаш
+            </button>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-5">
+            <a class="btn btn-primary m-4 px-5">Orqaga</a>
+        </div>
+    </div>
+</form>

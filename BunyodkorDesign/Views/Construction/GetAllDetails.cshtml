@@ -5,11 +5,12 @@
 }
 @model List<Construction>
 <br />
+<br />
 <div class="row py-2">
     <div class="col-6">
-        <h1 class="justify-content-center">Umumiy malumotlar </h1>
+        <h1 class="text-center">Umumiy malumotlar </h1>
     </div>
-    <div class="col-3 py-2">
+    <div class="col-2 py-2">
         <div class="contianer">
             <div class="form-group">
                 <div class="input-group" value=" ">
@@ -19,19 +20,25 @@
             </div>
         </div>
     </div>
-    <div class="col-3 py-2">
+    <div class="col-2 py-2">
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
+    <div class="col-2 py-2">
+        <a asp-action="GetAllConstruction" asp-controller="Construction" class="btn btn-primary">Orqaga</a>
+    </div>
 </div>
-
+<br />
 <table id="dataTable" class="table table-success table-striped">
     <thead>
         <tr>
             <th scope="col"></th>
-            <th scope="col">Nomi</th>
-            <th scope="col">Kirimi</th>
-            <th scope="col">Chiqimi</th>
-            <th scope="col">Qoldigi</th>
+            <th class="text-center" scope="col"><span>Nomi</span></th>
+            <th class ="text-center" scope="col">Vaqti</th>
+            <th class="text-center" scope="col">Shartnoma summa</th>
+            <th class="text-center" scope="col"><span>Chiqimi</span></th>
+            <th class="text-center" scope="col"><span>Sarf foizi</span></th>
+            <th class="text-center"scope="col"><span>Kirimi</span></th>
+            <th class="text-center" scope="col"><span>Qoldigi</span></th>
         </tr>
     </thead>
     <tbody>
@@ -39,21 +46,28 @@
             int count = 1;
             foreach (var item in Model)
             {
+                string percentage = (((double)item.Spend) / ((double)@item.ContractPrice)*100).ToString("0.0");
                 <tr class="Search">
                     <th scope="row">@count</th>
-                    <td><span>@item.FullName</span></td>
-                    <td class="price">@item.In</td>
-                    <td class="outs">@item.Spend</td>
-                    <td class="residual">@item.User.Residual</td>
+                    <td class="text-center"><span>@item.FullName</span></td>
+                    <td class="text-center"><span>@item.CreatedDate.ToString("dd.MM.yyyy")</span></td>
+                    <td class="contractPrice text-center"><span id="ContractPrice">@item.ContractPrice</span></td>
+                    <td class="outs text-center"><span id="Spend">@item.Spend</span></td>
+                    <td class="text-center"><span>@percentage %</span></td>
+                    <td class="price text-center"><span id="In">@item.In</span></td>
+                    <td class="residual text-center"><span id="formattedNumber">@item.User.Residual</span></td>
                 </tr>
                 count++;
             }
             <tr class="total-row">
                 <th scope="row">Жами</th>
-                <td></td>
-                <td id="totalPrice"></td>
-                <td id="totalOuts"></td>
-                <td id="totalResidual"></td>
+                <td class="text-center">----</td>
+                <td class="text-center">----</td>
+                <td class="text-center" id="contractPrice"></td>
+                <td class="text-center" id="totalOuts"></td>
+                <td class="text-center">----</td>
+                <td class="text-center" id="totalPrice"></td>
+                <td class="text-center" id="totalResidual"></td>
             </tr>
         }
     </tbody>
@@ -67,11 +81,9 @@
         $("#Search").keyup(function () {
             var searchtext = $("#Search").val().toLowerCase();
 
-            // Barcha yashirilgan qatorlarni olib tashlash
             var hiddenRows = $(".Search:hidden");
 
-            // Barcha yashirilgan qatorlarni hiddenRowsContainer ga joylashtirish
-            $("#hiddenRowsContainer").empty(); // Avvalgi ma'lumotlarni tozalash
+            $("#hiddenRowsContainer").empty(); 
             $("#hiddenRowsContainer").append(hiddenRows);
 
          
@@ -83,6 +95,16 @@
                     $(this).show();
                 }
             });
+            
+
+            var contractPrice = 0;
+
+            $(".Search:visible .contractPrice").each(function () {
+                contractPrice += parseFloat($(this).text());
+            });
+
+            $("#contractPrice").text(contractPrice);
+
 
             var totalAmount = 0;
 
@@ -91,7 +113,6 @@
                 totalAmount += price;
             });
 
-            // Jami pricelarni chiqarish
             $("#totalPrice").text(totalAmount);
 
             var totalOuts = 0;
@@ -101,7 +122,6 @@
                 totalOuts += outs;
             });
 
-            // Jami outslarni chiqarish
             $("#totalOuts").text(totalOuts);
 
 
@@ -112,7 +132,6 @@
                 totalResidual += Residual;
             });
 
-            // Jami outslarni chiqarish
             $("#totalResidual").text(totalResidual);
         });
     });

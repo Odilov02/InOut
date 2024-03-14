@@ -7,7 +7,7 @@
     <div class="col-6">
         <h1>Чиқимларни тасдиқлаш! </h1>
     </div>
-    <div class="col-3 py-2">
+    <div class="col-2 py-2">
         <div class="contianer">
             <div class="form-group">
                 <div class="input-group" value=" ">
@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-    <div class="col-3 py-2">
+    <div class="col-2 py-2">
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
 </div>
@@ -63,8 +63,17 @@
             }
         </tbody>
     </table>
-    <div class="d-grid gap-2 col-3 mx-auto">
-        <button class="btn btn-success py-3" type="submit">Сақлаш</button>
+    <div class="row">
+        <div class="col-1">
+        </div>
+        <div class="col-5">
+            <button class="btn btn-success px-x py-2" type="submit"><h5 class="px-4">Сақлаш</h5></button>
+        </div>
+        <div class="col-5">
+            <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@ViewData["constructionId"]" class="btn btn-primary px-4 py-2"><h5 class="px-4">Orqaga</h5></a>
+        </div>
+        <div class="col-1">
+        </div>
     </div>
 </form>
 <script>
@@ -83,7 +92,7 @@
             $("#hiddenRowsContainer").empty(); // Avvalgi ma'lumotlarni tozalash
             $("#hiddenRowsContainer").append(hiddenRows);
 
-           
+
 
             $(".Search").each(function () {
                 if (!contains($(this).text().toLowerCase(), searchtext)) {

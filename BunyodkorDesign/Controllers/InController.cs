@@ -111,6 +111,7 @@ public class InController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllNoConfirmedForAdmin(Guid constructionId)
     {
+        ViewData["constructionId"] = constructionId;
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
         List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && x.User.Id == construction!.UserId).ToList();
         return View(ins);
@@ -119,6 +120,7 @@ public class InController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllConfirmedForAdmin(Guid constructionId)
     {
+        ViewData["constructionId"] = constructionId;
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
         List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true && x.User.Id == construction!.UserId).ToList();
         return View(ins);

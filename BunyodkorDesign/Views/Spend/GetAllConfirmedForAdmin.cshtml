@@ -3,34 +3,56 @@
 @{
     Layout = "_AdminLayout";
 }
-@model List<AllSpend>
 <br />
+<br />
+@model List<AllSpend>
 <div class="row py-2">
-    <div class="col-6">
-        <h1 class="justify-content-center">Umumiy chiqimlar</h1>
+    <div class="col-5">
+        <h1 class="text-center">Umumiy chiqimlar</h1>
     </div>
-    <div class="col-3 py-2">
+    <div class="col-2 py-2">
         <div class="contianer">
             <div class="form-group">
                 <div class="input-group" value=" ">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
-                    <input type="text" id="Search" placeholder="Қидирмоқ..." class="form-control ">
+                    <input  type="text" id="Search" placeholder="Қидирмоқ..." class="form-control ">
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-3 py-2">
+    <div class="col-2 py-2">
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
-<table id="dataTable" class="table table-success table-striped">
+    <div class="col-2 py-2">
+        <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@ViewData["constructionId"]" class="btn btn-primary px-3">Orqaga</a>
+    </div>
+</div>
+<table id="dataTable" class="table table-success table-striped table-hover">
     <thead>
         <tr>
-            <th scope="col"></th>
-            <th scope="col">Turi</th>
-            <th scope="col">Вакти</th>
-            <th scope="col">Нархи</th>
-            <th scope="col">Чиқим тури</th>
-            <th scope="col">Сабаби</th>
+            <th class="text-center" scope="col"></th>
+            <th class="text-center" scope="col">Turi</th>
+            <th class="text-center" scope="col">Vaqti</th>
+            <th class="text-center" scope="col">Narxi</th>
+            <th class="text-center" scope="col">Chiqim turi</th>
+            <th class="text-center" scope="col">Sababi</th>
+        </tr>
+        <tr id="filterRow">
+            <td></td>
+            <td>
+                <input type="text" class="form-control" id="turFilter" placeholder="Қидирмоқ.." />
+            </td>
+            <td>
+                <input type="text" class="form-control" id="vaktFilter" placeholder="Қидирмоқ..." />
+            </td>
+            <td class="price">
+                <input class="form-control" type="text" id="narxFilter" placeholder="Қидирмоқ...">
+            </td>
+            <td>
+                <input type="text" class="form-control" id="chiqimFilter" placeholder="Қидирмоқ...">
+            </td>
+            <td>
+                <input type="text" class="form-control" id="sababFilter" placeholder="Қидирмоқ...">
+            </td>
         </tr>
     </thead>
     <tbody>
@@ -40,19 +62,20 @@
             {
                 <tr class="Search">
                     <th scope="row">@count</th>
-                    <td>@item.AdminOrUser</td>
-                    <td><span>@item.Date.ToString("HH:mm dd.MM.yyyy")</span></td>
-                    <td class="price">@item.Price</td>
-                    <td>@item.SpendType</td>
-                    <td>@item.Reason</td>
+                    <td class="text-center">@item.AdminOrUser</td>
+                    <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
+                    <td class="text-center price">@item.Price</td>
+                    <td class="text-center">@item.SpendType</td>
+                    <td class="text-center">@item.Reason</td>
                 </tr>
                 count++;
             }
             <tr class="total-row">
                 <th scope="row">Жами</th>
+                <td colspan="2"></td>
+                <th class="text-center" id="totalPrice"></th>
                 <td></td>
                 <td></td>
-                <td id="totalPrice" colspan="3"></td>
             </tr>
         }
     </tbody>
@@ -74,7 +97,7 @@
             $("#hiddenRowsContainer").empty(); // Avvalgi ma'lumotlarni tozalash
             $("#hiddenRowsContainer").append(hiddenRows);
 
-          
+
             $(".Search").each(function () {
                 if (!contains($(this).text().toLowerCase(), searchtext)) {
                     $(this).hide();
@@ -82,19 +105,59 @@
                     $(this).show();
                 }
             });
-                var totalAmount = 0;
+            var totalAmount = 0;
 
-                $(".Search:visible .price").each(function () {
-                    var price = parseFloat($(this).text());
-                    totalAmount += price;
-                });
+            $(".Search:visible .price").each(function () {
+                var price = parseFloat($(this).text());
+                totalAmount += price;
+            });
 
-                // Jami pricelarni chiqarish
-                $("#totalPrice").text(totalAmount);
-
+            // Jami pricelarni chiqarish
+            document.getElementById("totalPrice").innerText = totalAmount;
         });
     });
+    function filterTable() {
+        var turFilter = document.getElementById("turFilter").value.toLowerCase();
+        var vaktFilter = document.getElementById("vaktFilter").value.toLowerCase();
+        var narxFilter = document.getElementById("narxFilter").value.toLowerCase();
+        var chiqimFilter = document.getElementById("chiqimFilter").value.toLowerCase();
+        var sababFilter = document.getElementById("sababFilter").value.toLowerCase();
 
+        var rows = document.querySelectorAll("#dataTable tbody tr");
+        var totalAmount = 0;
+        rows.forEach(function (row) {
+            var tur = row.cells[1].innerText.toLowerCase();
+            var vakti = row.cells[2].innerText.toLowerCase();
+            var narxi = row.cells[3].innerText.toLowerCase();
+            var chiqimTuri = row.cells[4].innerText.toLowerCase();
+            var sababi = row.cells[5].innerText.toLowerCase();
+
+            if ((tur.includes(turFilter) || tur == '') && vakti.includes(vaktFilter) && narxi.includes(narxFilter) && chiqimTuri.includes(chiqimFilter) && sababi.includes(sababFilter)) {
+                row.style.display = "";
+                var price = parseFloat(row.cells[3].innerText);
+                totalAmount += price;
+            } else {
+                row.style.display = "none";
+            }
+
+            document.getElementById("totalPrice").innerText = totalAmount;
+        });
+
+        // Jami pricelarni chiqarish
+
+
+    }
+
+    // Input o'zgarishlari uchun filtratsiya qilish
+    document.querySelectorAll("#filterRow input").forEach(function (input) {
+        input.addEventListener("keyup", filterTable);
+    });
+
+    filterTable();
+
+
+
+    //<=======================================>
     function exportToExcel() {
         const table = document.getElementById('dataTable');
         const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });

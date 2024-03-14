@@ -22,13 +22,13 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
         builder.Entity<SpendType>().HasData(new SpendType
         {
             Id=Guid.NewGuid(),
-            Name = "У́зимизни ишчилар харажатлари",
+            Name = "У́зимизни ишчилар",
             Descraption = "У́зимизни ишчилар харажатлари"
         },
         new SpendType
         {
             Id = Guid.NewGuid(),
-            Name = "Озик-овкат харажатлари",
+            Name = "Озик-овкат",
             Descraption = "Озик-овкат харажатлари"
         },
         new SpendType
@@ -40,25 +40,25 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
         new SpendType
         {
             Id = Guid.NewGuid(),
-            Name = "Транспорт харажатлари",
+            Name = "Транспорт",
             Descraption = "Транспорт харажатлари"
         },
         new SpendType
         {
             Id = Guid.NewGuid(),
-            Name = "Хужжатлар ва офис харажатлари",
+            Name = "Хужжатлар ва офис",
             Descraption = "Хужжатлар ва офис харажатлари"
         },
         new SpendType
         {
             Id = Guid.NewGuid(),
-            Name = "Курилиш материаллар харажатлари",
+            Name = "Курилиш материаллар",
             Descraption = "Курилиш материаллар харажатлари"
         },
         new SpendType
         {
             Id = Guid.NewGuid(),
-            Name = "Иш куроллар харажатлари",
+            Name = "Иш куроллар",
             Descraption = "Иш куроллар харажатлари"
         },
         new SpendType

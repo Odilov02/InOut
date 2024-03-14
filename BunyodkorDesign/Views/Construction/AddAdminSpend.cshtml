@@ -100,15 +100,15 @@
     </div>
 
     <!-- Multi-line Text Input Control -->
-    <button type="submit" style="background-color: #05c46b;
-        border: 1px solid #777;
-        border-radius: 2px;
-        font-family: inherit;
-        font-size: 21px;
-        display: block;
-        width: 40%;
-        margin-top: 50px;
-        margin-bottom: 20px;">
-        Сақлаш
-    </button>
+   <div class="row">
+       <div class="col-5">
+            <button type="submit" class="btn btn-success m-4 px-5">
+                Сақлаш
+            </button>
+       </div>
+        <div class="col-2"></div>
+        <div class="col-5">
+            <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@Model.ConstructionId" class="btn btn-primary m-4 px-5">Orqaga</a>
+       </div>
+   </div>
 </form>

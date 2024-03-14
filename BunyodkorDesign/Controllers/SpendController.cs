@@ -82,6 +82,7 @@ public class SpendController : Controller
         if (HttpContext.Session.GetString("ConstructionId") is not null)
             HttpContext.Session.Remove("ConstructionId");
         HttpContext.Session.SetString("ConstructionId", constructionId.ToString());
+        ViewData["constructionId"] = constructionId;
         return View(spends);
     }
     [Authorize(Roles = "Admin")]
@@ -92,6 +93,7 @@ public class SpendController : Controller
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id.ToString() == constructionId);
         if (!ModelState.IsValid)
         {
+            ViewData["constructionId"] = constructionId;
             List<Spend> spends = _appDbContext.Spends.Where(x => x.User.Id == construction!.User.Id && x.IsConfirmed == false).ToList();
             return View(spends);
         }
@@ -110,6 +112,7 @@ public class SpendController : Controller
             return RedirectToAction("Choose", "Construction", new { constructionId = constructionId });
         }
         entities = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && x.User.Id == construction!.User.Id).ToList()!;
+        ViewData["constructionId"] = constructionId;
         HttpContext.Session.Remove("ConstructionId");
         return View(entities);
     }
@@ -117,6 +120,7 @@ public class SpendController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllConfirmedForAdmin(Guid constructionId)
     {
+        ViewData["constructionId"] = constructionId;
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
         List<AllSpend> allSpends = new List<AllSpend>();
         List<Spend> spends = await _appDbContext.Spends.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == true).ToListAsync();
@@ -157,6 +161,7 @@ public class SpendController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllNoConfirmedForAdmin(Guid constructionId)
     {
+        ViewData["constructionId"] = constructionId;
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
         var spends = await _appDbContext.Spends.Where(x => x.User.Id == construction!.UserId && x.IsConfirmed == false).ToListAsync();
         return View(spends);

@@ -31,9 +31,12 @@ public class ConstructionController : Controller
     }
 
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> GetAllConstruction()
+    public async Task<IActionResult> GetAllConstruction(Guid userId)
     {
         var constructions = await _appDbContext.Constructions.ToListAsync();
+        var user =await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+        ViewData["FullName"] = user!.FullName;
+        ViewData["PhoneNumber"] = user.PhoneNumber!.Substring(1);// return string.Format("+{0} {1} {2} {3} {4}"//user.PhoneNumber!.Substring(1,3)+" " + user.PhoneNumber!.Substring(4, 2) +" "+ user.PhoneNumber!.Substring(6, 3)+" " + user.PhoneNumber!.Substring(9, 2)+" "+ user.PhoneNumber!.Substring(11, 2);
         return View(constructions);
     }
     [Authorize(Roles = "Admin")]
@@ -121,7 +124,7 @@ public class ConstructionController : Controller
             construction.SpendDate = DateTime.Now;
             _appDbContext.Constructions.Update(construction);
             await _appDbContext.SaveChangesAsync();
-            return RedirectToAction("GetAllConstruction", new { constructionId = adminSpend.ConstructionId });
+            return RedirectToAction("Choose", new { constructionId = adminSpend.ConstructionId });
         }
         ViewData["SpendTypes"] = spendTypes;
         return View(adminSpend);
