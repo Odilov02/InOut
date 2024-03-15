@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Application.Common.DTOs.UserDTOs;
-
+#nullable disable
 public class UserRegisterDto
 {
     [MaxLength(100)]

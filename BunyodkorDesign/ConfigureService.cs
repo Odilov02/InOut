@@ -1,6 +1,4 @@
-﻿using Domain.Entities;
-using Infrastructure.Persistance;
-using Microsoft.AspNetCore.Identity;
+﻿using Infrastructure.Persistance;
 
 namespace WebUI;
 

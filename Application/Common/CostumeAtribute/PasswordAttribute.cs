@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace Application.Common.CostumeAtribute;
-
+#nullable disable
 public class PasswordAttribute : ValidationAttribute
 {
     public PasswordAttribute()

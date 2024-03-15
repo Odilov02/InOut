@@ -1,15 +1,4 @@
-﻿using Application.Common.DTOs.UserDTOs;
-using Application.Common.Extentions;
-using Application.Common.Interfaces;
-using Application.Common.Models;
-using AutoMapper;
-using Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
-namespace WebUI.Controllers;
+﻿namespace WebUI.Controllers;
 
 public class UserController : Controller
 {
@@ -62,9 +51,9 @@ public class UserController : Controller
         HttpContext.Session.SetString("UserId", user.Id.ToString());
         List<string> roles = (await _userManager.GetRolesAsync(user)).ToList();
         if (roles.Contains("Admin"))
-            return RedirectToAction("GetAllConstruction", "Construction", new { userId = user.Id });
+            return RedirectToAction("GetAllConstruction", "Construction");
         else if (roles.Contains("User"))
-            return RedirectToAction("Choose", "Spend", new { user = user });
+            return RedirectToAction("Choose", "Spend");
         return View(userCridential);
     }
     [Authorize]
@@ -105,8 +94,8 @@ public class UserController : Controller
         user.PhoneNumber = userUpdate.PhoneNumber;
         user.FullName = userUpdate.FullName;
         _appDbContext.Users.Update(user);
-        var result =await _appDbContext.SaveChangesAsync();
-        if(result>0)
+        var result = await _appDbContext.SaveChangesAsync();
+        if (result > 0)
         {
             return RedirectToAction("LogOut");
         }

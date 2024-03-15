@@ -1,5 +1,4 @@
 ﻿using BunyodkorDesign.Models;
-using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace BunyodkorDesign.Controllers

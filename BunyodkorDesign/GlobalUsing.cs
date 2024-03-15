@@ -1,0 +1,17 @@
+﻿global using Application.Common.Dtos.InDtos;
+global using Application.Common.Interfaces;
+global using AutoMapper;
+global using Domain.Entities;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.EntityFrameworkCore;
+global using Application.Common.Dtos.ConstructionDtos;
+global using Microsoft.AspNetCore.Identity;
+global using System.Data;
+global using Application.Common.Dtos.SpendDtos;
+global using Application.Common.Models;
+global using Application.Common.DTOs.UserDTOs;
+global using Application.Common.Extentions;
+global using Application;
+global using Infrastructure;
+global using WebUI;

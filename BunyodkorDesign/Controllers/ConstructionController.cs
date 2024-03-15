@@ -1,14 +1,4 @@
-﻿using Application.Common.Dtos.ConstructionDtos;
-using Application.Common.Interfaces;
-using AutoMapper;
-using Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Data;
-
-namespace WebUI.Controllers;
+﻿namespace WebUI.Controllers;
 
 public class ConstructionController : Controller
 {
@@ -31,12 +21,12 @@ public class ConstructionController : Controller
     }
 
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> GetAllConstruction(Guid userId)
+    public async Task<IActionResult> GetAllConstruction()
     {
         var constructions = await _appDbContext.Constructions.ToListAsync();
-        var user =await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+        var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == HttpContext.Session.GetString("UserId"));
         ViewData["FullName"] = user!.FullName;
-        ViewData["PhoneNumber"] = user.PhoneNumber!.Substring(1);// return string.Format("+{0} {1} {2} {3} {4}"//user.PhoneNumber!.Substring(1,3)+" " + user.PhoneNumber!.Substring(4, 2) +" "+ user.PhoneNumber!.Substring(6, 3)+" " + user.PhoneNumber!.Substring(9, 2)+" "+ user.PhoneNumber!.Substring(11, 2);
+        ViewData["PhoneNumber"] = user.PhoneNumber!.Substring(1);
         return View(constructions);
     }
     [Authorize(Roles = "Admin")]
@@ -104,7 +94,7 @@ public class ConstructionController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AddAdminSpend(AdminSpend adminSpend)
     {
-            var spendTypes = _appDbContext.SpendTypes.ToList();
+        var spendTypes = _appDbContext.SpendTypes.ToList();
         if (!ModelState.IsValid)
         {
             ViewData["SpendTypes"] = spendTypes;

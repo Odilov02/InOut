@@ -1,6 +1,4 @@
-using Application;
-using Infrastructure;
-using WebUI;
+
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();

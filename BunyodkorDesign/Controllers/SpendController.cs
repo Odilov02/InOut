@@ -1,13 +1,4 @@
-﻿using Application.Common.Dtos.SpendDtos;
-using Application.Common.Interfaces;
-using Application.Common.Models;
-using AutoMapper;
-using Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
-namespace WebUI.Controllers;
+﻿namespace WebUI.Controllers;
 
 public class SpendController : Controller
 {
@@ -52,8 +43,11 @@ public class SpendController : Controller
         }
     }
     [Authorize(Roles = "User")]
-    public IActionResult Choose()
+    public async Task<IActionResult> Choose()
     {
+        var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == HttpContext.Session.GetString("UserId"));
+        ViewData["FullName"] = user!.FullName;
+        ViewData["PhoneNumber"] = user.PhoneNumber!.Substring(1);
         return View();
     }
     [Authorize(Roles = "User")]
@@ -155,6 +149,7 @@ public class SpendController : Controller
                 allSpends.Add(allSpend);
             }
         }
+        allSpends = allSpends.OrderByDescending(x => x.Date).ToList();
         return View(allSpends);
     }
 

@@ -1,4 +1,6 @@
-﻿namespace Application.Common.Models;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Application.Common.Models;
 #nullable disable
 public class AllSpend
 {

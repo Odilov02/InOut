@@ -1,12 +1,4 @@
-﻿using Application.Common.Dtos.InDtos;
-using Application.Common.Interfaces;
-using AutoMapper;
-using Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
-namespace WebUI.Controllers;
+﻿namespace WebUI.Controllers;
 
 public class InController : Controller
 {

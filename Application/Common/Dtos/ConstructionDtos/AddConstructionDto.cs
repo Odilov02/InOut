@@ -13,5 +13,6 @@ public class AddConstructionDto
     [NotNull]
     [MaxLength (200)]
     public string Description { get; set; }
+    [NotNull]
     public long ContractPrice { get; set; }
 }
