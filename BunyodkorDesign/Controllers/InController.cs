@@ -59,9 +59,8 @@ public class InController : Controller
 
         _appDbContext.Ins.UpdateRange(ins);
         var result = await _appDbContext.SaveChangesAsync();
-        if (result > 0)
-            return RedirectToAction("Choose", "In");
-        ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false).ToList();
+         ins = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList()!;
+        ViewData["result"]=result;
         return View(ins);
     }
 
@@ -93,12 +92,12 @@ public class InController : Controller
         @in.Date = DateTime.Now;
         await _appDbContext.Ins.AddAsync(@in);
         var result = await _appDbContext.SaveChangesAsync();
-        if (result > 0)
-            return RedirectToAction("Choose", "Construction", new { constructionId = inDto.ConstructionId });
-        else
+        var inResult = new AddInDto()
         {
-            return View(inDto);
-        }
+            ConstructionId = inDto.ConstructionId
+        };
+        ViewData["result"] = result;
+        return View(inResult);
     }
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllNoConfirmedForAdmin(Guid constructionId)

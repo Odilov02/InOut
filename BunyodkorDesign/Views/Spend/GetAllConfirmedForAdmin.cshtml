@@ -60,23 +60,23 @@
             int count = 1;
             foreach (var item in Model)
             {
-                <tr class="Search">
-                    <th scope="row">@count</th>
-                    <td class="text-center">@item.AdminOrUser</td>
-                    <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
-                    <td class="text-center price">@item.Price</td>
-                    <td class="text-center">@item.SpendType</td>
-                    <td class="text-center">@item.Reason</td>
-                </tr>
+                        <tr class="Search">
+                            <th scope="row">@count</th>
+                            <td class="text-center">@item.AdminOrUser</td>
+                            <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
+                        <td id="formattedNumberPrice" class="text-center price">@item.Price</td>
+                            <td class="text-center">@item.SpendType</td>
+                            <td class="text-center">@item.Reason</td>
+                        </tr>
                 count++;
             }
-            <tr class="total-row">
-                <th scope="row">Жами</th>
-                <td colspan="2"></td>
-                <th class="text-center" id="totalPrice"></th>
-                <td></td>
-                <td></td>
-            </tr>
+                    <tr class="total-row">
+                        <th scope="row">Жами</th>
+                        <td colspan="2"></td>
+                        <th class="text-center" id="totalPrice"></th>
+                        <td></td>
+                        <td></td>
+                    </tr>
         }
     </tbody>
 </table>
@@ -108,15 +108,16 @@
             var totalAmount = 0;
 
             $(".Search:visible .price").each(function () {
-                var price = parseFloat($(this).text());
+                var price = parseFloat($(this).text().replace(/\s/g, ''));
                 totalAmount += price;
             });
 
             // Jami pricelarni chiqarish
-            document.getElementById("totalPrice").innerText = totalAmount;
+            document.getElementById("totalPrice").innerText = totalAmount.toLocaleString('en').replace(/,/g, ' ');
         });
     });
-    function filterTable() {
+    function filterTable() 
+    {
         var turFilter = document.getElementById("turFilter").value.toLowerCase();
         var vaktFilter = document.getElementById("vaktFilter").value.toLowerCase();
         var narxFilter = document.getElementById("narxFilter").value.toLowerCase();
@@ -131,21 +132,18 @@
             var narxi = row.cells[3].innerText.toLowerCase();
             var chiqimTuri = row.cells[4].innerText.toLowerCase();
             var sababi = row.cells[5].innerText.toLowerCase();
-
+            var priceFormat = parseFloat(row.cells[3].innerText.replace(/\s/g, ''));
             if ((tur.includes(turFilter) || tur == '') && vakti.includes(vaktFilter) && narxi.includes(narxFilter) && chiqimTuri.includes(chiqimFilter) && sababi.includes(sababFilter)) {
                 row.style.display = "";
-                var price = parseFloat(row.cells[3].innerText);
+                var price = priceFormat;
                 totalAmount += price;
             } else {
                 row.style.display = "none";
             }
-
-            document.getElementById("totalPrice").innerText = totalAmount;
-        });
-
-        // Jami pricelarni chiqarish
-
-
+            row.cells[3].innerText =priceFormat.toLocaleString('en').replace(/,/g, ' ');
+            document.getElementById("totalPrice").innerText = totalAmount.toLocaleString('en').replace(/,/g, ' ');
+           
+      });
     }
 
     // Input o'zgarishlari uchun filtratsiya qilish

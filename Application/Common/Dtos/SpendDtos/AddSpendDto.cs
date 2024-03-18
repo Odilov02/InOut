@@ -2,15 +2,15 @@
 using System.Diagnostics.CodeAnalysis;
 
 namespace Application.Common.Dtos.SpendDtos;
-
+#nullable disable
 public class AddSpendDto
 {
-    [NotNull]
-    [MaxLength(200)]
+    [Required(ErrorMessage = "Чиқим сабаби киритиши шарт!")]
+    [MaxLength(200,ErrorMessage = "Чиқим сабаби узунлиги 200 тадан кам болиши шарт!")]
     public string Reason { get; set; }
-    [NotNull]
+    [Required(ErrorMessage = "Чиқим сумма киритиши шарт!")]
     [Range(1, long.MaxValue)]
     public long Price { get; set; }
-    [NotNull]
+    [Required(ErrorMessage = "Чиқим тури танланишлиги киритиши шарт!")]
     public Guid SpendTypeId { get; set; }
 }

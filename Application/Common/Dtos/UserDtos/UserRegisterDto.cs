@@ -1,31 +1,29 @@
 ﻿using Application.Common.CostumeAtribute;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Application.Common.DTOs.UserDTOs;
 #nullable disable
 public class UserRegisterDto
 {
-    [MaxLength(100)]
-    [MinLength(3)]
-    [NotNull]
+    [Required(ErrorMessage = "Исм-фамилия киритиши шарт!")]
+    [MaxLength(50, ErrorMessage = "Исм-фамилия узунлиги 50 тадан кам болиши шарт!")]
     public string FullName { get; set; }
 
-    [MaxLength(100)]
-    [MinLength(3)]
-    [NotNull]
+
+    [Required(ErrorMessage = "Логин киритиши шарт!")]
+    [MaxLength(50, ErrorMessage = "Логин узунлиги 50 тадан кам болиши шарт!")]
     public string UserName { get; set; }
 
-    [MaxLength(13, ErrorMessage = "Telefon Nomer 13 ta bolishi kerak.")]
-    [MinLength(13, ErrorMessage = "Telefon Nomer 13 ta bolishi kerak.")]
-    [NotNull]
+    [Required(ErrorMessage = "Телефон номер киритиши шарт!")]
+    [MaxLength(13, ErrorMessage = "Телефон номер 13 та болиши шарт!")]
+    [MinLength(13, ErrorMessage = "Телефон номер 13 та болиши шарт!")]
     public string PhoneNumber { get; set; }
-    [Required]
+    [Required(ErrorMessage = "Парол киритиши шарт!")]
     [DataType(DataType.Password)]
-    [Password]
+    [Password()]
     public string Password { get; set; }
-    [Required]
-    [Compare("Password", ErrorMessage = "Parollar mos kelmadi.")]
+    [Required(ErrorMessage = "Парол қайта киритилиши шарт!")]
+    [Compare("Password", ErrorMessage = "Пароллар 1 хил болиши шарт!")]
     [DataType(DataType.Password)]
     public string ConfirmPassword { get; set; }
 }

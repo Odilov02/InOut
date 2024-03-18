@@ -3,9 +3,41 @@
     Layout = "_UserLayout";
 }
 @model List<In>
+@{
+    if (ViewData["result"] is not null)
+    {
+        if ((int)ViewData["result"]! > 0)
+        {
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col-8 mt-3">
+                    <h3 style="background-color: rgb(132, 253, 184);" class="shadow rounded text-center py-3" id="HtmlTeg">
+                        <span>@ViewData["result"]</span> ta malumot muvaffaqiyatli tasdiqland!
+                    </h3>
+                </div>
+                <div class="col"></div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col-8 mt-3">
+                    <h3 style="background-color: rgb(252, 113, 109);" class="shadow rounded text-center py-3" id="HtmlTeg">
+                        Malumotlar tasdiqlanmadi!
+                    </h3>
+                </div>
+                <div class="col"></div>
+            </div>
+        }
+    }
+}
 <br />
 <div class="row py-2">
     <div class="col-6">
+        <h3 class="mx-2" id="demo"></h3>
         <h1>Киримларни тасдиклаш! </h1>
     </div>
     <div class="col-3 py-2">
@@ -128,5 +160,11 @@
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
         }
+    }
+        const myInterval = setInterval(myTimer);
+
+    function myTimer() {
+        const date = new Date();
+        document.getElementById("demo").innerHTML = date.toLocaleTimeString();
     }
 </script>

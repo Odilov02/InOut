@@ -23,7 +23,7 @@ public class ConstructionController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllConstruction()
     {
-        var constructions = await _appDbContext.Constructions.ToListAsync();
+        var constructions = await _appDbContext.Constructions.OrderByDescending(x=>x.CreatedDate).ToListAsync();
         var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == HttpContext.Session.GetString("UserId"));
         ViewData["FullName"] = user!.FullName;
         ViewData["PhoneNumber"] = user.PhoneNumber!.Substring(1);
@@ -64,12 +64,18 @@ public class ConstructionController : Controller
         var user = _userManager.Users.FirstOrDefault(x => x.Id == construction.UserId);
         await _appDbContext.Constructions.AddAsync(construction);
         var result = await _appDbContext.SaveChangesAsync();
-        if (result > 0)
-        {
             await _userManager.AddToRoleAsync(user!, "User");
-            return RedirectToAction("GetAllConstruction");
-        }
-        return View();
+            ViewData["result"] = result;
+            var newUsersAll = _userManager.Users.ToList();
+            List<User> newUsers = new List<User>();
+            foreach (var item in newUsersAll)
+            {
+                var newRoles = await _userManager.GetRolesAsync(item);
+                if (newRoles.Count == 0)
+                newUsers.Add(item);
+            }
+            ViewData["users"] = newUsers;
+            return View();
     }
     [Authorize(Roles = "Admin")]
     public IActionResult Choose(Guid constructionId) => View(constructionId);
@@ -93,7 +99,7 @@ public class ConstructionController : Controller
     [HttpPost]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AddAdminSpend(AdminSpend adminSpend)
-    {
+   {
         var spendTypes = _appDbContext.SpendTypes.ToList();
         if (!ModelState.IsValid)
         {
@@ -108,15 +114,16 @@ public class ConstructionController : Controller
         }
         _appDbContext.AdminSpends.Add(adminSpend);
         var result = await _appDbContext.SaveChangesAsync();
-        if (result > 0)
+        construction.Spend += adminSpend.Price;
+        construction.SpendDate = DateTime.Now;
+        _appDbContext.Constructions.Update(construction);
+        await _appDbContext.SaveChangesAsync();
+        var newAdminSpend = new AdminSpend()
         {
-            construction.Spend += adminSpend.Price;
-            construction.SpendDate = DateTime.Now;
-            _appDbContext.Constructions.Update(construction);
-            await _appDbContext.SaveChangesAsync();
-            return RedirectToAction("Choose", new { constructionId = adminSpend.ConstructionId });
-        }
+            ConstructionId = construction.Id
+        };
         ViewData["SpendTypes"] = spendTypes;
-        return View(adminSpend);
+        ViewData["result"] = result;
+        return View(newAdminSpend);
     }
 }

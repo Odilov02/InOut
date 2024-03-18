@@ -1,12 +1,11 @@
-﻿using Application.Common.CostumeAtribute;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Application.Common.Models;
-
+#nullable disable
 public class UserCridential
 {
-    [MinLength(5)]
+    [Required(ErrorMessage = "Логин киритиши шарт!")]
     public string UserName { get; set; }
-    [Password]
+    [Required(ErrorMessage = "Парол киритиши шарт!")]
     public string Password { get; set; }
 }

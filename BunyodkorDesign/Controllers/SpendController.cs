@@ -34,13 +34,9 @@ public class SpendController : Controller
         spend.UserId = user!.Id;
         await _appDbContext.Spends.AddAsync(spend);
         var result = await _appDbContext.SaveChangesAsync();
-        if (result > 0)
-            return View("Choose");
-        else
-        {
-            ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
-            return View(SpendDto);
-        }
+        ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
+        ViewData["result"] = result;
+        return View();
     }
     [Authorize(Roles = "User")]
     public async Task<IActionResult> Choose()
@@ -101,13 +97,9 @@ public class SpendController : Controller
         }
         _appDbContext.Spends.UpdateRange(entities!);
         var result = await _appDbContext.SaveChangesAsync();
-        if (result > 0)
-        {
-            return RedirectToAction("Choose", "Construction", new { constructionId = constructionId });
-        }
         entities = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && x.User.Id == construction!.User.Id).ToList()!;
         ViewData["constructionId"] = constructionId;
-        HttpContext.Session.Remove("ConstructionId");
+        ViewData["result"] = result;
         return View(entities);
     }
 

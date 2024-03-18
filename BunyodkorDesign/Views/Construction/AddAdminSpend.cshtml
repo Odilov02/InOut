@@ -6,12 +6,43 @@
 @{
     List<Domain.Entities.SpendType>? spendTypes = (List<Domain.Entities.SpendType>)ViewData["SpendTypes"]!;
 }
+@{
+    if (ViewData["result"] is not null)
+    {
+        if ((int)ViewData["result"]! > 0)
+        {
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col-8 mt-3">
+                    <h3 style="background-color: rgb(132, 253, 184);" class="shadow rounded text-center py-3" id="HtmlTeg">
+                        Malumotlar muvaffaqiyatli qo'shildi!
+                    </h3>
+                </div>
+                <div class="col"></div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col-8 mt-3">
+                    <h3 style="background-color: rgb(252, 113, 109);" class="shadow rounded text-center py-3" id="HtmlTeg">
+                        Malumotlar qo'shilmadi!
+                    </h3>
+                </div>
+                <div class="col"></div>
+            </div>
+        }
+    }
+}
 <style>
     /* Styling the Form (Color, Padding, Shadow) */
     form {
         background-color: #fff;
         max-width: 670px;
-        margin: 50px auto;
+        margin: 30px auto;
         padding: 30px 20px;
         box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
     }
@@ -29,7 +60,7 @@
         }
 
         /* Styling form-control input,
-                            select, textarea */
+                                select, textarea */
         .form-control input,
         .form-control select,
         .form-control textarea {
@@ -42,7 +73,7 @@
         }
 
             /* Styling form-control Radio
-                            button and Checkbox */
+                                button and Checkbox */
             .form-control input[type="radio"],
             .form-control input[type="checkbox"] {
                 display: inline-block;
@@ -50,18 +81,17 @@
             }
 </style>
 <!-- Create Form -->
-<form id="form" asp-action="AddAdminSpend" method="post">
 
-    <!-- Details -->
+<form id="form" asp-action="AddAdminSpend" method="post">
+    <h3 class="mx-2" id="demo"></h3>
     <div class="form-control">
         <label for="Price" id="Price">
             Сумма
         </label>
 
         <!-- Input Type Text -->
-        <input type="hidden" id="ConstructionId" name="ConstructionId" value="@Model.ConstructionId" />  
-               <input type="number" id="Price" min="0" name="Price"
-               placeholder="Суммани киритинг..." />
+        <input type="hidden" id="ConstructionId" name="ConstructionId" value="@Model.ConstructionId" />
+        <input type="text" id="priceInput" name="Price" placeholder="Суммани киритинг..." oninput="formatNumber()"/>
         <span asp-validation-for="Price"></span>
     </div>
     <div class="form-control">
@@ -74,13 +104,13 @@
             @{
                 if (spendTypes is null)
                 {
-                    <option value="@null">Бошка харажатлар</option>
+                            <option value="@null">Бошка харажатлар</option>
                 }
                 else
                 {
                     foreach (var outType in spendTypes)
                     {
-                        <option value="@outType.Id">@outType.Name</option>
+                                    <option value="@outType.Id">@outType.Name</option>
                     }
                 }
             }
@@ -100,15 +130,45 @@
     </div>
 
     <!-- Multi-line Text Input Control -->
-   <div class="row">
-       <div class="col-5">
-            <button type="submit" class="btn btn-success m-4 px-5">
+    <div class="row">
+        <div class="col-5">
+            <button type="submit" class="btn btn-success m-4 px-5" onclick="submitNumber()">
                 Сақлаш
             </button>
-       </div>
+        </div>
         <div class="col-2"></div>
         <div class="col-5">
             <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@Model.ConstructionId" class="btn btn-primary m-4 px-5">Orqaga</a>
-       </div>
-   </div>
+        </div>
+    </div>
 </form>
+<script>
+    const myInterval = setInterval(myTimer);
+
+    function myTimer() {
+        const date = new Date();
+        document.getElementById("demo").innerHTML = date.toLocaleTimeString();
+    }
+    function formatNumber() {
+    let input = document.getElementById('priceInput');
+    let value = input.value.replace(/\D/g, ''); 
+    let formattedValue = '';
+    for (let i = 0; i < value.length; i++) {
+        if (i > 0 && (value.length - i) % 3 === 0 && i !== value.length) {
+            formattedValue += ' '; 
+        }
+        formattedValue += value.charAt(i);
+    }
+    input.value = formattedValue;
+}
+function submitNumber() {
+    let input = document.getElementById('priceInput');
+    let value = input.value.replace(/\s/g, '');
+    input.value=value;
+}
+    function removeTeg() {
+        var element = document.getElementById("HtmlTeg");
+        element.parentNode.removeChild(element);
+    }
+    setTimeout(removeTeg, 6000);
+</script>

@@ -163,5 +163,13 @@
             document.body.removeChild(a);
         }
     }
+    function FormatNumbers(){
+        var numberElement = document.getElementById('formattedNumber');
+        var number = parseInt(numberElement.innerText);
+
+        var formattedNumber = number.toLocaleString('en').replace(/,/g, ' ');
+
+        numberElement.innerText = formattedNumber;
+    }
 </script>
 

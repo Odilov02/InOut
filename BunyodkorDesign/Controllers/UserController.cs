@@ -25,9 +25,15 @@ public class UserController : Controller
         user.Password = user.Password.stringHash();
         var result = await _userManager.CreateAsync(user);
         if (result.Succeeded)
+        {
+            ViewData["result"] = 1;
             return View("Login");
+        }
         else
+        {
+            ViewData["result"] = 0;
             return View(userRegister);
+        }
     }
 
 
@@ -54,7 +60,13 @@ public class UserController : Controller
             return RedirectToAction("GetAllConstruction", "Construction");
         else if (roles.Contains("User"))
             return RedirectToAction("Choose", "Spend");
-        return View(userCridential);
+        else
+        {
+            HttpContext.Session.Remove("UserId");
+            await _signInManager.SignOutAsync();
+            ViewData["result"] = 0;
+        return View();
+        }
     }
     [Authorize]
     public IActionResult UpdateLogin()
@@ -99,7 +111,16 @@ public class UserController : Controller
         {
             return RedirectToAction("LogOut");
         }
-        return View(userUpdate);
+        else
+        {
+
+            UserUpdate newUserUpdate = new()
+            {
+                Id = user.Id
+            };
+            ViewData["result"] = result;
+            return View(newUserUpdate);
+        }
     }
 
 

@@ -5,14 +5,13 @@ namespace Application.Common.Dtos.ConstructionDtos;
 #nullable disable
 public class AddConstructionDto
 {
-    [NotNull]
-    [MaxLength(50)]
+    [Required(ErrorMessage = "Обьект номи киритиши шарт!")]
+    [MaxLength(50,ErrorMessage = "Обьект номи узунлиги 50 тадан кам болиши шарт!")]
     public string FullName { get; set; }
-    [NotNull]
     public Guid UserId { get; set; }
-    [NotNull]
-    [MaxLength (200)]
+    [Required(ErrorMessage = "Обьект хақида маьлумот киритиши шарт!")]
+    [MaxLength(50, ErrorMessage = "Обьект хақида маьлумот узунлиги 200 тадан кам болиши шарт!")]
     public string Description { get; set; }
-    [NotNull]
+    [Required(ErrorMessage = "Шартнома суммаси киритиши шарт!")]
     public long ContractPrice { get; set; }
 }

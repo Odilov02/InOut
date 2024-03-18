@@ -6,7 +6,7 @@ public class PasswordAttribute : ValidationAttribute
 {
     public PasswordAttribute()
     {
-        ErrorMessage = "Parol kamida 8 belgidan iborat bo'lishi kerak va kamida bir harf va bir raqamdan iborat bo'lishi kerak.";
+        ErrorMessage = "Парол камида 8 белгидан иборат болиши керак ва камида 1 харф ва 1 рақамдан иборат болиши керак!";
     }
 
     public override bool IsValid(object value)
