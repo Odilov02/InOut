@@ -1,4 +1,4 @@
-﻿@using Application.Common.Dtos.SpendDtos;
+﻿﻿@using Application.Common.Dtos.SpendDtos;
 @using Domain.Entities;
 @{
     Layout = "_AdminLayout";
@@ -8,7 +8,7 @@
 <br />
 <div class="row py-2">
     <div class="col-6">
-        <h1 class="text-center">Umumiy malumotlar </h1>
+        <h1 class="text-center">Умумий малумотлар </h1>
     </div>
     <div class="col-2 py-2">
         <div class="contianer">
@@ -24,7 +24,7 @@
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
     <div class="col-2 py-2">
-        <a asp-action="GetAllConstruction" asp-controller="Construction" class="btn btn-primary">Orqaga</a>
+        <a asp-action="GetAllConstruction" asp-controller="Construction" class="btn btn-primary">Орқага</a>
     </div>
 </div>
 <br />
@@ -32,13 +32,13 @@
     <thead>
         <tr>
             <th scope="col"></th>
-            <th class="text-center" scope="col"><span>Nomi</span></th>
-            <th class ="text-center" scope="col">Vaqti</th>
-            <th class="text-center" scope="col">Shartnoma summa</th>
-            <th class="text-center" scope="col"><span>Chiqimi</span></th>
-            <th class="text-center" scope="col"><span>Sarf foizi</span></th>
-            <th class="text-center"scope="col"><span>Kirimi</span></th>
-            <th class="text-center" scope="col"><span>Qoldigi</span></th>
+            <th class="text-center" scope="col"><span>Номи</span></th>
+            <th class="text-center" scope="col">Вақти</th>
+            <th class="text-center" scope="col">Шартнома сумма</th>
+            <th class="text-center" scope="col"><span>Чиқими</span></th>
+            <th class="text-center" scope="col"><span>Сарф фоизи</span></th>
+            <th class="text-center" scope="col"><span>Кирими</span></th>
+            <th class="text-center" scope="col"><span>Қолдиги</span></th>
         </tr>
     </thead>
     <tbody>
@@ -46,11 +46,11 @@
             int count = 1;
             foreach (var item in Model)
             {
-                string percentage = (((double)item.Spend) / ((double)@item.ContractPrice)*100).ToString("0.0");
+                string percentage = (((double)item.Spend) / ((double)@item.ContractPrice) * 100).ToString("0.0");
                 <tr class="Search">
                     <th scope="row">@count</th>
                     <td class="text-center"><span>@item.FullName</span></td>
-                    <td class="text-center"><span>@item.CreatedDate.ToString("dd.MM.yyyy")</span></td>
+                    <td class="text-center">@item.CreatedDate.ToString("dd.MM.yyyy")</td>
                     <td class="contractPrice text-center"><span id="ContractPrice">@item.ContractPrice</span></td>
                     <td class="outs text-center"><span id="Spend">@item.Spend</span></td>
                     <td class="text-center"><span>@percentage %</span></td>
@@ -63,30 +63,33 @@
                 <th scope="row">Жами</th>
                 <td class="text-center">----</td>
                 <td class="text-center">----</td>
-                <td class="text-center" id="contractPrice"></td>
-                <td class="text-center" id="totalOuts"></td>
+                <td class="text-center"><span id="contractPrice"></span></td>
+                <td class="text-center"><span id="totalOuts"></span></td>
                 <td class="text-center">----</td>
-                <td class="text-center" id="totalPrice"></td>
-                <td class="text-center" id="totalResidual"></td>
+                <td class="text-center"><span id="totalPrice"></span></td>
+                <td class="text-center"><span id="totalResidual"></span></td>
             </tr>
         }
     </tbody>
 </table>
 <script>
+   
+    formatTableNumbers();
+
+
     $(document).ready(function () {
         function contains(text_one, text_two) {
             return text_one.indexOf(text_two) != -1;
         }
-
-        $("#Search").keyup(function () {
+        $("#Search").on("input", function () {
             var searchtext = $("#Search").val().toLowerCase();
 
             var hiddenRows = $(".Search:hidden");
 
-            $("#hiddenRowsContainer").empty(); 
+            $("#hiddenRowsContainer").empty();
             $("#hiddenRowsContainer").append(hiddenRows);
 
-         
+
 
             $(".Search").each(function () {
                 if (!contains($(this).text().toLowerCase(), searchtext)) {
@@ -95,44 +98,8 @@
                     $(this).show();
                 }
             });
-            
 
-            var contractPrice = 0;
-
-            $(".Search:visible .contractPrice").each(function () {
-                contractPrice += parseFloat($(this).text());
-            });
-
-            $("#contractPrice").text(contractPrice);
-
-
-            var totalAmount = 0;
-
-            $(".Search:visible .price").each(function () {
-                var price = parseFloat($(this).text());
-                totalAmount += price;
-            });
-
-            $("#totalPrice").text(totalAmount);
-
-            var totalOuts = 0;
-
-            $(".Search:visible .outs").each(function () {
-                var outs = parseFloat($(this).text());
-                totalOuts += outs;
-            });
-
-            $("#totalOuts").text(totalOuts);
-
-
-            var totalResidual = 0;
-
-            $(".Search:visible .residual").each(function () {
-                var Residual = parseFloat($(this).text());
-                totalResidual += Residual;
-            });
-
-            $("#totalResidual").text(totalResidual);
+            formatTableNumbers();
         });
     });
     function exportToExcel() {
@@ -163,13 +130,66 @@
             document.body.removeChild(a);
         }
     }
-    function FormatNumbers(){
-        var numberElement = document.getElementById('formattedNumber');
-        var number = parseInt(numberElement.innerText);
+    function formatTableNumbers() {
+        var contractPrice = 0;
 
-        var formattedNumber = number.toLocaleString('en').replace(/,/g, ' ');
+        $(".Search:visible .contractPrice").each(function () {
+            contractPrice += parseFloat($(this).text().replace(/\s/g, ''));
+        });
 
-        numberElement.innerText = formattedNumber;
+        $("#contractPrice").text(contractPrice);
+
+
+        var totalAmount = 0;
+
+        $(".Search:visible .price").each(function () {
+            var price = parseFloat($(this).text().replace(/\s/g, ''));
+            totalAmount += price;
+        });
+
+        $("#totalPrice").text(totalAmount);
+
+        var totalOuts = 0;
+
+        $(".Search:visible .outs").each(function () {
+            var outs = parseFloat($(this).text().replace(/\s/g, ''));
+            totalOuts += outs;
+        });
+
+        $("#totalOuts").text(totalOuts);
+
+
+        var totalResidual = 0;
+
+        $(".Search:visible .residual").each(function () {
+            var Residual = parseFloat($(this).text().replace(/\s/g, ''));
+            totalResidual += Residual;
+        });
+
+        $("#totalResidual").text(totalResidual);
+
+        // Qatordan ma'lumotlarni olib olish
+        var rows = document.querySelectorAll('tbody tr');
+
+        // Har bir qator uchun
+        rows.forEach(function (row) {
+            // Har bir ustunni olib olish
+            var cells = row.querySelectorAll('td span');
+
+            // Har bir ustunni formatlab berish
+            cells.forEach(function (cell) {
+                var text = cell.textContent.trim();
+                var number = parseFloat(text.replace(/\s/g, '')); // Agar koma orqali ajratilgan sonlar bo'lsa
+                if (!isNaN(number)) {
+                    cell.textContent = formatNumber(number);
+                }
+            });
+        });
     }
-</script>
 
+    // Sonlarni formatlab beradigan funksiya
+    function formatNumber(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
+</script>

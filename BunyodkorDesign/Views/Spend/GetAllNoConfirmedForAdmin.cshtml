@@ -31,10 +31,10 @@
     <thead>
         <tr>
             <th scope="col"></th>
-            <th scope="col">Вакти</th>
-            <th scope="col">Нархи</th>
-            <th scope="col">Чиқим тури</th>
-            <th scope="col">Сабаби</th>
+            <th class="text-center" scope="col">Вакти</th>
+            <th class="text-center" scope="col">Нархи</th>
+            <th class="text-center" scope="col">Чиқим тури</th>
+            <th class="text-center" colspan="2">Сабаби</th>
         </tr>
     </thead>
     <tbody>
@@ -44,22 +44,84 @@
             {
                 <tr class="Search">
                     <th scope="row">@count</th>
-                    <td><span>@item.Date.ToString("HH:mm dd.MM.yyyy")</span></td>
-                    <td class="price">@item.Price</td>
-                    <td>@item.SpendType.Name</td>
-                    <td>@item.Reason</td>
+                    <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
+                    <td class="text-center price"><span>@item.Price</span></td>
+                    <td class="text-center">@item.SpendType.Name</td>
+                    <td colspan="2" class ="text-center">@item.Reason</td>
                 </tr>
                 count++;
             }
             <tr class="total-row">
                 <th scope="row">Жами</th>
-                <td></td>
-                <td id="totalPrice" colspan="3"></td>
+                <td class="text-center">----</td>
+                <td class="text-center" ><span id="totalPrice"></span></td>
+                <td class="text-center">----</td>
+                <td colspan="2" class="text-center">----</td>
             </tr>
         }
     </tbody>
 </table>
 <script>
+    formatTableNumbers();
+    $(document).ready(function () {
+        function contains(text_one, text_two) {
+            return text_one.indexOf(text_two) != -1;
+        }
+
+        $("#Search").keyup(function () {
+            var searchtext = $("#Search").val().toLowerCase();
+
+            // Barcha yashirilgan qatorlarni olib tashlash
+            var hiddenRows = $(".Search:hidden");
+
+            // Barcha yashirilgan qatorlarni hiddenRowsContainer ga joylashtirish
+            $("#hiddenRowsContainer").empty(); // Avvalgi ma'lumotlarni tozalash
+            $("#hiddenRowsContainer").append(hiddenRows);
+
+
+            $(".Search").each(function () {
+                if (!contains($(this).text().toLowerCase(), searchtext)) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+            });
+            formatTableNumbers();
+        });
+    });
+    function formatTableNumbers() {
+
+        var totalAmount = 0;
+
+        $(".Search:visible .price").each(function () {
+            var price = parseFloat($(this).text().replace(/\s/g, ''));
+            totalAmount += price;
+        });
+
+        $("#totalPrice").text(totalAmount);
+
+        var rows = document.querySelectorAll('tbody tr');
+
+        // Har bir qator uchun
+        rows.forEach(function (row) {
+            // Har bir ustunni olib olish
+            var cells = row.querySelectorAll('td span');
+
+            // Har bir ustunni formatlab berish
+            cells.forEach(function (cell) {
+                var text = cell.textContent.trim();
+                var number = parseFloat(text.replace(/\s/g, '')); // Agar koma orqali ajratilgan sonlar bo'lsa
+                if (!isNaN(number)) {
+                    cell.textContent = formatNumber(number);
+                }
+            });
+        });
+    }
+
+    // Sonlarni formatlab beradigan funksiya
+    function formatNumber(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
     $(document).ready(function () {
         function contains(text_one, text_two) {
             return text_one.indexOf(text_two) != -1;

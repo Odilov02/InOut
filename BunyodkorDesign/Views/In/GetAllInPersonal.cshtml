@@ -1,15 +1,14 @@
-﻿@using Application.Common.Dtos.SpendDtos;
-@using Domain.Entities;
+﻿@using Domain.Entities;
 @{
-    Layout = "_UserLayout";
+    Layout = "_AdminLayout";
 }
-@model List<Spend>
+@model List<In>
 <br />
 <div class="row py-2">
-    <div class="col-6">
-        <h1 class="justify-content-center">Тасдиқланган чиқимлар</h1>
+    <div class="col-3">
+        <h1 class="text-center">Киримлар</h1>
     </div>
-    <div class="col-3 py-2">
+    <div class="col-2 py-2">
         <div class="contianer">
             <div class="form-group">
                 <div class="input-group" value=" ">
@@ -19,17 +18,23 @@
             </div>
         </div>
     </div>
-    <div class="col-3 py-2">
+    <div class="col-2 py-2">
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
+    <div class="col-2 py-2">
+        <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@ViewData["constructionId"]" class="btn btn-primary px-3">Кирим қушиш </a>
+    </div>
+    <div class="col-2 py-2">
+        <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@ViewData["constructionId"]" class="btn btn-outline-danger px-3">Орқага</a>
+    </div>
 </div>
+
 <table id="dataTable" class="table table-success table-striped">
     <thead>
         <tr>
             <th scope="col"></th>
             <th class="text-center" scope="col">Вакти</th>
             <th class="text-center" scope="col">Нархи</th>
-            <th class="text-center" scope="col">Чиқим тури</th>
             <th class="text-center" colspan="2">Сабаби</th>
         </tr>
     </thead>
@@ -41,8 +46,7 @@
                 <tr class="Search">
                     <th scope="row">@count</th>
                     <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
-                    <td class="price text-center"><span>@item.Price</span></td>
-                    <td class="text-center">@item.SpendType.Name</td>
+                    <td class="text-center price"><span>@item.Price</span></td>
                     <td class="text-center" colspan="2">@item.Reason</td>
                 </tr>
                 count++;
@@ -51,7 +55,6 @@
                 <th scope="row">Жами</th>
                 <td class="text-center">-----</td>
                 <td class="text-center"><span id="totalPrice"></span></td>
-                <td class="text-center">-----</td>
                 <td class="text-center" colspan="2">-----</td>
             </tr>
         }
@@ -74,15 +77,7 @@
             $("#hiddenRowsContainer").empty(); // Avvalgi ma'lumotlarni tozalash
             $("#hiddenRowsContainer").append(hiddenRows);
 
-            var totalAmount = 0;
 
-            $(".Search:visible .price").each(function () {
-                var price = parseFloat($(this).text());
-                totalAmount += price;
-            });
-
-            // Jami pricelarni chiqarish
-            $("#totalPrice").text(totalAmount);
 
             $(".Search").each(function () {
                 if (!contains($(this).text().toLowerCase(), searchtext)) {
@@ -94,34 +89,7 @@
             formatTableNumbers();
         });
     });
-    function exportToExcel() {
-        const table = document.getElementById('dataTable');
-        const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
-        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
 
-        function s2ab(s) {
-            const buf = new ArrayBuffer(s.length);
-            const view = new Uint8Array(buf);
-            for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
-            return buf;
-        }
-
-        const blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-        const fileName = "data.xlsx";
-
-        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(blob, fileName);
-        } else {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            document.body.appendChild(a);
-            a.href = url;
-            a.download = fileName;
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-        }
-    }
     function formatTableNumbers() {
 
         var totalAmount = 0;
@@ -154,5 +122,33 @@
     // Sonlarni formatlab beradigan funksiya
     function formatNumber(number) {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+    function exportToExcel() {
+        const table = document.getElementById('dataTable');
+        const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+
+        function s2ab(s) {
+            const buf = new ArrayBuffer(s.length);
+            const view = new Uint8Array(buf);
+            for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        }
+
+        const blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
+        const fileName = "data.xlsx";
+
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, fileName);
+        } else {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            document.body.appendChild(a);
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
     }
 </script>

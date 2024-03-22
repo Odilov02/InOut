@@ -1,5 +1,5 @@
 ﻿namespace Domain.Entities;
-
+#nullable disable
 public class SpendType:BaseEntity
 {
     public string Name { get; set; }

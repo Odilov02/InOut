@@ -121,7 +121,5 @@ public class UserController : Controller
             ViewData["result"] = result;
             return View(newUserUpdate);
         }
-    }
-
-
+    }  
 }

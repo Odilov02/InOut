@@ -114,7 +114,7 @@ public class ConstructionController : Controller
         }
         _appDbContext.AdminSpends.Add(adminSpend);
         var result = await _appDbContext.SaveChangesAsync();
-        construction.Spend += adminSpend.Price;
+        construction.Spend += adminSpend.Price ?? 0;
         construction.SpendDate = DateTime.Now;
         _appDbContext.Constructions.Update(construction);
         await _appDbContext.SaveChangesAsync();
@@ -126,4 +126,5 @@ public class ConstructionController : Controller
         ViewData["result"] = result;
         return View(newAdminSpend);
     }
+
 }

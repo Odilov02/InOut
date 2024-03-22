@@ -84,9 +84,9 @@
         </label>
       
         <!-- Input Type Text -->
-        <input type="number" id="PriceInput" name="Price"
-               placeholder="Чиқим суммасини киритинг..." onclick="formatNumber()" />
-        <span asp-validation-for="Price"></span>
+        <input type="text" id="PriceInput" name="Price"
+               placeholder="Чиқим суммасини киритинг..." oninput="formatNumber()" />
+        <span class="text-danger" asp-validation-for="Price"></span>
     </div>
     <div class="form-control">
         <label for="SpendTypeId" id="SpendTypeId">
@@ -110,7 +110,7 @@
             }
 
         </select>
-        <span asp-validation-for="SpendTypeId"></span>
+        <span class="text-danger" asp-validation-for="SpendTypeId"></span>
     </div>
     <div class="form-control">
         <label for="comment">
@@ -120,7 +120,7 @@
         <!-- multi-line text input control -->
         <textarea name="Reason" id="Reason"
                   placeholder="Чиқим сабабини киритинг..."></textarea>
-        <span asp-validation-for="Reason"></span>
+        <span class="text-danger" asp-validation-for="Reason"></span>
     </div>
     <div class="row">
         <div class="col-5">

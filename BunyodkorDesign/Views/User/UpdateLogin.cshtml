@@ -53,8 +53,8 @@
     }
 
     form {
-        height: 520px;
-        width: 400px;
+        height: 600px;
+        width: 450px;
         background-color: rgba(255,255,255,0.13);
         position: absolute;
         transform: translate(-50%,-50%);
@@ -104,19 +104,6 @@
     ::placeholder {
         color: #e5e5e5;
     }
-
-    button {
-        margin-top: 50px;
-        width: 100%;
-        background-color: #ffffff;
-        color: #080710;
-        padding: 15px 0;
-        font-size: 18px;
-        font-weight: 600;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
     .social {
         margin-top: 30px;
         display: flex;
@@ -152,16 +139,19 @@
     <div class="shape"></div>
 </div>
 <form method="post" asp-action="UpdateLogin" class="bg-dark">
-    <h3>Malumotlarni tasdiqlash!</h3>
+    <h3>Маьлумотларни тасдиқлаш!</h3>
     <div>
         <label for="Username">Логин</label>
         <input type="text" placeholder="Логин киритинг..." id="UserName" name="UserName">
-        <span asp-validation-for="UserName"></span>
+        <span class="text-danger" asp-validation-for="UserName"></span>
     </div>
     <div>
         <label for="Password">Парол</label>
         <input type="password" placeholder="Рарол киритинг..." id="Password" name="Password">
-        <span asp-validation-for="Password"></span>
+        <span class="text-danger" asp-validation-for="Password"></span>
     </div>
-    <button type="submit">Кириш</button>
+    <div class="d-grid gap-2 my-4">
+        <button class="btn btn-primary my-3" type="submit"><h4>Кириш</h4></button>
+        <a asp-action="Login" asp-controller="User" class="btn btn-outline-danger"><h4>Орқага</h4></a>
+    </div>
 </form>

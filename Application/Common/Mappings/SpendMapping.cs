@@ -6,6 +6,6 @@ public class SpendMapping : Profile
 {
     public SpendMapping()
     {
-        CreateMap<AddSpendDto, Spend>().ForMember(dest => dest.SpendType, opt => opt.MapFrom(src => new SpendType() { Id=src.SpendTypeId}));
+        CreateMap<AddSpendDto, Spend>().ForMember(dest => dest.SpendType, opt => opt.MapFrom(src => new SpendType() { Id=src.SpendTypeId??new Guid()}));
     }
 }

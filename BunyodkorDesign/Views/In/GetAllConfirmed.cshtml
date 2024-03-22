@@ -3,6 +3,7 @@
     Layout = "_UserLayout";
 }
 @model List<In>
+<br />
 <div class="row py-2">
     <div class="col-6">
         <h1 class="justify-content-center">Тасдиқланган киримлар </h1>
@@ -26,9 +27,9 @@
     <thead>
         <tr>
             <th scope="col"></th>
-            <th scope="col">Вакти</th>
-            <th scope="col">Нархи</th>
-            <th scope="col">Сабаби</th>
+            <th class="text-center" scope="col">Вакти</th>
+            <th class="text-center" scope="col">Нархи</th>
+            <th class="text-center" scope="col">Сабаби</th>
         </tr>
     </thead>
     <tbody>
@@ -38,21 +39,23 @@
             {
                 <tr class="Search">
                     <th scope="row">@count</th>
-                    <td><span>@item.Date.ToString("HH:mm dd.MM.yyyy")</span></td>
-                    <td class="price">@item.Price</td>
-                    <td>@item.Reason</td>
+                    <td class ="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
+                    <td class="text-center price"><span>@item.Price</span></td>
+                    <td class="text-center">@item.Reason</td>
                 </tr>
                 count++;
             }
             <tr class="total-row">
                 <th scope="row">Жами</th>
-                <td></td>
-                <td id="totalPrice" colspan="3"></td>
+                <td class="text-center">------</td>
+                <td class="text-center"><span id="totalPrice"></span></td>
+                <td class="text-center">------</td>
             </tr>
         }
     </tbody>
 </table>
 <script>
+    formatTableNumbers();
     $(document).ready(function () {
         function contains(text_one, text_two) {
             return text_one.indexOf(text_two) != -1;
@@ -77,17 +80,42 @@
                     $(this).show();
                 }
             });
-            var totalAmount = 0;
-
-            $(".Search:visible .price").each(function () {
-                var price = parseFloat($(this).text());
-                totalAmount += price;
-            });
-
-            // Jami pricelarni chiqarish
-            $("#totalPrice").text(totalAmount);
+            formatTableNumbers();
         });
     });
+    function formatTableNumbers() {
+
+        var totalAmount = 0;
+
+        $(".Search:visible .price").each(function () {
+            var price = parseFloat($(this).text().replace(/\s/g, ''));
+            totalAmount += price;
+        });
+
+        $("#totalPrice").text(totalAmount);
+
+        var rows = document.querySelectorAll('tbody tr');
+
+        // Har bir qator uchun
+        rows.forEach(function (row) {
+            // Har bir ustunni olib olish
+            var cells = row.querySelectorAll('td span');
+
+            // Har bir ustunni formatlab berish
+            cells.forEach(function (cell) {
+                var text = cell.textContent.trim();
+                var number = parseFloat(text.replace(/\s/g, '')); // Agar koma orqali ajratilgan sonlar bo'lsa
+                if (!isNaN(number)) {
+                    cell.textContent = formatNumber(number);
+                }
+            });
+        });
+    }
+
+    // Sonlarni formatlab beradigan funksiya
+    function formatNumber(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
     function exportToExcel() {
         const table = document.getElementById('dataTable');
         const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });

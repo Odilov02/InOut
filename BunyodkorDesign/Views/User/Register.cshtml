@@ -13,31 +13,31 @@
                 <div class="mb-3">
                     <label for="FullName" class="form-label mx-3"><strong>Исм фамилия</strong></label>
                     <input type="text" name="FullName" class="form-control" id="FullName" placeholder="Исм фамилийангизни киритинг...">
-                    <span asp-validation-for="FullName"></span>
+                    <span class="text-danger" asp-validation-for="FullName"></span>
                 </div>
                 <div class="mb-3">
                     <label for="UserName" class="form-label mx-3"><strong>Логин</strong></label>
                     <input type="text" name="UserName" class="form-control" id="UserName" placeholder="Логин киритинг...">
-                    <span asp-validation-for="UserName"></span>
+                    <span class="text-danger" asp-validation-for="UserName"></span>
                 </div>
                 <div class="mb-3">
                     <label for="PhoneNumber" class="form-label mx-3"><strong>Телефон номер</strong></label>
                     <input type="text" name="PhoneNumber" value="+998" class="form-control" id="PhoneNumber" placeholder="Телефон номерингизни киритинг...">
-                    <span asp-validation-for="PhoneNumber"></span>
+                    <span class="text-danger" asp-validation-for="PhoneNumber"></span>
                 </div>
                 <div class="mb-3">
                     <label for="Password" class="form-label mx-3"><strong>Парол</strong></label>
                     <input type="password" name="Password" class="form-control" id="Password" placeholder="Парол киритинг...">
-                    <span asp-validation-for="Password"></span>
+                    <span class="text-danger" asp-validation-for="Password"></span>
                 </div>
                 <div class="mb-3">
                     <label for="ConfirmPassword" class="form-label mx-3"><strong>Паролни тасдиклаш</strong></label>
                     <input type="password" name="ConfirmPassword" class="form-control" id="ConfirmPassword" placeholder="Паролингизни кайта киритинг...">
-                    <span asp-validation-for="ConfirmPassword"></span>
+                    <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
                 </div>
-                <div class="row mt-3 mb-4 mx-2">
-                    <div class="col-5">
-                        <button type="submit" class="btn btn-success "><strong>Сақлаш</strong></button>
+                <div class="row mt-3 mb-4 mx-2 ">
+                    <div class="d-grid gap-2 col-12">
+                        <button type="submit" class="btn btn-success px-5 py-2 my-2 "><h5>Сақлаш</h5></button>
                     </div>
                     <div class="col-7">
                         <p class="my-2"><strong>Сизда аккаунт борми?</strong> <a class="text-info" asp-controller="User" asp-action="Login"><strong>Логинга у́тиш</strong></a></p>

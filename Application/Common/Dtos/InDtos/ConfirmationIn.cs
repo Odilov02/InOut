@@ -1,11 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Application.Common.Dtos.InDtos;
 
 public class ConfirmationIn
 {
-    [NotNull]
-    public Guid Id { get; set; }
-    [NotNull]
+    [Required]
+    public Guid? Id { get; set; }
+    [Required]
     public bool IsConfirmed { get; set; }
 }

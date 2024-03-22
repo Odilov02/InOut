@@ -85,7 +85,7 @@ body{
 }
 form{
     height: 520px;
-    width: 400px;
+    width: 450px;
     background-color: rgba(255,255,255,0.13);
     position: absolute;
     transform: translate(-50%,-50%);
@@ -107,13 +107,13 @@ form *{
 form h3{
     font-size: 32px;
     font-weight: 500;
-    line-height: 42px;
+    line-height: 32px;
     text-align: center;
 }
 
 label{
     display: block;
-    margin-top: 30px;
+    margin-top: 20px;
     font-size: 16px;
     font-weight: 500;
 }
@@ -124,7 +124,7 @@ input{
     background-color: rgba(255,255,255,0.07);
     border-radius: 3px;
     padding: 0 10px;
-    margin-top: 8px;
+    margin-top: 6px;
     font-size: 14px;
     font-weight: 300;
 }
@@ -176,12 +176,15 @@ button{
       <div>
         <label for="Username">Логин</label>
         <input type="text" placeholder="Логин киритинг..." id="UserName" name="UserName">
-        <span asp-validation-for="UserName"></span>
+        <span class="text-danger" asp-validation-for="UserName"></span>
       </div>
         <div>
         <label for="Password">Парол</label>
         <input type="password" placeholder="Рарол киритинг..." id="Password" name="Password">
-        <span asp-validation-for="Password"></span>
+        <span class="text-danger" asp-validation-for="Password"></span>
         </div>
-    <button type="submit">Кириш</button>
+    <div class="d-grid gap-2 my-3">
+        <button class="btn btn-primary my-3" type="submit"><h4>Кириш</h4></button>
+        <a asp-action="Register" asp-controller="User" class="btn btn-success"><h4>Ро'йхатдан о'тиш</h4></a>
+    </div>
     </form>

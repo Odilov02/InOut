@@ -13,7 +13,7 @@
                 </div>
                 <div class="col-8 mt-3">
                     <h3 style="background-color: rgb(132, 253, 184);" class="shadow rounded text-center py-3" id="HtmlTeg">
-                        <span>@ViewData["result"]</span> ta malumotlar muvaffaqiyatli tasdiqland!
+                        <span>@ViewData["result"]</span> та маьлумотлар муваффақиятли тасдиқланди!
                     </h3>
                 </div>
                 <div class="col"></div>
@@ -35,8 +35,8 @@
     }
 }
 <div class="row py-4">
+    <h3 class="mx-2" id="demo"></h3>
     <div class="col-6">
-        <h3 class="mx-2" id="demo"></h3>
         <h1>Чиқимларни тасдиқлаш! </h1>
     </div>
     <div class="col-2 py-2">
@@ -58,10 +58,10 @@
         <thead>
             <tr>
                 <th scope="col"></th>
-                <th scope="col">Вакти</th>
-                <th scope="col">Нархи</th>
-                <th scope="col">Чиқим тури</th>
-                <th scope="col">Сабаби</th>
+                <th class="text-center" scope="col">Вакти</th>
+                <th class="text-center" scope="col">Нархи</th>
+                <th class="text-center" scope="col">Чиқим тури</th>
+                <th class="text-center" scope="col">Сабаби</th>
                 <th scope="col">Тасдиқлаш</th>
             </tr>
         </thead>
@@ -73,10 +73,10 @@
                     int index = count - 1;
                     <tr class="Search">
                         <th scope="row">@count</th>
-                        <td><span>@item.Date.ToString("HH:mm dd.MM.yyyy")</span></td>
-                        <td class="price">@item.Price</td>
-                        <td>@item.SpendType.Name</td>
-                        <td>@item.Reason</td>
+                        <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
+                        <td class="price text-center"><span>@item.Price</span></td>
+                        <td class="text-center">@item.SpendType.Name</td>
+                        <td class="text-center">@item.Reason</td>
                         <td>
                             <input type="hidden" name="outDtos[@index].Id" value="@item.Id" />
                             <div class="form-check">
@@ -87,10 +87,12 @@
                     count++;
                 }
                 <tr class="total-row">
-                    <th scope="row">Жами</th>
-                    <td></td>
-                    <td id="totalPrice" colspan="3"></td>
-                    <td></td>
+                    <th  scope="row">Жами</th>
+                    <td class="text-center">----</td>
+                    <td class="text-center"><span id="totalPrice"></span></td>
+                    <td class="text-center">----</td>
+                    <td class="text-center">----</td>
+                    <td>----</td>
                 </tr>
             }
         </tbody>
@@ -102,13 +104,14 @@
             <button class="btn btn-success px-x py-2" type="submit"><h5 class="px-4">Сақлаш</h5></button>
         </div>
         <div class="col-5">
-            <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@ViewData["constructionId"]" class="btn btn-primary px-4 py-2"><h5 class="px-4">Orqaga</h5></a>
+            <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@ViewData["constructionId"]" class="btn btn-primary px-4 py-2"><h5 class="px-4">Орқага</h5></a>
         </div>
         <div class="col-1">
         </div>
     </div>
 </form>
 <script>
+    formatTableNumbers();
     $(document).ready(function () {
         function contains(text_one, text_two) {
             return text_one.indexOf(text_two) != -1;
@@ -133,15 +136,7 @@
                     $(this).show();
                 }
             });
-            var totalAmount = 0;
-
-            $(".Search:visible .price").each(function () {
-                var price = parseFloat($(this).text());
-                totalAmount += price;
-            });
-
-            // Jami pricelarni chiqarish
-            $("#totalPrice").text(totalAmount);
+            formatTableNumbers();
         });
     });
     function exportToExcel() {
@@ -177,5 +172,38 @@
     function myTimer() {
         const date = new Date();
         document.getElementById("demo").innerHTML = date.toLocaleTimeString();
+    }
+    function formatTableNumbers() {
+
+        var totalAmount = 0;
+
+        $(".Search:visible .price").each(function () {
+            var price = parseFloat($(this).text().replace(/\s/g, ''));
+            totalAmount += price;
+        });
+
+        $("#totalPrice").text(totalAmount);
+
+        var rows = document.querySelectorAll('tbody tr');
+
+        // Har bir qator uchun
+        rows.forEach(function (row) {
+            // Har bir ustunni olib olish
+            var cells = row.querySelectorAll('td span');
+
+            // Har bir ustunni formatlab berish
+            cells.forEach(function (cell) {
+                var text = cell.textContent.trim();
+                var number = parseFloat(text.replace(/\s/g, '')); // Agar koma orqali ajratilgan sonlar bo'lsa
+                if (!isNaN(number)) {
+                    cell.textContent = formatNumber(number);
+                }
+            });
+        });
+    }
+
+    // Sonlarni formatlab beradigan funksiya
+    function formatNumber(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
 </script>

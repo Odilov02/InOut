@@ -1,4 +1,3 @@
-
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -19,5 +18,5 @@ app.UseAuthorization();
 app.UseSession();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=User}/{action=Register}");
+    pattern: "{controller=User}/{action=Login}");
 app.Run();

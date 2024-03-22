@@ -18,16 +18,18 @@ public class UserUpdate
     [MaxLength(50, ErrorMessage = "Логин узунлиги 50 тадан кам болиши шарт!")]
     public string UserName { get; set; }
 
+
     [Required(ErrorMessage = "Телефон номер киритиши шарт!")]
     [MaxLength(13, ErrorMessage = "Телефон номер 13 та болиши шарт!")]
     [MinLength(13, ErrorMessage = "Телефон номер 13 та болиши шарт!")]
-    [NotNull]
     public string PhoneNumber { get; set; }
+
     [Required(ErrorMessage = "Парол киритиши шарт!")]
     [Password()]
     [DataType(DataType.Password)]
     public string Password { get; set; }
-    [Required]
+
+    [Required(ErrorMessage = "Парол қайта киритилиши шарт!")]
     [Compare("Password", ErrorMessage = "Пароллар 1 хил болиши шарт!")]
     [DataType(DataType.Password)]
     public string ConfirmedPassword { get; set; }

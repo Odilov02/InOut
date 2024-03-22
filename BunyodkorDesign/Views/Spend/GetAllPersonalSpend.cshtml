@@ -3,34 +3,40 @@
 @{
     Layout = "_AdminLayout";
 }
+@model List<Spend>
 <br />
-<br />
-@model List<AllSpend>
-<div class="row py-2">
-    <div class="col-5">
-        <h1 class="text-center">Умумий чиқимлар</h1>
+
+<div class="row py-2 ms-2">
+    <div class="col-2 py-2">
+        <a asp-action="GetAllInPersonal" asp-controller="In" class="btn btn-dark">Киримларга утиш</a>
+    </div>
+    <div class="col-2 py-2">
+        <a asp-action="AddSpendPersonal" asp-controller="Spend" class="btn btn-success">Чиқим қушиш</a>
     </div>
     <div class="col-2 py-2">
         <div class="contianer">
             <div class="form-group">
                 <div class="input-group" value=" ">
-                    <input  type="text" id="Search" placeholder="Қидирмоқ..." class="form-control ">
+                    <input type="text" id="Search" placeholder="Қидирмоқ..." class="form-control ">
                 </div>
             </div>
         </div>
     </div>
     <div class="col-2 py-2">
-        <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
+        <button class="btn btn-primary" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
     <div class="col-2 py-2">
-        <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@ViewData["constructionId"]" class="btn btn-primary px-3">Орқага</a>
+        <h3  class="text-center pt-1" id="formattedNumber">@ViewData["Residual"]</h3>
+    </div>
+  <div class="col-2 py-2">
+        <a asp-action="GetAllConstruction" asp-controller="Construction" class="btn btn-danger px-4">Орқага</a>
     </div>
 </div>
+
 <table id="dataTable" class="table table-success table-striped table-hover">
     <thead>
         <tr>
             <th class="text-center" scope="col"></th>
-            <th class="text-center" scope="col">Тури</th>
             <th class="text-center" scope="col">Вақти</th>
             <th class="text-center" scope="col">Нархи</th>
             <th class="text-center" scope="col">Чиқим тури </th>
@@ -38,9 +44,6 @@
         </tr>
         <tr id="filterRow">
             <td></td>
-            <td>
-                <input type="text" class="form-control" id="AdminOrUserFilter" placeholder="Қидирмоқ.." />
-            </td>
             <td>
                 <input type="text" class="form-control" id="DateFilter" placeholder="Қидирмоқ..." />
             </td>
@@ -60,19 +63,18 @@
             int count = 1;
             foreach (var item in Model)
             {
-                <tr class="Search">
+                        <tr class="Search">
                             <th scope="row">@count</th>
-                            <td class="text-center">@item.AdminOrUser</td>
                             <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
-                             <td id="formattedNumberPrice" class="text-center price">@item.Price</td>
-                            <td class="text-center">@item.SpendType</td>
+                            <td id="formattedNumberPrice" class="text-center price">@item.Price</td>
+                            <td class="text-center">@item.SpendType.Name</td>
                             <td class="text-center">@item.Reason</td>
                         </tr>
                 count++;
             }
                     <tr class="total-row">
                         <th scope="row">Жами</th>
-                        <td colspan="2"></td>
+                        <td></td>
                         <th class="text-center" id="totalPrice"></th>
                         <td></td>
                         <td></td>
@@ -82,6 +84,14 @@
 </table>
 
 <script>
+    var numberElement = document.getElementById('formattedNumber');
+    var number = parseInt(numberElement.innerText);
+
+    // Formatlash va probel qo'shish
+    var formattedNumber = number.toLocaleString('en').replace(/,/g, ' ');
+
+    // HTML-ga chiqarish
+    numberElement.innerText = formattedNumber;
     $(document).ready(function () {
         function contains(text_one, text_two) {
             return text_one.indexOf(text_two) != -1;
@@ -112,13 +122,12 @@
                 totalAmount += price;
             });
 
+          
             // Jami pricelarni chiqarish
             document.getElementById("totalPrice").innerText = totalAmount.toLocaleString('en').replace(/,/g, ' ');
         });
     });
-    function filterTable() 
-    {
-        var turFilter = document.getElementById("AdminOrUserFilter").value.toLowerCase();
+    function filterTable() {
         var vaktFilter = document.getElementById("DateFilter").value.toLowerCase();
         var narxFilter = document.getElementById("PriceFilter").value.toLowerCase();
         var chiqimFilter = document.getElementById("SpendTypeFilter").value.toLowerCase();
@@ -127,26 +136,25 @@
         var rows = document.querySelectorAll("#dataTable tbody tr");
         var totalAmount = 0;
         rows.forEach(function (row) {
-            var tur = row.cells[1].innerText.toLowerCase();
-            var vakti = row.cells[2].innerText.toLowerCase();
-            var narxi = row.cells[3].innerText.toLowerCase();
-            var chiqimTuri = row.cells[4].innerText.toLowerCase();
-            var sababi = row.cells[5].innerText.toLowerCase();
-            var priceFormat = parseFloat(row.cells[3].innerText.replace(/\s/g, ''));
-            if ((tur.includes(turFilter)) && vakti.includes(vaktFilter) && narxi.includes(narxFilter) && chiqimTuri.includes(chiqimFilter) && sababi.includes(sababFilter)) {
+            var vakti = row.cells[1].innerText.toLowerCase();
+            var narxi = row.cells[2].innerText.toLowerCase();
+            var chiqimTuri = row.cells[3].innerText.toLowerCase();
+            var sababi = row.cells[4].innerText.toLowerCase();
+            var priceFormat = parseFloat(row.cells[2].innerText.replace(/\s/g, ''));
+            if (vakti.includes(vaktFilter) && narxi.includes(narxFilter) && chiqimTuri.includes(chiqimFilter) && sababi.includes(sababFilter)) {
                 var price = priceFormat;
                 totalAmount += price;
                 row.style.display = "";
             } else {
                 row.style.display = "none";
             }
-            row.cells[3].innerText =priceFormat.toLocaleString('en').replace(/,/g, ' ');
+            row.cells[2].innerText = priceFormat.toLocaleString('en').replace(/,/g, ' ');
             document.getElementById("totalPrice").innerText = totalAmount.toLocaleString('en').replace(/,/g, ' ');
-           
-      });
+
+        });
     }
 
-   // Input o'zgarishlari uchun filtratsiya qilish
+    // Input o'zgarishlari uchun filtratsiya qilish
     document.querySelectorAll("#filterRow input").forEach(function (input) {
         input.addEventListener("keyup", filterTable);
     });
@@ -185,3 +193,4 @@
         }
     }
 </script>
+

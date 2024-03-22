@@ -116,4 +116,13 @@ public class InController : Controller
         List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true && x.User.Id == construction!.UserId).ToList();
         return View(ins);
     }
+
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetAllInPersonal()
+    {
+        var userId = HttpContext.Session.GetString("UserId");
+        ViewData["UserId"]=userId;
+        List<In> ins =await _appDbContext.Ins.Where(x =>x.User.Id.ToString() !=userId).ToListAsync();
+        return View(ins);
+    }
 }

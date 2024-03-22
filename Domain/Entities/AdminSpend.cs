@@ -1,11 +1,18 @@
-﻿namespace Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+namespace Domain.Entities;
 #nullable disable
 public class AdminSpend: BaseAuditableEntity
 {
     public DateTime CreatedDate { get; set; }=DateTime.Now;
-    public long Price { get; set; }
+
+    [Required(ErrorMessage = "Чиқим суммаси киритиши шарт!")]
+    [Range(1, long.MaxValue, ErrorMessage = "Чиқим суммаси киритиши шарт!")]
+    public long? Price { get; set; }
+
+    [Required(ErrorMessage = "Чиқим сабаби киритиши шарт!")]
     public string Reason { get; set; }
-    public Guid SpendTypeId { get; set; }
+    [Required(ErrorMessage = "Чиқим тури танланишлиги киритиши шарт!")]
+    public Guid? SpendTypeId { get; set; }
     public virtual SpendType SpendType { get; set; }
     public Guid ConstructionId { get; set; }
     public virtual Construction Construction { get; set; }

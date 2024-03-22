@@ -11,29 +11,29 @@
     {
         if ((int)ViewData["result"]! > 0)
         {
-            <div class="row">
-                <div class="col">
-                </div>
-                <div class="col-8 mt-3">
-                    <h3 style="background-color: rgb(132, 253, 184);" class="shadow rounded text-center py-3" id="HtmlTeg">
-                        Malumotlar muvaffaqiyatli qo'shildi!
-                    </h3>
-                </div>
-                <div class="col"></div>
-            </div>
+                    <div class="row">
+                        <div class="col">
+                        </div>
+                        <div class="col-8 mt-3">
+                            <h3 style="background-color: rgb(132, 253, 184);" class="shadow rounded text-center py-3" id="HtmlTeg">
+                                Malumotlar muvaffaqiyatli qo'shildi!
+                            </h3>
+                        </div>
+                        <div class="col"></div>
+                    </div>
         }
         else
         {
-            <div class="row">
-                <div class="col">
-                </div>
-                <div class="col-8 mt-3">
-                    <h3 style="background-color: rgb(252, 113, 109);" class="shadow rounded text-center py-3" id="HtmlTeg">
-                        Malumotlar qo'shilmadi!
-                    </h3>
-                </div>
-                <div class="col"></div>
-            </div>
+                    <div class="row">
+                        <div class="col">
+                        </div>
+                        <div class="col-8 mt-3">
+                            <h3 style="background-color: rgb(252, 113, 109);" class="shadow rounded text-center py-3" id="HtmlTeg">
+                                Malumotlar qo'shilmadi!
+                            </h3>
+                        </div>
+                        <div class="col"></div>
+                    </div>
         }
     }
 }
@@ -92,7 +92,7 @@
         <!-- Input Type Text -->
         <input type="hidden" id="ConstructionId" name="ConstructionId" value="@Model.ConstructionId" />
         <input type="text" id="priceInput" name="Price" placeholder="Суммани киритинг..." oninput="formatNumber()"/>
-        <span asp-validation-for="Price"></span>
+        <span class="text-danger" asp-validation-for="Price"></span>
     </div>
     <div class="form-control">
         <label for="SpendTypeId" id="SpendTypeId">
@@ -104,19 +104,19 @@
             @{
                 if (spendTypes is null)
                 {
-                            <option value="@null">Бошка харажатлар</option>
+                       <option value="@null">Бошка харажатлар</option>
                 }
                 else
                 {
                     foreach (var outType in spendTypes)
                     {
-                                    <option value="@outType.Id">@outType.Name</option>
+                       <option value="@outType.Id">@outType.Name</option>
                     }
                 }
             }
 
         </select>
-        <span asp-validation-for="SpendTypeId"></span>
+        <span class="text-danger" asp-validation-for="SpendTypeId"></span>
     </div>
     <div class="form-control">
         <label for="comment">
@@ -126,7 +126,7 @@
         <!-- multi-line text input control -->
         <textarea name="Reason" id="Reason"
                   placeholder="Чиким сабабини киритинг..."></textarea>
-        <span asp-validation-for="Reason"></span>
+        <span class="text-danger" asp-validation-for="Reason"></span>
     </div>
 
     <!-- Multi-line Text Input Control -->
@@ -138,7 +138,7 @@
         </div>
         <div class="col-2"></div>
         <div class="col-5">
-            <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@Model.ConstructionId" class="btn btn-primary m-4 px-5">Orqaga</a>
+            <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@Model.ConstructionId" class="btn btn-primary m-4 px-5">Орқага</a>
         </div>
     </div>
 </form>
@@ -162,7 +162,7 @@
     input.value = formattedValue;
 }
 function submitNumber() {
-    let input = document.getElementById('priceInput');
+    var input = document.getElementById('priceInput');
     let value = input.value.replace(/\s/g, '');
     input.value=value;
 }
