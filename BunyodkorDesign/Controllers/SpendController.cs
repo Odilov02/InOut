@@ -99,7 +99,7 @@ public class SpendController : Controller
         var result = await _appDbContext.SaveChangesAsync();
         entities = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && x.User.Id == construction!.User.Id).ToList()!;
         ViewData["constructionId"] = constructionId;
-        ViewData["result"] = result;
+        ViewData["result"] = result-2;
         return View(entities);
     }
 

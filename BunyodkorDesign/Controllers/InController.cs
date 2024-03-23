@@ -59,8 +59,8 @@ public class InController : Controller
 
         _appDbContext.Ins.UpdateRange(ins);
         var result = await _appDbContext.SaveChangesAsync();
-         ins = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList()!;
-        ViewData["result"]=result;
+        ins = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList()!;
+        ViewData["result"] = result-2;
         return View(ins);
     }
 
@@ -121,8 +121,45 @@ public class InController : Controller
     public async Task<IActionResult> GetAllInPersonal()
     {
         var userId = HttpContext.Session.GetString("UserId");
-        ViewData["UserId"]=userId;
-        List<In> ins =await _appDbContext.Ins.Where(x =>x.User.Id.ToString() !=userId).ToListAsync();
+        ViewData["UserId"] = userId;
+        List<In> ins = await _appDbContext.Ins.Where(x => x.User.Id.ToString() != userId).ToListAsync();
         return View(ins);
+    }
+
+    [Authorize(Roles = "Admin")]
+    public IActionResult AddPersonalIn()
+    {
+        var inDto = new PersonalIn()
+        {
+            UserId = Guid.Parse(HttpContext.Session.GetString("UserId")!)
+        };
+        return View(inDto);
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPost]
+    public async Task<IActionResult> AddPersonalIn(PersonalIn personalIn)
+    {
+        if (!ModelState.IsValid)
+            return View(personalIn);
+        var @in = _mapper.Map<In>(personalIn);
+        var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id == personalIn.UserId);
+        if (user == null)
+            return View(personalIn);
+        await _appDbContext.Ins.AddAsync(@in);
+        var result = await _appDbContext.SaveChangesAsync();
+        ViewData["result"] = result;
+        if (result > 0)
+        {
+            user.Residual += @in.Price;
+            _appDbContext.Users.Update(user);
+            await _appDbContext.SaveChangesAsync();
+            var inDto = new PersonalIn()
+            {
+                UserId = user.Id
+            };
+            return View(inDto);
+        }
+        return View(personalIn);
     }
 }

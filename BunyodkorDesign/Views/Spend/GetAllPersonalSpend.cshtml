@@ -8,10 +8,10 @@
 
 <div class="row py-2 ms-2">
     <div class="col-2 py-2">
-        <a asp-action="GetAllInPersonal" asp-controller="In" class="btn btn-dark">Киримларга утиш</a>
+        <a asp-action="GetAllInPersonal" asp-controller="In" class="btn btn-dark">Киримларга ўтиш</a>
     </div>
     <div class="col-2 py-2">
-        <a asp-action="AddSpendPersonal" asp-controller="Spend" class="btn btn-success">Чиқим қушиш</a>
+        <a asp-action="AddSpendPersonal" asp-controller="Spend" class="btn btn-success">Чиқим қўшиш</a>
     </div>
     <div class="col-2 py-2">
         <div class="contianer">
@@ -71,13 +71,13 @@
                             <td class="text-center">@item.Reason</td>
                         </tr>
                 count++;
-            }
+            }   
                     <tr class="total-row">
                         <th scope="row">Жами</th>
                         <td></td>
                         <th class="text-center" id="totalPrice"></th>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
                     </tr>
         }
     </tbody>
@@ -122,8 +122,6 @@
                 totalAmount += price;
             });
 
-          
-            // Jami pricelarni chiqarish
             document.getElementById("totalPrice").innerText = totalAmount.toLocaleString('en').replace(/,/g, ' ');
         });
     });
@@ -133,7 +131,7 @@
         var chiqimFilter = document.getElementById("SpendTypeFilter").value.toLowerCase();
         var sababFilter = document.getElementById("ReasonFilter").value.toLowerCase();
 
-        var rows = document.querySelectorAll("#dataTable tbody tr");
+        var rows = document.querySelectorAll("#dataTable tbody .Search");
         var totalAmount = 0;
         rows.forEach(function (row) {
             var vakti = row.cells[1].innerText.toLowerCase();
@@ -150,7 +148,6 @@
             }
             row.cells[2].innerText = priceFormat.toLocaleString('en').replace(/,/g, ' ');
             document.getElementById("totalPrice").innerText = totalAmount.toLocaleString('en').replace(/,/g, ' ');
-
         });
     }
 

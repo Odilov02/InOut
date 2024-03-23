@@ -4,39 +4,6 @@
     ViewData["Title"] = "Login";
 }
 @model UserCridential;
-@{
-    if (ViewData["result"] is not null)
-    {
-        if ((int)ViewData["result"]! > 0)
-        {
-            <div class="row">
-                <div class="col">
-                </div>
-                <div class="col-8 m-4">
-                    <h3 style="background-color: rgb(132, 253, 184);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
-                         Muvaffaqiyatli royxatdan o'tdingiz!
-                    </h3>
-                </div>
-                <div class="col"></div>
-            </div>
-        }
-        else
-        {
-            <div class="row">
-                <div class="col">
-                </div>
-                <div class="col-8 m-4">
-                    <h3 style="background-color: rgb(252, 113, 109);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
-                        Royxatdan o'ta olmadingiz!
-                    </h3>
-                </div>
-                <div class="col"></div>
-            </div>
-        }
-    }
-}
-   
- 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">

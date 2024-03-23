@@ -124,7 +124,7 @@
         var chiqimFilter = document.getElementById("SpendTypeFilter").value.toLowerCase();
         var sababFilter = document.getElementById("ReasonFilter").value.toLowerCase();
 
-        var rows = document.querySelectorAll("#dataTable tbody tr");
+        var rows = document.querySelectorAll("#dataTable tbody .Search");
         var totalAmount = 0;
         rows.forEach(function (row) {
             var tur = row.cells[1].innerText.toLowerCase();
@@ -133,7 +133,7 @@
             var chiqimTuri = row.cells[4].innerText.toLowerCase();
             var sababi = row.cells[5].innerText.toLowerCase();
             var priceFormat = parseFloat(row.cells[3].innerText.replace(/\s/g, ''));
-            if ((tur.includes(turFilter)) && vakti.includes(vaktFilter) && narxi.includes(narxFilter) && chiqimTuri.includes(chiqimFilter) && sababi.includes(sababFilter)) {
+            if (tur.includes(turFilter) && vakti.includes(vaktFilter) && narxi.includes(narxFilter) && chiqimTuri.includes(chiqimFilter) && sababi.includes(sababFilter)) {
                 var price = priceFormat;
                 totalAmount += price;
                 row.style.display = "";
@@ -142,7 +142,6 @@
             }
             row.cells[3].innerText =priceFormat.toLocaleString('en').replace(/,/g, ' ');
             document.getElementById("totalPrice").innerText = totalAmount.toLocaleString('en').replace(/,/g, ' ');
-           
       });
     }
 

@@ -11,7 +11,7 @@
             <h3 class="m-3 px-5"><strong>Ру́йхатдан у́тиш</strong></h3>
             <form method="post" asp-action="Register">
                 <div class="mb-3">
-                    <label for="FullName" class="form-label mx-3"><strong>Исм фамилия</strong></label>
+                    <label for="FullName" class="form-label mx-3"><strong>Исм-фамилия</strong></label>
                     <input type="text" name="FullName" class="form-control" id="FullName" placeholder="Исм фамилийангизни киритинг...">
                     <span class="text-danger" asp-validation-for="FullName"></span>
                 </div>
@@ -22,7 +22,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="PhoneNumber" class="form-label mx-3"><strong>Телефон номер</strong></label>
-                    <input type="text" name="PhoneNumber" value="+998" class="form-control" id="PhoneNumber" placeholder="Телефон номерингизни киритинг...">
+                    <input type="text" name="PhoneNumber" value="+998" oninput="formatNumber()" class="form-control" id="InputFormat" placeholder="Телефон номерингизни киритинг...">
                     <span class="text-danger" asp-validation-for="PhoneNumber"></span>
                 </div>
                 <div class="mb-3">
@@ -37,7 +37,7 @@
                 </div>
                 <div class="row mt-3 mb-4 mx-2 ">
                     <div class="d-grid gap-2 col-12">
-                        <button type="submit" class="btn btn-success px-5 py-2 my-2 "><h5>Сақлаш</h5></button>
+                        <button type="submit" class="btn btn-success px-5 py-2 my-2" onclick="submitFormatNumber()"><h5>Сақлаш</h5></button>
                     </div>
                     <div class="col-7">
                         <p class="my-2"><strong>Сизда аккаунт борми?</strong> <a class="text-info" asp-controller="User" asp-action="Login"><strong>Логинга у́тиш</strong></a></p>
@@ -48,3 +48,40 @@
         <div class="col"></div>
     </div>
 </div>
+<script>
+    function formatNumber() {
+        var input = document.getElementById('InputFormat');
+        var valueNumber = input.value.replace(/\D/g, '');
+        var result = '';
+        for (var i = 0; i < valueNumber.length; i++) {
+            if (i == 0) {
+                result += '+';
+            }
+            if (i == 3) {
+                result += '-';
+            }
+            if (i == 5) {
+                result += '-';
+            }
+            if (i == 8) {
+                result += '-';
+            }
+            if (i == 10) {
+                result += '-';
+            }
+            if (i < 12) {
+                result += valueNumber[i];
+            }
+        }
+        if (valueNumber.length == 0) {
+            result = '+998';
+        }
+        input.value = result;
+    }
+    function submitFormatNumber() {
+        var input = document.getElementById('InputFormat');
+        var valueNumber = input.value.replace(/\D/g, '');
+        var result = '+' + valueNumber;
+        input.value = result;
+    }
+</script>

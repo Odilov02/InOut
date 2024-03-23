@@ -22,10 +22,10 @@
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
     <div class="col-2 py-2">
-        <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@ViewData["constructionId"]" class="btn btn-primary px-3">Кирим қушиш </a>
+        <a asp-action="AddPersonalIn" asp-controller="In" class="btn btn-primary px-3">Кирим қўшиш </a>
     </div>
     <div class="col-2 py-2">
-        <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@ViewData["constructionId"]" class="btn btn-outline-danger px-3">Орқага</a>
+        <a asp-action="GetAllPersonalSpend" asp-controller="Spend" asp-route-constructionId="@ViewData["constructionId"]" class="btn btn-outline-danger px-3">Орқага</a>
     </div>
 </div>
 
@@ -33,7 +33,7 @@
     <thead>
         <tr>
             <th scope="col"></th>
-            <th class="text-center" scope="col">Вакти</th>
+            <th class="text-center" scope="col">Вақти</th>
             <th class="text-center" scope="col">Нархи</th>
             <th class="text-center" colspan="2">Сабаби</th>
         </tr>
@@ -54,7 +54,7 @@
             <tr class="total-row">
                 <th scope="row">Жами</th>
                 <td class="text-center">-----</td>
-                <td class="text-center"><span id="totalPrice"></span></td>
+                <th class="text-center"><span id="totalPrice"></span></th>
                 <td class="text-center" colspan="2">-----</td>
             </tr>
         }
@@ -70,11 +70,9 @@
         $("#Search").keyup(function () {
             var searchtext = $("#Search").val().toLowerCase();
 
-            // Barcha yashirilgan qatorlarni olib tashlash
             var hiddenRows = $(".Search:hidden");
 
-            // Barcha yashirilgan qatorlarni hiddenRowsContainer ga joylashtirish
-            $("#hiddenRowsContainer").empty(); // Avvalgi ma'lumotlarni tozalash
+            $("#hiddenRowsContainer").empty();
             $("#hiddenRowsContainer").append(hiddenRows);
 
 
@@ -99,7 +97,7 @@
             totalAmount += price;
         });
 
-        $("#totalPrice").text(totalAmount);
+        $("#totalPrice").text(totalAmount.toLocaleString('en').replace(/,/g, ' '));
 
         var rows = document.querySelectorAll('tbody tr');
 

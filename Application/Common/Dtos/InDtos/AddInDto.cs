@@ -7,11 +7,11 @@ namespace Application.Common.Dtos.InDtos;
 #nullable disable
 public class AddInDto
 {
-    [Required(ErrorMessage = "Кирим сабаби киритиши шарт!")]
+    [Required(ErrorMessage = "Кирим сабаби киритилиши шарт!")]
     [MaxLength(200,ErrorMessage = "Кирим сабаби узунлиги 200 тадан кам болиши шарт!")]
     public string Reason { get; set; }
 
-    [Required(ErrorMessage = "Кирим суммаси киритили шарт!")]
+    [Required(ErrorMessage = "Кирим суммаси киритилиши шарт!")]
     public long? Price { get; set; }
     [Required]
     public Guid ConstructionId { get; set; }

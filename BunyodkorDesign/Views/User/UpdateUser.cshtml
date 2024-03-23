@@ -8,29 +8,29 @@
     {
         if ((int)ViewData["result"]! > 0)
         {
-            <div class="row">
-                <div class="col">
-                </div>
-                <div class="col-8 m-4">
-                    <h3 style="background-color: rgb(132, 253, 184);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
-                        Malumotlar muvaffaqiyatli ozgardi!
-                    </h3>
-                </div>
-                <div class="col"></div>
-            </div>
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                            </div>
+                                                                            <div class="col-8 m-4">
+                                                                                <h3 style="background-color: rgb(132, 253, 184);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
+                                                                                    Маьлумотлар муваффақиятли ўзгарди!
+                                                                                </h3>
+                                                                            </div>
+                                                                            <div class="col"></div>
+                                                                        </div>
         }
         else
         {
-            <div class="row">
-                <div class="col">
-                </div>
-                <div class="col-8 m-4">
-                    <h3 style="background-color: rgb(252, 113, 109);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
-                        Ozgartirib bolmadi!
-                    </h3>
-                </div>
-                <div class="col"></div>
-            </div>
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                            </div>
+                                                                            <div class="col-8 m-4">
+                                                                                <h3 style="background-color: rgb(252, 113, 109);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
+                                                                                    Маьлумотлар  ўзгармади!
+                                                                                </h3>
+                                                                            </div>
+                                                                            <div class="col"></div>
+                                                                        </div>
         }
     }
 }
@@ -85,64 +85,98 @@
 
     <div class="form-control">
         <label for="FullName" id="FullName">
-            FullName
+           Исм-фамилия
         </label>
         <input type="text" id="FullName" name="FullName"
-               placeholder="FullName..." />
+               placeholder="Исм фамилийангизни киритинг..." />
         <span class="text-danger" asp-validation-for="FullName"></span>
     </div>
 
 
     <div class="form-control">
         <label for="UserName" id="UserName">
-            UserName
+            Логин
         </label>
         <input type="text" id="UserName" name="UserName"
-               placeholder="UserName..." />
+               placeholder="Логин киритинг..." />
         <span class="text-danger" asp-validation-for="UserName"></span>
     </div>
 
 
     <div class="form-control">
-        <label for="PhoneNumber" id="PhoneNumber">
-            PhoneNumber
+        <label for="PhoneNumber">
+            Телефон номер
         </label>
-        <input type="text" id="PhoneNumber" name="PhoneNumber"
-               placeholder="PhoneNumber..." />
+        <input type="text" id="InputFormat" name="PhoneNumber" oninput="formatNumber()"
+                value="+998"  placeholder="Телефон номерингизни киритинг..." />
         <span class="text-danger" asp-validation-for="PhoneNumber"></span>
     </div>
 
 
     <div class="form-control">
         <label for="Password" id="Password">
-            Password
+            Парол
         </label>
-        <input type="text" id="Password" name="Password"
-               placeholder="Password..." />
+        <input type="password" id="Password" name="Password"
+               placeholder="Парол киритинг..." />
         <span class="text-danger" asp-validation-for="Password"></span>
     </div>
-
-
-
     <div class="form-control">
         <label for="ConfirmedPassword" id="ConfirmedPassword">
-            ConfirmedPassword
+            Паролни тасдиклаш
         </label>
-        <input type="text" id="ConfirmedPassword" name="ConfirmedPassword"
-               placeholder="ConfirmedPassword..." />
+        <input type="password" id="ConfirmedPassword" name="ConfirmedPassword"
+               placeholder="Паролингизни кайта киритинг..." />
         <span class="text-danger" asp-validation-for="ConfirmedPassword"></span>
     </div>
 
 
     <div class="row">
         <div class="col-5">
-            <button type="submit" class="btn btn-success m-4 px-5">
+            <button type="submit" onclick="submitFormatNumber()" class="btn btn-success m-4 px-5">
                 Сақлаш
             </button>
         </div>
         <div class="col-2"></div>
         <div class="col-5">
-            <a asp-action="LogOut" asp-controller="User" class="btn btn-primary m-4 px-5">Orqaga</a>
+            <a asp-action="LogOut" asp-controller="User" class="btn btn-primary m-4 px-5">Орқага</a>
         </div>
     </div>
 </form>
+<script>
+    function formatNumber() {
+        var input = document.getElementById('InputFormat');
+        var valueNumber = input.value.replace(/\D/g, '');
+        var result = '';
+        for (var i = 0; i < valueNumber.length; i++) {
+            if (i == 0) { 
+                result += '+';
+            }
+            if (i == 3) { 
+                result += '-';
+            }
+                 if (i == 5) { 
+                result += '-';
+            }
+               if (i == 8) { 
+                result += '-';
+            }
+              if (i == 10) { 
+                result += '-';
+            }
+            if (i < 12) { 
+            result += valueNumber[i];
+            }
+        }
+        if (valueNumber.length == 0) {
+            result = '+998';
+        }
+        input.value = result;
+    }
+    function submitFormatNumber() {
+        var input = document.getElementById('InputFormat');
+        var valueNumber = input.value.replace(/\D/g, '');
+        var result = '+' + valueNumber;
+        input.value = result;
+    }
+</script>

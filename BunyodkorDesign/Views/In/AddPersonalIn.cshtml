@@ -1,11 +1,8 @@
-﻿ @using Application.Common.Dtos.SpendDtos;
+﻿@using Application.Common.Dtos.InDtos;
 @{
-    Layout = "_UserLayout";
+    Layout = "_AdminLayout";
 }
-@model AddSpendDto
-@{
-    List<Domain.Entities.SpendType>? spendTypes = (List<Domain.Entities.SpendType>)ViewData["SpendTypes"]!;
-}
+@model PersonalIn
 @{
     if (ViewData["result"] is not null)
     {
@@ -15,7 +12,7 @@
                 <div class="col">
                 </div>
                 <div class="col-8 mt-3">
-                    <h3 style="background-color: rgb(132, 253, 184);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
+                    <h3 style="background-color: rgb(132, 253, 184);" class="shadow rounded text-center py-3" id="HtmlTeg">
                         Маьлумотлар муваффақиятли қўшилди
                     </h3>
                 </div>
@@ -28,7 +25,7 @@
                 <div class="col">
                 </div>
                 <div class="col-8 mt-3">
-                    <h3 style="background-color: rgb(252, 113, 109);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
+                    <h3 style="background-color: rgb(252, 113, 109);" class="shadow  rounded text-center py-3" id="HtmlTeg">
                         Маьлумотлар қўшилмади
                     </h3>
                 </div>
@@ -38,6 +35,7 @@
     }
 }
 <style>
+    /* Styling the Form (Color, Padding, Shadow) */
     form {
         background-color: #fff;
         max-width: 670px;
@@ -46,16 +44,20 @@
         box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
     }
 
+    /* Styling form-control Class */
     .form-control {
         text-align: left;
         margin-bottom: 25px;
     }
 
+        /* Styling form-control Label */
         .form-control label {
             display: block;
             margin-bottom: 10px;
         }
 
+        /* Styling form-control input,
+                                select, textarea */
         .form-control input,
         .form-control select,
         .form-control textarea {
@@ -67,61 +69,41 @@
             width: 95%;
         }
 
+            /* Styling form-control Radio
+                                button and Checkbox */
             .form-control input[type="radio"],
             .form-control input[type="checkbox"] {
                 display: inline-block;
                 width: auto;
             }
 </style>
-
 <!-- Create Form -->
-<form id="form" asp-action="AddSpend" method="post">
+<form id="form" asp-action="AddPersonalIn" method="post">
     <h3 class="mx-2" id="demo"></h3>
     <!-- Details -->
     <div class="form-control">
-        <label for="Price" id="Price">
+        <input type="hidden" id="UserId" name="UserId" value="@Model.UserId" />
+        <label for="Price" id="in">
             Сумма
         </label>
-      
+
         <!-- Input Type Text -->
-        <input type="text" id="PriceInput" name="Price"
-               placeholder="Чиқим суммасини киритинг..." oninput="formatNumber()" />
+        <input type="text" name="Price" id="inInputFormat" oninput="formatNumber()"
+               placeholder="Суммани киритинг..." />
         <span class="text-danger" asp-validation-for="Price"></span>
     </div>
     <div class="form-control">
-        <label for="SpendTypeId" id="SpendTypeId">
-            Чиқим тури
-        </label>
-
-        <!-- Dropdown options -->
-        <select name="SpendTypeId" id="SpendTypeId">
-            @{
-                if (spendTypes is null)
-                {
-                    <option value="@null">Бошқа харажатлар</option>
-                }
-                else
-                {
-                    foreach (var outType in spendTypes)
-                    {
-                        <option value="@outType.Id">@outType.Name</option>
-                    }
-                }
-            }
-
-        </select>
-        <span class="text-danger" asp-validation-for="SpendTypeId"></span>
-    </div>
-    <div class="form-control">
         <label for="comment">
-            Чиқим сабаби
+            Кирим сабаби
         </label>
 
         <!-- multi-line text input control -->
         <textarea name="Reason" id="Reason"
-                  placeholder="Чиқим сабабини киритинг..."></textarea>
+                  placeholder="Кирим сабабини киритинг..."></textarea>
         <span class="text-danger" asp-validation-for="Reason"></span>
     </div>
+
+    <!-- Multi-line Text Input Control -->
     <div class="row">
         <div class="col-5">
             <button type="submit" class="btn btn-success m-4 px-5" onclick="submitNumber()">
@@ -130,7 +112,7 @@
         </div>
         <div class="col-2"></div>
         <div class="col-5">
-            <a asp-action="Choose" asp-controller="Spend" asp-route-constructionId="Choose" class="btn btn-primary m-4 px-5">Орқага</a>
+            <a asp-action="GetAllInPersonal" asp-controller="In" class="btn btn-primary m-4 px-5">Орқага</a>
         </div>
     </div>
 </form>
@@ -142,7 +124,7 @@
         document.getElementById("demo").innerHTML = date.toLocaleTimeString();
     }
     function formatNumber() {
-        let input = document.getElementById('PriceInput');
+        let input = document.getElementById('inInputFormat');
         let value = input.value.replace(/\D/g, '');
         let formattedValue = '';
         for (let i = 0; i < value.length; i++) {
@@ -154,8 +136,13 @@
         input.value = formattedValue;
     }
     function submitNumber() {
-        let input = document.getElementById('PriceInput');
+        var input = document.getElementById('inInputFormat');
         let value = input.value.replace(/\s/g, '');
         input.value = value;
     }
+    function removeTeg() {
+        var element = document.getElementById("HtmlTeg");
+        element.parentNode.removeChild(element);
+    }
+    setTimeout(removeTeg, 6000);
 </script>

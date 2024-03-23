@@ -6,7 +6,7 @@ builder.Services.AddWebUIServices();
 builder.Services.AddApplicationService();
 builder.Services.AddSession();
 var app = builder.Build();
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Index");
     app.UseHsts();
