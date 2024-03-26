@@ -26,7 +26,11 @@ public class SpendController : Controller
             ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
             return View(SpendDto);
         }
-        var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == HttpContext.Session.GetString("UserId"));
+        string? userId = HttpContext.Session.GetString("UserId");
+        if (userId is null)
+            return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
+        var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId);
 
         Spend spend = _mapper.Map<Spend>(SpendDto);
         spend.SpendType = (await _appDbContext.SpendTypes.FirstOrDefaultAsync(x => x.Id == spend.SpendType.Id))!;
@@ -41,7 +45,11 @@ public class SpendController : Controller
     [Authorize(Roles = "User")]
     public async Task<IActionResult> Choose()
     {
-        var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == HttpContext.Session.GetString("UserId"));
+        string? userId = HttpContext.Session.GetString("UserId");
+        if (userId is null)
+            return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
+        var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId);
         ViewData["FullName"] = user!.FullName;
         ViewData["PhoneNumber"] = user.PhoneNumber!.Substring(1);
         return View();
@@ -49,7 +57,10 @@ public class SpendController : Controller
     [Authorize(Roles = "User")]
     public IActionResult GetAllConfirmed()
     {
-        var userId = (HttpContext.Session.GetString("UserId"));
+        string? userId = HttpContext.Session.GetString("UserId");
+        if (userId is null)
+            return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
         List<Spend> spends = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == true && x.UserId.ToString() == userId).ToList();
         return View(spends);
     }
@@ -57,7 +68,10 @@ public class SpendController : Controller
     [Authorize(Roles = "User")]
     public IActionResult GetAllNoConfirmed()
     {
-        var userId = (HttpContext.Session.GetString("UserId"));
+        string? userId = HttpContext.Session.GetString("UserId");
+        if (userId is null)
+            return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
         List<Spend> spends = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).ToList();
         return View(spends);
     }
@@ -69,25 +83,20 @@ public class SpendController : Controller
     {
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
         List<Spend> spends = _appDbContext.Spends.Where(x => x.User.Id == construction!.User.Id && x.IsConfirmed == false).ToList();
-        if (HttpContext.Session.GetString("ConstructionId") is not null)
-            HttpContext.Session.Remove("ConstructionId");
-        HttpContext.Session.SetString("ConstructionId", constructionId.ToString());
-        ViewData["constructionId"] = constructionId;
-        return View(spends);
+        var spendsConfirming = new SpendsConfirming()
+        {
+            ConstructionId = constructionId,
+            Spends = spends
+        };
+        return View(spendsConfirming);
     }
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<IActionResult> ConfirmSpend(List<ConfirmationSpend> outDtos)
+    public async Task<IActionResult> ConfirmSpend(SpendsConfirming spendsConfirming)
     {
-        string constructionId = HttpContext.Session.GetString("ConstructionId")!;
-        var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id.ToString() == constructionId);
-        if (!ModelState.IsValid)
-        {
-            ViewData["constructionId"] = constructionId;
-            List<Spend> spends = _appDbContext.Spends.Where(x => x.User.Id == construction!.User.Id && x.IsConfirmed == false).ToList();
-            return View(spends);
-        }
-        List<Spend> entities = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && outDtos.Any(y => y.Id == x.Id && y.IsConfirmed == true)).ToList();
+        var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == spendsConfirming.ConstructionId);
+
+        List<Spend> entities = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && spendsConfirming.Spends.Any(y => y.Id == x.Id && y.IsConfirmed == true)).ToList();
         foreach (var item in entities)
         {
             item!.IsConfirmed = true;
@@ -97,10 +106,16 @@ public class SpendController : Controller
         }
         _appDbContext.Spends.UpdateRange(entities!);
         var result = await _appDbContext.SaveChangesAsync();
-        entities = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && x.User.Id == construction!.User.Id).ToList()!;
-        ViewData["constructionId"] = constructionId;
-        ViewData["result"] = result-2;
-        return View(entities);
+        _appDbContext.Constructions.Update(construction!);
+       await _appDbContext.SaveChangesAsync();
+        entities = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && x.UserId == construction!.UserId).ToList()!;
+        var resultSpendsConfirming = new SpendsConfirming()
+        {
+            ConstructionId = spendsConfirming.ConstructionId,
+            Spends = entities
+        };
+        ViewData["result"] = result - 2;
+        return View(resultSpendsConfirming);
     }
 
     [Authorize(Roles = "Admin")]
@@ -156,9 +171,12 @@ public class SpendController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllPersonalSpend()
     {
-        var userId = (HttpContext.Session.GetString("UserId"));
-        ViewData["Residual"]=(await _appDbContext.Users.FirstOrDefaultAsync(x=>x.Id.ToString() == userId))!.Residual;
-        List<Spend> spends =await _appDbContext.Spends.Where(x => x.UserId.ToString() != userId).ToListAsync();
+        string? userId = HttpContext.Session.GetString("AdminId");
+        if (userId is null)
+            return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
+        ViewData["Residual"] = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Residual;
+        List<Spend> spends = await _appDbContext.Spends.Where(x => x.UserId.ToString() == userId).ToListAsync();
         return View(spends);
     }
     [Authorize(Roles = "Admin")]
@@ -177,7 +195,11 @@ public class SpendController : Controller
             ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
             return View(SpendDto);
         }
-        var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == HttpContext.Session.GetString("UserId"));
+        string? userId = HttpContext.Session.GetString("AdminId");
+        if (userId is null)
+            return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
+        var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId);
 
         Spend spend = _mapper.Map<Spend>(SpendDto);
         spend.SpendType = (await _appDbContext.SpendTypes.FirstOrDefaultAsync(x => x.Id == spend.SpendType.Id))!;
@@ -185,7 +207,7 @@ public class SpendController : Controller
         spend.UserId = user!.Id;
         await _appDbContext.Spends.AddAsync(spend);
         var result = await _appDbContext.SaveChangesAsync();
-        if(result>0)
+        if (result > 0)
         {
             user.Residual -= spend.Price;
             _appDbContext.Users.Update(user);

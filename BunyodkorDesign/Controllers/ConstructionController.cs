@@ -1,5 +1,6 @@
-﻿namespace WebUI.Controllers;
+﻿using Domain.Entities;
 
+namespace WebUI.Controllers;
 public class ConstructionController : Controller
 {
     private readonly IAppDbContext _appDbContext;
@@ -15,7 +16,10 @@ public class ConstructionController : Controller
     [Authorize(Roles = "User")]
     public async Task<IActionResult> GetResidual()
     {
-        var userId = HttpContext.Session.GetString("UserId");
+        string? userId = HttpContext.Session.GetString("UserId");
+        if (userId is null)
+            return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.UserId.ToString() == userId);
         return View(construction);
     }
@@ -24,7 +28,11 @@ public class ConstructionController : Controller
     public async Task<IActionResult> GetAllConstruction()
     {
         var constructions = await _appDbContext.Constructions.OrderByDescending(x=>x.CreatedDate).ToListAsync();
-        var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == HttpContext.Session.GetString("UserId"));
+        string? userId = HttpContext.Session.GetString("AdminId");
+        if (userId is null)
+            return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
+        var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId);
         ViewData["FullName"] = user!.FullName;
         ViewData["PhoneNumber"] = user.PhoneNumber!.Substring(1);
         return View(constructions);

@@ -25,25 +25,23 @@ public class UserController : Controller
         user.Password = user.Password.stringHash();
         var result = await _userManager.CreateAsync(user);
         if (result.Succeeded)
-        {
-            ViewData["result"] = 1;
             return View("Login");
-        }
         else
-        {
-            ViewData["result"] = 0;
             return View(userRegister);
-        }
     }
-
 
     public async Task<IActionResult> LogOut()
     {
-        HttpContext.Session.Remove("UserId");
+        if (HttpContext.Session.GetString("UserId") is not null)
+            HttpContext.Session.Remove("UserId");
+        
+        if (HttpContext.Session.GetString("AdminId") is not null)
+            HttpContext.Session.Remove("AdminId");
         await _signInManager.SignOutAsync();
         return RedirectToAction("Login");
     }
     public IActionResult Login() => View();
+    public IActionResult ErrorHandling() => View();
     [HttpPost]
     public async Task<IActionResult> Login(UserCridential userCridential)
     {
@@ -52,37 +50,35 @@ public class UserController : Controller
         User? user = await _userManager.Users.FirstOrDefaultAsync(x => x.Password == userCridential.Password.stringHash() && x.UserName == userCridential.UserName);
         if (user == null) return View(userCridential);
         await _signInManager.SignInAsync(user, true);
-        if (HttpContext.Session.GetString("UserId") is not null)
-            HttpContext.Session.Remove("UserId");
-        HttpContext.Session.SetString("UserId", user.Id.ToString());
+      
         List<string> roles = (await _userManager.GetRolesAsync(user)).ToList();
         if (roles.Contains("Admin"))
+        {
+           HttpContext.Session.SetString("AdminId", user.Id.ToString());
             return RedirectToAction("GetAllConstruction", "Construction");
+        }
         else if (roles.Contains("User"))
+        {
+        HttpContext.Session.SetString("UserId", user.Id.ToString());
             return RedirectToAction("Choose", "Spend");
+        }
         else
         {
             HttpContext.Session.Remove("UserId");
             await _signInManager.SignOutAsync();
-            ViewData["result"] = 0;
-        return View();
+            return View();
         }
     }
     [Authorize]
-    public IActionResult UpdateLogin()
-    {
-        return View();
-    }
+    public IActionResult UpdateLogin()=> View();
     [Authorize]
     [HttpPost]
     public IActionResult UpdateLogin(UserCridential userCridential)
     {
         if (!ModelState.IsValid)
-        {
             return View(userCridential);
-        }
         var user = _appDbContext.Users.FirstOrDefault(x => x.UserName == userCridential.UserName && x.Password == userCridential.Password.stringHash());
-        if (user == null)
+        if (user is null)
             return View(userCridential);
         UserUpdate userUpdate = new()
         {
@@ -108,12 +104,9 @@ public class UserController : Controller
         _appDbContext.Users.Update(user);
         var result = await _appDbContext.SaveChangesAsync();
         if (result > 0)
-        {
             return RedirectToAction("LogOut");
-        }
         else
         {
-
             UserUpdate newUserUpdate = new()
             {
                 Id = user.Id

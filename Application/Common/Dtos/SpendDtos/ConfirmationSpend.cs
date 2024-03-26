@@ -1,11 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Application.Common.Dtos.SpendDtos;
 
 public class ConfirmationSpend
 {
-    [NotNull]
+    [Required]
     public Guid Id { get; set; }
-    [NotNull]
+    [Required]
     public bool IsConfirmed { get; set; }
 }

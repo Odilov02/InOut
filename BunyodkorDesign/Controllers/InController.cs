@@ -16,7 +16,10 @@ public class InController : Controller
     [Authorize(Roles = "User")]
     public IActionResult GetAllConfirmed()
     {
-        var userId = (HttpContext.Session.GetString("UserId"));
+        string? userId = HttpContext.Session.GetString("UserId");
+        if (userId is null)
+            return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
         List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true && x.User.Id.ToString() == userId).ToList();
         return View(ins);
     }
@@ -24,7 +27,10 @@ public class InController : Controller
     [Authorize(Roles = "User")]
     public IActionResult GetAllNoConfirmed()
     {
-        var userId = (HttpContext.Session.GetString("UserId"));
+        string? userId = HttpContext.Session.GetString("UserId");
+        if (userId is null)
+            return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
         List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && x.User.Id.ToString() == userId).ToList();
         return View(ins);
     }
@@ -32,7 +38,10 @@ public class InController : Controller
     [Authorize(Roles = "User")]
     public async Task<IActionResult> ConfirmationIn()
     {
-        var userId = (HttpContext.Session.GetString("UserId"));
+        string? userId = HttpContext.Session.GetString("UserId");
+        if (userId is null)
+            return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
         List<In?> ins = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList();
         return View(ins);
     }
@@ -41,7 +50,10 @@ public class InController : Controller
     [HttpPost]
     public async Task<IActionResult> ConfirmationIn(List<ConfirmationIn?> insDto)
     {
-        var userId = (HttpContext.Session.GetString("UserId"));
+        string? userId = HttpContext.Session.GetString("UserId");
+        if (userId is null)
+            return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
         if (!ModelState.IsValid)
         {
             List<In?> insdto = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList();
@@ -120,18 +132,25 @@ public class InController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllInPersonal()
     {
-        var userId = HttpContext.Session.GetString("UserId");
+        string? userId = HttpContext.Session.GetString("AdminId");
+        if (userId is null)
+            return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
         ViewData["UserId"] = userId;
-        List<In> ins = await _appDbContext.Ins.Where(x => x.User.Id.ToString() != userId).ToListAsync();
+        List<In> ins = await _appDbContext.Ins.Where(x => x.User.Id.ToString() == userId).ToListAsync();
         return View(ins);
     }
 
     [Authorize(Roles = "Admin")]
     public IActionResult AddPersonalIn()
     {
+        string? userId = HttpContext.Session.GetString("AdminId");
+        if (userId is null)
+            return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
         var inDto = new PersonalIn()
         {
-            UserId = Guid.Parse(HttpContext.Session.GetString("UserId")!)
+            UserId = Guid.Parse(userId)
         };
         return View(inDto);
     }

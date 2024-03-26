@@ -1,8 +1,9 @@
 ﻿@using Domain.Entities;
+@using Application.Common.Models;
 @{
     Layout = "_AdminLayout";
 }
-@model List<Spend>
+@model SpendsConfirming
 @{
     if (ViewData["result"] is not null)
     {
@@ -54,6 +55,7 @@
     </div>
 </div>
 <form asp-action="ConfirmSpend" method="post">
+                  <input type="hidden" name="ConstructionId" value="@Model.ConstructionId" />
     <table id="dataTable" class="table table-success table-striped">
         <thead>
             <tr>
@@ -68,7 +70,7 @@
         <tbody>
             @{
                 int count = 1;
-                foreach (var item in Model)
+                foreach (var item in Model.Spends)
                 {
                     int index = count - 1;
                     <tr class="Search">
@@ -78,16 +80,25 @@
                         <td class="text-center">@item.SpendType.Name</td>
                         <td class="text-center">@item.Reason</td>
                         <td>
-                            <input type="hidden" name="outDtos[@index].Id" value="@item.Id" />
+                            <input type="hidden" name="Spends[@index].Id" value="@item.Id" />
                             <div class="form-check">
-                                <input name="outDtos[@index].IsConfirmed" class="form-check-input" type="checkbox" value="true" id="flexCheckChecked" checked>
+                                <input name="Spends[@index].IsConfirmed" class="form-check-input" type="checkbox" value="true" id="flexCheckChecked" checked>
                             </div>
                         </td>
                     </tr>
                     count++;
                 }
+                if(Model.Spends.Count==0)
+                {
+                    <tr>
+                    <td>
+                            <input type="hidden" name="ConstructionId" value="@Model.ConstructionId" />
+                            <input type="hidden" name="Spends" value="@null" />
+                    </td>
+                    </tr>
+                }
                 <tr class="total-row">
-                    <th  scope="row">Жами</th>
+                    <th scope="row">Жами</th>
                     <td class="text-center">----</td>
                     <td class="text-center"><span id="totalPrice"></span></td>
                     <td class="text-center">----</td>
@@ -104,7 +115,7 @@
             <button class="btn btn-success px-x py-2" type="submit"><h5 class="px-4">Сақлаш</h5></button>
         </div>
         <div class="col-5">
-            <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@ViewData["constructionId"]" class="btn btn-primary px-4 py-2"><h5 class="px-4">Орқага</h5></a>
+            <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@Model.ConstructionId" class="btn btn-primary px-4 py-2"><h5 class="px-4">Орқага</h5></a>
         </div>
         <div class="col-1">
         </div>
