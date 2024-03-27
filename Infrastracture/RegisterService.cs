@@ -11,8 +11,8 @@ public static class RegisterService
     {
         services.AddDbContext<AppDbContext>(options =>
         {
-           // options.UseSqlServer(configuration.GetConnectionString("SqlServer"));
-            options.UseNpgsql(configuration.GetConnectionString("Default"));
+            options.UseSqlServer(configuration.GetConnectionString("SqlServer"));
+            // options.UseNpgsql(configuration.GetConnectionString("Default"));
             options.UseLazyLoadingProxies();
         });
 

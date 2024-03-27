@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddInfrastructureServices(builder.Configuration);

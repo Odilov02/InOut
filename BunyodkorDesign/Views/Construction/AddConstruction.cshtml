@@ -139,14 +139,16 @@
 
     <!-- Multi-line Text Input Control -->
     <div class="row">
-        <div class="col-5">
-            <button type="submit" class="btn btn-success m-4 px-5" onclick="submitNumber()">
+        <div class="col-1"></div>
+        <div class="col-6">
+            <button type="submit" class="btn btn-success my-4 px-5" onclick="submitNumber()">
                 Сақлаш
             </button>
         </div>
-        <div class="col-2"></div>
-        <div class="col-5">
-            <a asp-action="GetAllConstruction" asp-controller="Construction" class="btn btn-primary m-4 px-5">Орқага</a>
+        <div class="col-5 d-flex justify-content-end">
+            <a asp-action="GetAllConstruction" asp-controller="Construction" class="btn btn-primary my-4 px-5">Орқага</a>
+        </div>
+        <div col-1>
         </div>
     </div>
 </form>

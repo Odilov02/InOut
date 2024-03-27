@@ -3,8 +3,8 @@ using System;
 using Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -21,33 +21,33 @@ namespace Infrastructure.Persistance.Migrations
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Domain.Entities.AdminSpend", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ConstructionId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Lasted")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastedBy")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long?>("Price")
                         .IsRequired()
@@ -56,11 +56,11 @@ namespace Infrastructure.Persistance.Migrations
                     b.Property<string>("Reason")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<Guid?>("SpendTypeId")
                         .IsRequired()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -75,38 +75,38 @@ namespace Infrastructure.Persistance.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<long>("ContractPrice")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<long>("In")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("InDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<long>("Spend")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("SpendDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -120,25 +120,25 @@ namespace Infrastructure.Persistance.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("Lasted")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastedBy")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Price")
                         .HasColumnType("bigint");
@@ -146,10 +146,10 @@ namespace Infrastructure.Persistance.Migrations
                     b.Property<string>("Reason")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -162,45 +162,46 @@ namespace Infrastructure.Persistance.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("53e675a6-e126-4ace-ad60-77bcc4e61553"),
+                            Id = new Guid("d098f80a-7b94-4540-a315-960d767f3a02"),
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = new Guid("dcb83f52-223b-4a3d-aebe-9f93012ce30d"),
-                            ConcurrencyStamp = "de954bad-c0a3-4523-82c7-6bd50484cce2",
+                            Id = new Guid("94af46bb-007f-405c-a44d-43acda4df151"),
+                            ConcurrencyStamp = "2d20c3ca-4ed1-4904-a114-091571657b88",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("7910e3be-2577-4afc-84c4-afa9141332e5"),
+                            Id = new Guid("3e762db5-4c5a-43bb-ba53-287f7bd5d8e4"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -210,38 +211,38 @@ namespace Infrastructure.Persistance.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("Lasted")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastedBy")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Price")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Reason")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("SpendTypeId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -256,15 +257,15 @@ namespace Infrastructure.Persistance.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Descraption")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -273,49 +274,49 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a90778de-edec-490b-b346-a6ac0332b9db"),
+                            Id = new Guid("c2a1e18a-739e-41f0-8274-97afff7d9b81"),
                             Descraption = "У́зимизни ишчилар харажатлари",
                             Name = "У́зимизни ишчилар"
                         },
                         new
                         {
-                            Id = new Guid("9e17b85e-d178-4379-a9c7-b07dfd2abdcc"),
+                            Id = new Guid("e620e54e-3266-4c38-8f79-994a98502f93"),
                             Descraption = "Озик-овкат харажатлари",
                             Name = "Озик-овкат"
                         },
                         new
                         {
-                            Id = new Guid("d097a1fd-03f8-4d56-8a88-34edd5fe29ac"),
+                            Id = new Guid("88ac13c2-33e1-4fc1-9be2-1700890fbe08"),
                             Descraption = "Иш хаклари",
                             Name = "Иш хаклари"
                         },
                         new
                         {
-                            Id = new Guid("a921c015-26ec-4a0d-a9ee-d55677f449e2"),
+                            Id = new Guid("10985d50-cb48-4dfb-b849-fca4f1ac1226"),
                             Descraption = "Транспорт харажатлари",
                             Name = "Транспорт"
                         },
                         new
                         {
-                            Id = new Guid("c3967f49-8874-441b-95b1-2f3bf0973b3c"),
+                            Id = new Guid("7fb48fc2-29a9-4e83-a259-db2bc13a8fc9"),
                             Descraption = "Хужжатлар ва офис харажатлари",
                             Name = "Хужжатлар ва офис"
                         },
                         new
                         {
-                            Id = new Guid("29a9d833-337b-4f4c-b332-db7dd97e96e6"),
+                            Id = new Guid("53334974-9598-47c5-9986-394aa1602e5e"),
                             Descraption = "Курилиш материаллар харажатлари",
                             Name = "Курилиш материаллар"
                         },
                         new
                         {
-                            Id = new Guid("32692fe7-2b05-48e9-b15e-94d3f15aa52f"),
+                            Id = new Guid("49b3e8a7-100e-4a5d-9218-58c569d97106"),
                             Descraption = "Иш куроллар харажатлари",
                             Name = "Иш куроллар"
                         },
                         new
                         {
-                            Id = new Guid("278a87a3-4ca9-4699-9db0-2537a276b368"),
+                            Id = new Guid("6d7438c6-8845-4188-92a2-3fe072612b82"),
                             Descraption = "Бошка майда харажатлар",
                             Name = "Бошка майда харажатлар"
                         });
@@ -325,54 +326,54 @@ namespace Infrastructure.Persistance.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<long>("Residual")
                         .ValueGeneratedOnAdd()
@@ -380,15 +381,15 @@ namespace Infrastructure.Persistance.Migrations
                         .HasDefaultValue(0L);
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -397,7 +398,8 @@ namespace Infrastructure.Persistance.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.HasIndex("PhoneNumber")
                         .IsUnique();
@@ -410,9 +412,9 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("04c39848-90c9-45a1-a316-802b56ba0b1d"),
+                            Id = new Guid("c41b4491-fd26-4150-9c21-27b9e1ee9b1c"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f92b5c38-89fa-4b1a-a70e-2f5c0411e448",
+                            ConcurrencyStamp = "b9c3c3a7-528a-4374-89f3-f75f5cd4ac3d",
                             EmailConfirmed = false,
                             FullName = "Diyorbek Odilov",
                             LockoutEnabled = false,
@@ -420,7 +422,7 @@ namespace Infrastructure.Persistance.Migrations
                             PhoneNumber = "+998942922288",
                             PhoneNumberConfirmed = false,
                             Residual = 0L,
-                            SecurityStamp = "052f0c15-3c4c-4754-afb6-126c39650996",
+                            SecurityStamp = "95da1660-dbc9-4392-a1e3-427ca6b395b7",
                             TwoFactorEnabled = false,
                             UserName = "DiyorbekOdilov19"
                         });
@@ -430,18 +432,18 @@ namespace Infrastructure.Persistance.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -454,18 +456,18 @@ namespace Infrastructure.Persistance.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -477,16 +479,16 @@ namespace Infrastructure.Persistance.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -498,10 +500,10 @@ namespace Infrastructure.Persistance.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -512,24 +514,24 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("04c39848-90c9-45a1-a316-802b56ba0b1d"),
-                            RoleId = new Guid("dcb83f52-223b-4a3d-aebe-9f93012ce30d")
+                            UserId = new Guid("c41b4491-fd26-4150-9c21-27b9e1ee9b1c"),
+                            RoleId = new Guid("94af46bb-007f-405c-a44d-43acda4df151")
                         });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
