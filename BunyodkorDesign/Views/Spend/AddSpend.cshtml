@@ -1,4 +1,4 @@
-﻿q @using Application.Common.Dtos.SpendDtos;
+﻿@using Application.Common.Dtos.SpendDtos;
 @{
     Layout = "_UserLayout";
 }
@@ -123,13 +123,14 @@
         <span class="text-danger" asp-validation-for="Reason"></span>
     </div>
     <div class="row">
-        <div class="col-1"></div>
-        <div class="col-5">
+        <div class="col-xs-0 col-md-1">
+        </div>
+        <div class="col-4 mx-2 mx-md-1">
             <button type="submit" class="btn btn-success my-4 px-5" onclick="submitNumber()">
                 Сақлаш
             </button>
         </div>
-        <div class="col-5 d-flex justify-content-end">
+        <div class="col-5 mx-4 d-flex justify-content-end">
             <a asp-action="Choose" asp-controller="Spend" asp-route-constructionId="Choose" class="btn btn-primary my-4 px-5">Орқага</a>
         </div>
         <div class="col-1"></div>

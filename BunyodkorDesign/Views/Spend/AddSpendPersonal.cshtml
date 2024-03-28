@@ -123,12 +123,14 @@
         <span class="text-danger" asp-validation-for="Reason"></span>
     </div>
     <div class="row">
-        <div class="col-6">
+        <div class="col-xs-0 col-md-1">
+        </div>
+        <div class="col-4 mx-2 mx-md-1">
             <button type="submit" class="btn btn-success m-4 px-5" onclick="submitNumber()">
                 Сақлаш
             </button>
         </div>
-        <div class="col-6">
+        <div class="col-5 mx-4 d-flex justify-content-end">
             <a asp-action="GetAllPersonalSpend" asp-controller="Spend" class="btn btn-primary m-4 px-5">Орқага</a>
         </div>
     </div>

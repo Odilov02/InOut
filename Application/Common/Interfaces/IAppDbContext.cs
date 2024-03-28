@@ -5,6 +5,7 @@ namespace Application.Common.Interfaces;
 
 public interface IAppDbContext
 {
+    Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade Database { get; }
     EntityEntry Entry(object entity);
     DbSet<In> Ins { get; }
     DbSet<Spend> Spends { get; }

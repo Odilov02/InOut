@@ -188,20 +188,20 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d098f80a-7b94-4540-a315-960d767f3a02"),
+                            Id = new Guid("00469c5f-1563-48c0-9009-762d59be3427"),
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = new Guid("94af46bb-007f-405c-a44d-43acda4df151"),
-                            ConcurrencyStamp = "2d20c3ca-4ed1-4904-a114-091571657b88",
+                            Id = new Guid("182b7b07-ea66-41c0-850f-b7d0cb7a48f7"),
+                            ConcurrencyStamp = "b02ba8ce-ecc3-4e6c-b925-e576eb5fcf4e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("3e762db5-4c5a-43bb-ba53-287f7bd5d8e4"),
+                            Id = new Guid("eb087fb9-bf5d-45d1-a717-4585db52917d"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -274,49 +274,49 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c2a1e18a-739e-41f0-8274-97afff7d9b81"),
+                            Id = new Guid("a2350099-148e-452b-bcda-7127edf103b8"),
                             Descraption = "У́зимизни ишчилар харажатлари",
                             Name = "У́зимизни ишчилар"
                         },
                         new
                         {
-                            Id = new Guid("e620e54e-3266-4c38-8f79-994a98502f93"),
+                            Id = new Guid("cee3a164-7059-4971-8a13-48916fdd2694"),
                             Descraption = "Озик-овкат харажатлари",
                             Name = "Озик-овкат"
                         },
                         new
                         {
-                            Id = new Guid("88ac13c2-33e1-4fc1-9be2-1700890fbe08"),
+                            Id = new Guid("bbd89be8-4f91-4f87-89dc-2221cb835d84"),
                             Descraption = "Иш хаклари",
                             Name = "Иш хаклари"
                         },
                         new
                         {
-                            Id = new Guid("10985d50-cb48-4dfb-b849-fca4f1ac1226"),
+                            Id = new Guid("68584602-dde9-4913-8983-fe6174b21b63"),
                             Descraption = "Транспорт харажатлари",
                             Name = "Транспорт"
                         },
                         new
                         {
-                            Id = new Guid("7fb48fc2-29a9-4e83-a259-db2bc13a8fc9"),
+                            Id = new Guid("5c177499-9f1d-4b61-a7c4-fbaa017a0a32"),
                             Descraption = "Хужжатлар ва офис харажатлари",
                             Name = "Хужжатлар ва офис"
                         },
                         new
                         {
-                            Id = new Guid("53334974-9598-47c5-9986-394aa1602e5e"),
+                            Id = new Guid("a31df78b-a39a-40df-bcd5-35a586d04a8d"),
                             Descraption = "Курилиш материаллар харажатлари",
                             Name = "Курилиш материаллар"
                         },
                         new
                         {
-                            Id = new Guid("49b3e8a7-100e-4a5d-9218-58c569d97106"),
+                            Id = new Guid("cef41a28-1e5f-4e57-b8c7-cf00b17156f6"),
                             Descraption = "Иш куроллар харажатлари",
                             Name = "Иш куроллар"
                         },
                         new
                         {
-                            Id = new Guid("6d7438c6-8845-4188-92a2-3fe072612b82"),
+                            Id = new Guid("b7c3ed4a-60e5-4268-a94a-efc4b20716d0"),
                             Descraption = "Бошка майда харажатлар",
                             Name = "Бошка майда харажатлар"
                         });
@@ -353,6 +353,11 @@ namespace Infrastructure.Persistance.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -387,11 +392,13 @@ namespace Infrastructure.Persistance.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Login")
+                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -404,27 +411,25 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasIndex("PhoneNumber")
                         .IsUnique();
 
-                    b.HasIndex("UserName")
-                        .IsUnique();
-
                     b.ToTable("AspNetUsers", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c41b4491-fd26-4150-9c21-27b9e1ee9b1c"),
+                            Id = new Guid("1159374c-fa47-447e-a3d8-e723c6454cc3"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b9c3c3a7-528a-4374-89f3-f75f5cd4ac3d",
+                            ConcurrencyStamp = "6fa9159f-1b1e-4fa5-ae48-18a055213f01",
                             EmailConfirmed = false,
                             FullName = "Diyorbek Odilov",
                             LockoutEnabled = false,
+                            Login = "DiyorbekOdilov19",
                             Password = "839045bc366f3119171d91d4565bb7e6d29c12b5af9c5a6cc8cf1bb14a871740",
                             PhoneNumber = "+998942922288",
                             PhoneNumberConfirmed = false,
                             Residual = 0L,
-                            SecurityStamp = "95da1660-dbc9-4392-a1e3-427ca6b395b7",
+                            SecurityStamp = "604277df-7cab-4485-abc6-395dadfee369",
                             TwoFactorEnabled = false,
-                            UserName = "DiyorbekOdilov19"
+                            UserName = "53c0aac9-6362-4de7-8457-37e5bad37126"
                         });
                 });
 
@@ -514,8 +519,8 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("c41b4491-fd26-4150-9c21-27b9e1ee9b1c"),
-                            RoleId = new Guid("94af46bb-007f-405c-a44d-43acda4df151")
+                            UserId = new Guid("1159374c-fa47-447e-a3d8-e723c6454cc3"),
+                            RoleId = new Guid("182b7b07-ea66-41c0-850f-b7d0cb7a48f7")
                         });
                 });
 

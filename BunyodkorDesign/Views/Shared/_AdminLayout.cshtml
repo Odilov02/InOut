@@ -48,8 +48,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Орқага"></button>
                 </div>
                 <div class="modal-body">
-                    <h3 class="mx-4" id="fullName"></h3><br />
-                    <h3 class="mx-4" id="phoneNumber"></h3>
+                    <h3 class="mx-4">@ViewData["FullName"]</h3><br />
+                    <h3 class="mx-4" id="phoneNumber">@ViewData["PhoneNumber"]</h3>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Орқага</button>
@@ -63,24 +63,13 @@
 </body>
 </html>
 <script>
-        var fullName = '@(ViewData["FullName"] ?? "")';
-    if (fullName.trim() !== '') {
-        localStorage.setItem('fullName', fullName);
-    }
+    function formatPhoneNumber() {
+        var phoneNumberElement = document.getElementById("phoneNumber");
+        var phoneNumber = phoneNumberElement.textContent;
 
-    var phoneNumber = '@(ViewData["PhoneNumber"] ?? "")';
-    if (phoneNumber.trim() !== '') {
-        localStorage.setItem('phoneNumber', phoneNumber);
-    }
+        var formattedPhoneNumber = phoneNumber.replace(/(\+998)(\d{2})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5');
 
-    var fullNameItem = localStorage.getItem('fullName');
-    if (fullNameItem !== null && fullNameItem !== undefined && fullNameItem.trim() !== '') {
-        var fullNameDiv = document.getElementById('fullName');
-        fullNameDiv.innerText = fullNameItem;
+        phoneNumberElement.textContent = formattedPhoneNumber;
     }
-    var phoneNumberItem = localStorage.getItem('phoneNumber');
-    if (phoneNumberItem !== null && phoneNumberItem !== undefined && phoneNumberItem.trim() !== '') {
-        var phoneNumberDiv = document.getElementById('phoneNumber');
-        phoneNumberDiv.innerText = phoneNumberItem.replace(/(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/, '+$1 $2 $3 $4 $5');
-    }
+    formatPhoneNumber();
 </script>

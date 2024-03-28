@@ -8,29 +8,29 @@
     {
         if ((int)ViewData["result"]! > 0)
         {
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                            </div>
-                                                                            <div class="col-8 m-4">
-                                                                                <h3 style="background-color: rgb(132, 253, 184);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
-                                                                                    Маьлумотлар муваффақиятли ўзгарди!
-                                                                                </h3>
-                                                                            </div>
-                                                                            <div class="col"></div>
-                                                                        </div>
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col-8 m-4">
+                    <h3 style="background-color: rgb(132, 253, 184);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
+                        Маьлумотлар муваффақиятли ўзгарди!
+                    </h3>
+                </div>
+                <div class="col"></div>
+            </div>
         }
         else
         {
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                            </div>
-                                                                            <div class="col-8 m-4">
-                                                                                <h3 style="background-color: rgb(252, 113, 109);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
-                                                                                    Маьлумотлар  ўзгармади!
-                                                                                </h3>
-                                                                            </div>
-                                                                            <div class="col"></div>
-                                                                        </div>
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col-8 m-4">
+                    <h3 style="background-color: rgb(252, 113, 109);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
+                        Маьлумотлар  ўзгармади!
+                    </h3>
+                </div>
+                <div class="col"></div>
+            </div>
         }
     }
 }
@@ -57,7 +57,7 @@
         }
 
         /* Styling form-control input,
-                                select, textarea */
+                                    select, textarea */
         .form-control input,
         .form-control select,
         .form-control textarea {
@@ -70,7 +70,7 @@
         }
 
             /* Styling form-control Radio
-                                button and Checkbox */
+                                    button and Checkbox */
             .form-control input[type="radio"],
             .form-control input[type="checkbox"] {
                 display: inline-block;
@@ -85,7 +85,7 @@
 
     <div class="form-control">
         <label for="FullName" id="FullName">
-           Исм-фамилия
+            Исм-фамилия
         </label>
         <input type="text" id="FullName" name="FullName"
                placeholder="Исм фамилийангизни киритинг..." />
@@ -94,12 +94,12 @@
 
 
     <div class="form-control">
-        <label for="UserName" id="UserName">
+        <label for="Login" id="UserName">
             Логин
         </label>
-        <input type="text" id="UserName" name="UserName"
+        <input type="text" id="Login" name="Login"
                placeholder="Логин киритинг..." />
-        <span class="text-danger" asp-validation-for="UserName"></span>
+        <span class="text-danger" asp-validation-for="Login"></span>
     </div>
 
 
@@ -108,7 +108,7 @@
             Телефон номер
         </label>
         <input type="text" id="InputFormat" name="PhoneNumber" oninput="formatNumber()"
-                value="+998"  placeholder="Телефон номерингизни киритинг..." />
+               value="+998" placeholder="Телефон номерингизни киритинг..." />
         <span class="text-danger" asp-validation-for="PhoneNumber"></span>
     </div>
 
@@ -150,23 +150,23 @@
         var valueNumber = input.value.replace(/\D/g, '');
         var result = '';
         for (var i = 0; i < valueNumber.length; i++) {
-            if (i == 0) { 
+            if (i == 0) {
                 result += '+';
             }
-            if (i == 3) { 
+            if (i == 3) {
                 result += '-';
             }
-                 if (i == 5) { 
+            if (i == 5) {
                 result += '-';
             }
-               if (i == 8) { 
+            if (i == 8) {
                 result += '-';
             }
-              if (i == 10) { 
+            if (i == 10) {
                 result += '-';
             }
-            if (i < 12) { 
-            result += valueNumber[i];
+            if (i < 12) {
+                result += valueNumber[i];
             }
         }
         if (valueNumber.length == 0) {

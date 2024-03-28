@@ -1,5 +1,7 @@
-﻿namespace WebUI.Controllers;
+﻿using Microsoft.AspNetCore.RateLimiting;
 
+namespace WebUI.Controllers;
+[EnableRateLimiting("fixed")]
 public class InController : Controller
 {
     private readonly IAppDbContext _appDbContext;
@@ -10,12 +12,26 @@ public class InController : Controller
         _mapper = mapper;
     }
 
+
     [Authorize(Roles = "User")]
-    public IActionResult Choose() => View();
+    public IActionResult Choose()
+    {
+
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        return View();
+    }
+
+
 
     [Authorize(Roles = "User")]
     public IActionResult GetAllConfirmed()
     {
+
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
+
         string? userId = HttpContext.Session.GetString("UserId");
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
@@ -24,9 +40,16 @@ public class InController : Controller
         return View(ins);
     }
 
+
+
+
     [Authorize(Roles = "User")]
     public IActionResult GetAllNoConfirmed()
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
+
         string? userId = HttpContext.Session.GetString("UserId");
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
@@ -35,9 +58,16 @@ public class InController : Controller
         return View(ins);
     }
 
+
+
+
     [Authorize(Roles = "User")]
     public async Task<IActionResult> ConfirmationIn()
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
+
         string? userId = HttpContext.Session.GetString("UserId");
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
@@ -46,10 +76,17 @@ public class InController : Controller
         return View(ins);
     }
 
+
+
+
+
     [Authorize(Roles = "User")]
     [HttpPost]
     public async Task<IActionResult> ConfirmationIn(List<ConfirmationIn?> insDto)
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
         string? userId = HttpContext.Session.GetString("UserId");
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
@@ -61,35 +98,77 @@ public class InController : Controller
         }
         List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && insDto.Any(y => y.Id == x.Id && y.IsConfirmed == true)).ToList();
         var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId);
-        foreach (var item in ins)
-        {
-            item.IsConfirmed = true;
-            user!.Residual += item.Price;
-            user.Construction!.In += item.Price;
-            user.Construction.InDate = DateTime.Now;
-        }
 
-        _appDbContext.Ins.UpdateRange(ins);
-        var result = await _appDbContext.SaveChangesAsync();
-        ins = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList()!;
-        ViewData["result"] = result-2;
-        return View(ins);
+        using (var transaction = _appDbContext.Database.BeginTransaction())
+        {
+            try
+            {
+
+                foreach (var item in ins)
+                {
+                    item.IsConfirmed = true;
+                    user!.Residual += item.Price;
+                }
+
+                _appDbContext.Ins.UpdateRange(ins);
+                var result = await _appDbContext.SaveChangesAsync();
+                if (result > 0)
+                {
+                    foreach (var item in ins)
+                    {
+                        user!.Construction!.In += item.Price;
+                        user.Construction.InDate = DateTime.Now;
+                    }
+                    _appDbContext.Constructions.Update(user!.Construction!);
+                    await _appDbContext.SaveChangesAsync();
+                    ins = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList()!;
+                    transaction.Commit();
+                    ViewData["result"] = result-1;
+                    return View(ins);
+                }
+                else
+                {
+                    throw new();
+                }
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+            }
+            List<In?> newInsDto = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList();
+            return View(newInsDto);
+        }
     }
+
+
+
 
     ///Admin Action
     [Authorize(Roles = "Admin")]
     public IActionResult AddIn(Guid constructionId)
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
+
         var inDto = new AddInDto()
         {
             ConstructionId = constructionId
         };
         return View(inDto);
     }
+
+
+
+
     [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddIn(AddInDto inDto)
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
+
         if (!ModelState.IsValid)
         {
             return View(inDto);
@@ -111,27 +190,49 @@ public class InController : Controller
         ViewData["result"] = result;
         return View(inResult);
     }
+
+
+
+
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllNoConfirmedForAdmin(Guid constructionId)
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
+
         ViewData["constructionId"] = constructionId;
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
         List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && x.User.Id == construction!.UserId).ToList();
         return View(ins);
     }
 
+
+
+
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllConfirmedForAdmin(Guid constructionId)
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
+
         ViewData["constructionId"] = constructionId;
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
         List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true && x.User.Id == construction!.UserId).ToList();
         return View(ins);
     }
 
+
+
+
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllInPersonal()
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
+
         string? userId = HttpContext.Session.GetString("AdminId");
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
@@ -141,9 +242,16 @@ public class InController : Controller
         return View(ins);
     }
 
+
+
+
     [Authorize(Roles = "Admin")]
     public IActionResult AddPersonalIn()
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
+
         string? userId = HttpContext.Session.GetString("AdminId");
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
@@ -155,29 +263,50 @@ public class InController : Controller
         return View(inDto);
     }
 
+
+
+
     [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddPersonalIn(PersonalIn personalIn)
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
         if (!ModelState.IsValid)
             return View(personalIn);
         var @in = _mapper.Map<In>(personalIn);
         var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id == personalIn.UserId);
         if (user == null)
             return View(personalIn);
-        await _appDbContext.Ins.AddAsync(@in);
-        var result = await _appDbContext.SaveChangesAsync();
-        ViewData["result"] = result;
-        if (result > 0)
+        using (var transaction = _appDbContext.Database.BeginTransaction())
         {
-            user.Residual += @in.Price;
-            _appDbContext.Users.Update(user);
-            await _appDbContext.SaveChangesAsync();
-            var inDto = new PersonalIn()
+            try
             {
-                UserId = user.Id
-            };
-            return View(inDto);
+                await _appDbContext.Ins.AddAsync(@in);
+                var result = await _appDbContext.SaveChangesAsync();
+                ViewData["result"] = result;
+                if (result > 0)
+                {
+                    user.Residual += @in.Price;
+                    _appDbContext.Users.Update(user);
+                    await _appDbContext.SaveChangesAsync();
+                    var inDto = new PersonalIn()
+                    {
+                        UserId = user.Id
+                    };
+                    transaction.Commit();
+                    return View(inDto);
+                }
+                else
+                {
+                    throw new();
+                }
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+            }
         }
         return View(personalIn);
     }

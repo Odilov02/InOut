@@ -12,7 +12,7 @@ public class UserRegisterDto
 
     [Required(ErrorMessage = "Логин киритлииши шарт!")]
     [MaxLength(50, ErrorMessage = "Логин узунлиги 50 тадан кам болиши шарт!")]
-    public string UserName { get; set; }
+    public string Login { get; set; }
 
     [Required(ErrorMessage = "Телефон номер киритилиши шарт!")]
     [MaxLength(13, ErrorMessage = "Телефон номер 13 та болиши шарт!")]

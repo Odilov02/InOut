@@ -5,7 +5,7 @@ namespace Application.Common.Models;
 public class UserCridential
 {
     [Required(ErrorMessage = "Логин киритилиши шарт!")]
-    public string UserName { get; set; }
+    public string Login { get; set; }
     [Required(ErrorMessage = "Парол киритилиши шарт!")]
     public string Password { get; set; }
 }

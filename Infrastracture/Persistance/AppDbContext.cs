@@ -17,6 +17,10 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
        : base(options)
     {
     }
+    public AppDbContext()
+    {
+        
+    }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<SpendType>().HasData(new SpendType
@@ -97,8 +101,9 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
         {
             Id = adminId,
             FullName = "Diyorbek Odilov",
-            UserName = "DiyorbekOdilov19",
+            Login = "DiyorbekOdilov19",
             PhoneNumber="+998942922288",
+            UserName=Guid.NewGuid().ToString(),
             Password = "DiyorbekOdilov19".stringHash(),
             SecurityStamp = Guid.NewGuid().ToString()
         });;

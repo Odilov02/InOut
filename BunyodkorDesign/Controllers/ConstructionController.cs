@@ -1,6 +1,7 @@
-﻿using Domain.Entities;
+﻿using Microsoft.AspNetCore.RateLimiting;
 
 namespace WebUI.Controllers;
+[EnableRateLimiting("fixedWindow")]
 public class ConstructionController : Controller
 {
     private readonly IAppDbContext _appDbContext;
@@ -13,9 +14,15 @@ public class ConstructionController : Controller
         _mapper = mapper;
     }
 
+
+
+
     [Authorize(Roles = "User")]
     public async Task<IActionResult> GetResidual()
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
         string? userId = HttpContext.Session.GetString("UserId");
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
@@ -24,10 +31,17 @@ public class ConstructionController : Controller
         return View(construction);
     }
 
+
+
+
+
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllConstruction()
     {
-        var constructions = await _appDbContext.Constructions.OrderByDescending(x=>x.CreatedDate).ToListAsync();
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
+        var constructions = await _appDbContext.Constructions.OrderByDescending(x => x.CreatedDate).ToListAsync();
         string? userId = HttpContext.Session.GetString("AdminId");
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
@@ -37,9 +51,16 @@ public class ConstructionController : Controller
         ViewData["PhoneNumber"] = user.PhoneNumber!.Substring(1);
         return View(constructions);
     }
+
+
+
+
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AddConstruction()
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
         var usersAll = _userManager.Users.ToList();
         List<User> users = new List<User>();
         foreach (var user in usersAll)
@@ -51,10 +72,18 @@ public class ConstructionController : Controller
         ViewData["users"] = users;
         return View();
     }
+
+
+
+
     [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddConstruction(AddConstructionDto constructionDto)
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
+
         if (!ModelState.IsValid)
         {
             var usersAll = _userManager.Users.ToList();
@@ -72,29 +101,48 @@ public class ConstructionController : Controller
         var user = _userManager.Users.FirstOrDefault(x => x.Id == construction.UserId);
         await _appDbContext.Constructions.AddAsync(construction);
         var result = await _appDbContext.SaveChangesAsync();
-            await _userManager.AddToRoleAsync(user!, "User");
-            ViewData["result"] = result;
-            var newUsersAll = _userManager.Users.ToList();
-            List<User> newUsers = new List<User>();
-            foreach (var item in newUsersAll)
-            {
-                var newRoles = await _userManager.GetRolesAsync(item);
-                if (newRoles.Count == 0)
+        await _userManager.AddToRoleAsync(user!, "User");
+        ViewData["result"] = result;
+        var newUsersAll = _userManager.Users.ToList();
+        List<User> newUsers = new List<User>();
+        foreach (var item in newUsersAll)
+        {
+            var newRoles = await _userManager.GetRolesAsync(item);
+            if (newRoles.Count == 0)
                 newUsers.Add(item);
-            }
-            ViewData["users"] = newUsers;
-            return View();
+        }
+        ViewData["users"] = newUsers;
+        return View();
     }
+
+
+
+
+
     [Authorize(Roles = "Admin")]
     public IActionResult Choose(Guid constructionId) => View(constructionId);
+
+
+    [Authorize(Roles = "Admin")]
     public IActionResult GetAllDetails()
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
+
         List<Construction> constructions = _appDbContext.Constructions.ToList();
         return View(constructions);
     }
+
+
+
     [Authorize(Roles = "Admin")]
     public IActionResult AddAdminSpend(Guid constructionId)
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
+
         var adminSpend = new AdminSpend()
         {
             ConstructionId = constructionId
@@ -103,11 +151,17 @@ public class ConstructionController : Controller
         ViewData["SpendTypes"] = spendTypes;
         return View(adminSpend);
     }
+     
+
 
     [HttpPost]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AddAdminSpend(AdminSpend adminSpend)
-   {
+    {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
+
         var spendTypes = _appDbContext.SpendTypes.ToList();
         if (!ModelState.IsValid)
         {

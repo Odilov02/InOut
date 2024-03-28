@@ -28,7 +28,7 @@
     </div>
 </div>
 <br />
-<table id="dataTable" class="table table-success table-striped">
+<table id="dataTable" class="table table-bordered table-success table-striped">
     <thead>
         <tr>
             <th scope="col"></th>
@@ -54,17 +54,16 @@
                     <td class="text-center">@item.CreatedDate.ToString("dd.MM.yyyy")</td>
                     <td class="contractPrice text-center"><span id="ContractPrice">@item.ContractPrice</span></td>
                     <td class="outs text-center"><span id="Spend">@item.Spend</span></td>
-                    <td class="text-center"><span>@percentage %</span></td>
+                    <td class="text-center"><h6>@percentage %</h6></td>
                     <td class="price text-center"><span id="In">@item.In</span></td>
                     <td class="residual text-center"><span id="formattedNumber">@item.User.Residual</span></td>
-                    <td class="text-center">@item.User.PhoneNumber</td>
+                    <td class="text-center" id="phoneNumber"><p>@item.User.PhoneNumber</p></td>
                 </tr>
                 count++;
             }
             <tr class="total-row">
                 <th scope="row">Жами</th>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
+                <td colspan="2"></td>
                 <td class="text-center"><span id="contractPrice"></span></td>
                 <td class="text-center"><span id="totalOuts"></span></td>
                 <td class="text-center"></td>
@@ -187,6 +186,11 @@
                     cell.textContent = formatNumber(number);
                 }
             });
+            var cellsNumber = row.querySelectorAll('td p');
+            cellsNumber.forEach(function (cell) {
+                var number = cell.textContent.trim();
+                cell.textContent = formatPhoneNumber(number);
+            });
         });
     }
 
@@ -194,5 +198,9 @@
     function formatNumber(number) {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
+    function formatPhoneNumber(phoneNumber) {
+        return phoneNumber.replace(/(\+998)(\d{2})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5');
 
+    }
+    
 </script>

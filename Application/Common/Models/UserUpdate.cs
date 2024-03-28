@@ -16,7 +16,7 @@ public class UserUpdate
 
     [Required(ErrorMessage = "Логин киритилиши шарт!")]
     [MaxLength(50, ErrorMessage = "Логин узунлиги 50 тадан кам болиши шарт!")]
-    public string UserName { get; set; }
+    public string Login { get; set; }
 
 
     [Required(ErrorMessage = "Телефон номер киритилиши шарт!")]
