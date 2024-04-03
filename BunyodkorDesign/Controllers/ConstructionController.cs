@@ -48,7 +48,7 @@ public class ConstructionController : Controller
 
         var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId);
         ViewData["FullName"] = user!.FullName;
-        ViewData["PhoneNumber"] = user.PhoneNumber!.Substring(1);
+        ViewData["PhoneNumber"] = user.PhoneNumber;
         return View(constructions);
     }
 
@@ -174,19 +174,54 @@ public class ConstructionController : Controller
             ViewData["SpendTypes"] = spendTypes;
             return View(adminSpend);
         }
-        _appDbContext.AdminSpends.Add(adminSpend);
-        var result = await _appDbContext.SaveChangesAsync();
-        construction.Spend += adminSpend.Price ?? 0;
-        construction.SpendDate = DateTime.Now;
-        _appDbContext.Constructions.Update(construction);
-        await _appDbContext.SaveChangesAsync();
-        var newAdminSpend = new AdminSpend()
-        {
-            ConstructionId = construction.Id
-        };
-        ViewData["SpendTypes"] = spendTypes;
-        ViewData["result"] = result;
-        return View(newAdminSpend);
-    }
+        string? userId = HttpContext.Session.GetString("AdminId");
+        if (userId is null)
+            return RedirectToAction(actionName: "LogOut", controllerName: "User");
 
+        using (var transaction = _appDbContext.Database.BeginTransaction())
+        {
+            try
+            {
+                _appDbContext.AdminSpends.Add(adminSpend);
+                var result = await _appDbContext.SaveChangesAsync();
+                if(result<=0)
+                {
+                    throw new();
+                }
+                construction.Spend += adminSpend.Price ?? 0;
+                construction.SpendDate = DateTime.Now;
+                _appDbContext.Constructions.Update(construction);
+              result=  await _appDbContext.SaveChangesAsync();
+                if (result <= 0)
+                {
+                    throw new();
+                }
+               if(adminSpend.IsCash??false)
+                {
+                    var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId);
+                    user!.Residual -= adminSpend.Price ?? 0;
+                    _appDbContext.Users.Update(user);
+
+                    result = await _appDbContext.SaveChangesAsync();
+                    if (result <= 0)
+                    {
+                        throw new();
+                    }
+                }
+                var newAdminSpend = new AdminSpend()
+                {
+                    ConstructionId = construction.Id
+                };
+                ViewData["SpendTypes"] = spendTypes;
+                ViewData["result"] = result;
+                transaction.Commit();
+                return View(newAdminSpend);
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+            }
+         }
+        return View(adminSpend);
+    }
 }

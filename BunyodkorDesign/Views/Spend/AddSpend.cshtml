@@ -160,4 +160,9 @@
         let value = input.value.replace(/\s/g, '');
         input.value = value;
     }
+    function removeTeg() {
+        var element = document.getElementById("HtmlTeg");
+        element.parentNode.removeChild(element);
+    }
+    setTimeout(removeTeg, 3000);
 </script>

@@ -16,7 +16,7 @@
                         <div class="col">
                         </div>
                         <div class="col-8 mt-3">
-                            <h3 style="background-color: rgb(132, 253, 184);" class="shadow  rounded text-center py-3" id="HtmlTeg">
+                    <h3 style="background-color: rgb(132, 253, 184);" class="shadow  rounded text-center py-3" id="HtmlTeg">
                         Маьлумотлар мувоффақиятли қўшилди!
                             </h3>
                         </div>
@@ -29,7 +29,7 @@
                         <div class="col">
                         </div>
                         <div class="col-8 mt-3">
-                            <h3 style="background-color: rgb(252, 113, 109);" class="shadow  rounded text-center py-3" id="HtmlTeg">
+                    <h3 style="background-color: rgb(252, 113, 109);" class="shadow  rounded text-center py-3" id="HtmlTeg">
                         Маьлумотлар қўшилмади!
                             </h3>
                         </div>
@@ -177,4 +177,9 @@
         let value = input.value.replace(/\s/g, '');
         input.value = value;
     }
+    function removeTeg() {
+        var element = document.getElementById("HtmlTeg");
+        element.parentNode.removeChild(element);
+    }
+    setTimeout(removeTeg, 3000);
 </script>

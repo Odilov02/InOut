@@ -5,121 +5,71 @@
 <br />
 <br />
 <div class="row">
-    <div class="col-2"></div>
-    <div class="col-8">
+    <div class="col-1"></div>
+    <div class="col-10">
         <div class="accordion row pt-3 pb-2" id="accordionExample">
-            <div class="accordion-item">
-                <br />
-                <br />
-                <h2 class="accordion-header" id="headingOne">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        <div class="col-sm-11 ">
-                            <div class="card">
-                                <div class="card-body">
-                                    <br />
-                                    <h4 class="card-title text-center">Чиқимлар</h4>
-                                    <br />
-                                </div>
-                            </div>
-                        </div>
-                    </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                        <div class="row py-2">
+            <div class="row">
+                <div class="accordion-item col-6">
+                    <br />
+                    <br />
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                             <div class="col-sm-11 ">
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="d-grid gap-2">
-                                            <a asp-route-constructionId="@Model" asp-action="AddAdminSpend" asp-controller="Construction" class="btn btn-info"><h4 class="text-center">Янги чиқим қу́шиш</h4></a>
+                                        <br />
+                                        <h4 class="card-title text-center">Чиқимлар</h4>
+                                        <br />
+                                    </div>
+                                </div>
+                            </div>
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="row py-2">
+                                <div class="col-sm-11 ">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-grid gap-2">
+                                                <a asp-route-constructionId="@Model" asp-action="AddAdminSpend" asp-controller="Construction" class="btn btn-info"><h4 class="text-center">Янги чиқим қу́шиш</h4></a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                         <div class="row py-2">
-                            <div class="col-sm-11 ">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="d-grid gap-2">
-                                            <a asp-route-constructionId="@Model" asp-action="ConfirmSpend" asp-controller="Spend" class="btn btn-primary"><h4 class="text-center">Чиқимларни тасдиқлаш</h4></a>
+                            <div class="row pt-3 pb-2">
+                                <div class="col-sm-11 ">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-grid gap-2">
+                                                <a asp-route-constructionId="@Model" asp-action="GetAllConfirmedForAdmin" asp-controller="Spend" class="btn btn-success"><h4 class="text-center">Умумий чиқимлар</h4></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+                            <div class="row py-2">
+                                <div class="col-sm-11 ">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-grid gap-2">
+                                                <a asp-route-constructionId="@Model" asp-action="ConfirmSpend" asp-controller="Spend" class="btn btn-primary"><h4 class="text-center">Чиқимларни тасдиқлаш</h4></a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row pt-3 pb-2">
-                            <div class="col-sm-11 ">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="d-grid gap-2">
-                                            <a asp-route-constructionId="@Model" asp-action="GetAllConfirmedForAdmin" asp-controller="Spend" class="btn btn-success"><h4 class="text-center">Умумий чиқимлар</h4></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                            </div>
-                        </div>
-                        <div class="row py-2">
-                            <div class="col-sm-11 ">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="d-grid gap-2">
-                                            <a asp-route-constructionId="@Model" asp-action="GetAllNoConfirmedForAdmin" asp-controller="Spend" class="btn btn-danger"><h4 class="text-center">Тасдиқланмаган чиқимлар</h4></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-
-                        <div class="col-sm-11 ">
-                            <div class="card">
-                                <div class="card-body">
-                                    <br />
-                                    <h4 class="card-title text-center">Киримлар</h4>
-                                    <br />
-                                </div>
-                            </div>
-                        </div>
-                    </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                        <div class="row py-2">
-                            <div class="col-sm-11 ">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="d-grid gap-2">
-                                            <a asp-route-constructionId="@Model" asp-action="AddIn" asp-controller="In" class="btn btn-primary"><h4 class="text-center">Янги кирим қу́шиш</h4></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row pt-3 pb-2">
-                            <div class="col-sm-11 ">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="d-grid gap-2">
-                                            <a asp-route-constructionId="@Model" asp-action="GetAllConfirmedForAdmin" asp-controller="In" class="btn btn-success"><h4 class="text-center">Тасдиқланган киримлар</h4></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row py-2">
-                            <div class="col-sm-11 ">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="d-grid gap-2">
-                                            <a asp-route-constructionId="@Model" asp-action="GetAllNoConfirmedForAdmin" asp-controller="In" class="btn btn-danger"><h4 class="text-center">Тасдиқланмаган киримлар</h4></a>
+                           
+                            <div class="row py-2">
+                                <div class="col-sm-11 ">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-grid gap-2">
+                                                <a asp-route-constructionId="@Model" asp-action="GetAllNoConfirmedForAdmin" asp-controller="Spend" class="btn btn-danger"><h4 class="text-center">Тасдиқланмаган чиқимлар</h4></a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -127,13 +77,73 @@
                         </div>
                     </div>
                 </div>
-                <br />
-                <br />
+                <div class="accordion-item col-6">
+                    <br />
+                    <br />
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <div class="col-sm-11 ">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <br />
+                                        <h4 class="card-title text-center">Киримлар</h4>
+                                        <br />
+                                    </div>
+                                </div>
+                            </div>
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="row py-2">
+                                <div class="col-sm-11 ">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-grid gap-2">
+                                                <a asp-route-constructionId="@Model" asp-action="AddIn" asp-controller="In" class="btn btn-primary"><h4 class="text-center">Янги кирим қу́шиш</h4></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-3 pb-2">
+                                <div class="col-sm-11 ">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-grid gap-2">
+                                                <a asp-route-constructionId="@Model" asp-action="GetAllConfirmedForAdmin" asp-controller="In" class="btn btn-success"><h4 class="text-center">Тасдиқланган киримлар</h4></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row py-2">
+                                <div class="col-sm-11 ">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-grid gap-2">
+                                                <a asp-route-constructionId="@Model" asp-action="GetAllNoConfirmedForAdmin" asp-controller="In" class="btn btn-danger"><h4 class="text-center">Тасдиқланмаган киримлар</h4></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                </div>
             </div>
         </div>
-                <div class="d-grid gap-3">
-            <a asp-action="GetAllConstruction" asp-controller="Construction" class="btn btn-primary m-3"><h4 class="text-center">Орқага</h4></a>
-                </div>
+        <div class="row">
+            <div class="col-2">
+            </div>
+            <div class="d-grid gap-3 col-8">
+                <a asp-action="GetAllConstruction" asp-controller="Construction" class="btn btn-primary m-3"><h4 class="text-center">Орқага</h4></a>
+            </div>
+            <div class="col-2">
+            </div>
+        </div>
     </div>
-    <div class="col-2"></div>
+    <div class="col-1"></div>
 </div>

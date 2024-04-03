@@ -61,7 +61,7 @@
             <tr>
                 <th scope="col"></th>
                 <th class="text-center" scope="col">Вақти</th>
-                <th class="text-center" scope="col">Нархи</th>
+                <th class="text-center" scope="col">Суммаси</th>
                 <th class="text-center" scope="col">Чиқим тури</th>
                 <th class="text-center" scope="col">Сабаби</th>
                 <th scope="col">Тасдиқлаш</th>
@@ -217,4 +217,9 @@
     function formatNumber(number) {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
+    function removeTeg() {
+        var element = document.getElementById("HtmlTeg");
+        element.parentNode.removeChild(element);
+    }
+    setTimeout(removeTeg, 3000);
 </script>

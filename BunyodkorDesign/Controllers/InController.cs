@@ -103,33 +103,29 @@ public class InController : Controller
         {
             try
             {
-
                 foreach (var item in ins)
                 {
                     item.IsConfirmed = true;
                     user!.Residual += item.Price;
-                }
-
-                _appDbContext.Ins.UpdateRange(ins);
-                var result = await _appDbContext.SaveChangesAsync();
-                if (result > 0)
-                {
-                    foreach (var item in ins)
+                    _appDbContext.Ins.Update(item);
+                    var result = await _appDbContext.SaveChangesAsync();
+                    if (result <= 0)
                     {
-                        user!.Construction!.In += item.Price;
-                        user.Construction.InDate = DateTime.Now;
+                        throw new();
                     }
+                    user!.Construction!.In += item.Price;
+                    user.Construction.InDate = DateTime.Now;
                     _appDbContext.Constructions.Update(user!.Construction!);
-                    await _appDbContext.SaveChangesAsync();
-                    ins = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList()!;
-                    transaction.Commit();
-                    ViewData["result"] = result-1;
-                    return View(ins);
+                    result = await _appDbContext.SaveChangesAsync();
+                    if (result <= 0)
+                    {
+                        throw new();
+                    }
                 }
-                else
-                {
-                    throw new();
-                }
+                transaction.Commit();
+                ViewData["result"] = ins.Count;
+                ins = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList()!;
+                return View(ins);
             }
             catch (Exception)
             {
@@ -179,16 +175,47 @@ public class InController : Controller
             return View(inDto);
         }
         In @in = _mapper.Map<In>(inDto);
-        @in.User = user;
-        @in.Date = DateTime.Now;
-        await _appDbContext.Ins.AddAsync(@in);
-        var result = await _appDbContext.SaveChangesAsync();
-        var inResult = new AddInDto()
+
+        using (var transaction = _appDbContext.Database.BeginTransaction())
         {
-            ConstructionId = inDto.ConstructionId
-        };
-        ViewData["result"] = result;
-        return View(inResult);
+            try
+            {
+                @in.User = user;
+                @in.Date = DateTime.Now;
+                await _appDbContext.Ins.AddAsync(@in);
+                var result = await _appDbContext.SaveChangesAsync();
+                if(result<=0)
+                {
+                    throw new();
+                }
+                var adminId= HttpContext.Session.GetString("AdminId");
+                if (adminId is null)
+                    return RedirectToAction(actionName: "LogOut", controllerName: "User");
+                var admin =await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == adminId);
+
+
+                admin!.Residual -= @in.Price;
+                _appDbContext.Users.Update(admin);
+                result =await _appDbContext.SaveChangesAsync();
+
+                if (result <= 0)
+                {
+                    throw new();
+                }
+                var inResult = new AddInDto()
+                {
+                    ConstructionId = inDto.ConstructionId
+                };
+                transaction.Commit();
+                ViewData["result"] = result;
+                return View(inResult);
+            }
+            catch(Exception)
+            {
+                transaction.Rollback();
+            }
+        }
+        return View(inDto);
     }
 
 

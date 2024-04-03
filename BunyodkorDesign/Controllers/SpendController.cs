@@ -176,7 +176,7 @@ public class SpendController : Controller
                         Spends = entities
                     };
                     transaction.Commit();
-                    ViewData["result"] = result-1;
+                    ViewData["result"] = result - 1;
                     return View(resultSpendsConfirming);
                 }
                 else
@@ -267,14 +267,53 @@ public class SpendController : Controller
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
 
-
         string? userId = HttpContext.Session.GetString("AdminId");
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
 
         ViewData["Residual"] = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Residual;
+        var resultSpend = new List<GettingPersonalSpend>();
+
+        List<AdminSpend> adminSpends = _appDbContext.AdminSpends.Where(x => x.IsCash ?? false).ToList();
+
+        foreach (var item in adminSpends)
+        {
+            var adminSpend = new GettingPersonalSpend();
+            adminSpend.Construction = item.Construction;
+            adminSpend.Date = item.CreatedDate;
+            adminSpend.Price = item.Price ?? 0;
+            adminSpend.Reason = item.Reason;
+            adminSpend.SpendType = item.SpendType;
+            resultSpend.Add(adminSpend);
+        }
+
+        List<In> ins = _appDbContext.Ins.Where(x => x.UserId.ToString() != userId).ToList();
+
+        foreach (var item in ins)
+        {
+            var inSpend = new GettingPersonalSpend();
+            inSpend.Construction = item.User.Construction!;
+            inSpend.Date = item.Date;
+            inSpend.Price = item.Price;
+            inSpend.Reason = item.Reason;
+            inSpend.SpendType = new SpendType() { Name = "Прорапга кирим" };
+            resultSpend.Add(inSpend);
+        }
+
         List<Spend> spends = await _appDbContext.Spends.Where(x => x.UserId.ToString() == userId).ToListAsync();
-        return View(spends);
+
+        foreach (var item in spends)
+        {
+            var spend = new GettingPersonalSpend();
+            spend.Construction = new Construction() { FullName = "Умумий чиқим" };
+            spend.Date = item.Date;
+            spend.Price = item.Price;
+            spend.Reason = item.Reason;
+            spend.SpendType = item.SpendType;
+            resultSpend.Add(spend);
+        }
+        resultSpend = resultSpend.OrderByDescending(x => x.Date).ToList();
+        return View(resultSpend);
     }
 
 

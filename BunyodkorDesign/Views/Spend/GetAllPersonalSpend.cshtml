@@ -3,7 +3,7 @@
 @{
     Layout = "_AdminLayout";
 }
-@model List<Spend>
+@model List<GettingPersonalSpend>
 <br />
 
 <div class="row py-2 ms-2">
@@ -38,7 +38,8 @@
         <tr>
             <th class="text-center" scope="col"></th>
             <th class="text-center" scope="col">Вақти</th>
-            <th class="text-center" scope="col">Нархи</th>
+            <th class="text-center" scope="col">Суммаси</th>
+            <th class="text-center" scope="col">Обьекти</th>               
             <th class="text-center" scope="col">Чиқим тури </th>
             <th class="text-center" scope="col">Сабаби</th>
         </tr>
@@ -49,6 +50,9 @@
             </td>
             <td class="price">
                 <input class="form-control" type="text" id="PriceFilter" placeholder="Қидирмоқ...">
+            </td>
+            <td>
+                <input type="text" class="form-control" id="ConstructionFilter" placeholder="Қидирмоқ...">
             </td>
             <td>
                 <input type="text" class="form-control" id="SpendTypeFilter" placeholder="Қидирмоқ...">
@@ -67,6 +71,7 @@
                             <th scope="row">@count</th>
                             <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
                             <td id="formattedNumberPrice" class="text-center price">@item.Price</td>
+                            <td class="text-center">@item.Construction.FullName</td>
                             <td class="text-center">@item.SpendType.Name</td>
                             <td class="text-center">@item.Reason</td>
                         </tr>
@@ -76,8 +81,9 @@
                         <th scope="row">Жами</th>
                         <td></td>
                         <th class="text-center" id="totalPrice"></th>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
         }
     </tbody>
@@ -128,6 +134,7 @@
     function filterTable() {
         var vaktFilter = document.getElementById("DateFilter").value.toLowerCase();
         var narxFilter = document.getElementById("PriceFilter").value.toLowerCase();
+        var constructionFilter = document.getElementById("ConstructionFilter").value.toLowerCase();
         var chiqimFilter = document.getElementById("SpendTypeFilter").value.toLowerCase();
         var sababFilter = document.getElementById("ReasonFilter").value.toLowerCase();
 
@@ -136,10 +143,11 @@
         rows.forEach(function (row) {
             var vakti = row.cells[1].innerText.toLowerCase();
             var narxi = row.cells[2].innerText.toLowerCase();
-            var chiqimTuri = row.cells[3].innerText.toLowerCase();
-            var sababi = row.cells[4].innerText.toLowerCase();
+            var obyekti = row.cells[3].innerText.toLowerCase();
+            var chiqimTuri = row.cells[4].innerText.toLowerCase();
+            var sababi = row.cells[5].innerText.toLowerCase();
             var priceFormat = parseFloat(row.cells[2].innerText.replace(/\s/g, ''));
-            if (vakti.includes(vaktFilter) && narxi.includes(narxFilter) && chiqimTuri.includes(chiqimFilter) && sababi.includes(sababFilter)) {
+            if (obyekti.includes(constructionFilter) && vakti.includes(vaktFilter) && narxi.includes(narxFilter) && chiqimTuri.includes(chiqimFilter) && sababi.includes(sababFilter)) {
                 var price = priceFormat;
                 totalAmount += price;
                 row.style.display = "";

@@ -40,6 +40,7 @@
             <th class="text-center" scope="col"><span>Кирими</span></th>
             <th class="text-center" scope="col"><span>Қолдиги</span></th>
             <th class="text-center" scope="col"><span>Номери</span></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -58,6 +59,9 @@
                     <td class="price text-center"><span id="In">@item.In</span></td>
                     <td class="residual text-center"><span id="formattedNumber">@item.User.Residual</span></td>
                     <td class="text-center" id="phoneNumber"><p>@item.User.PhoneNumber</p></td>
+                    <td class="text-center">
+                        <a asp-action="UpdateUserForAdmin" asp-controller="User" asp-route-constructionId="@item.Id" class="btn btn-secondary">Ўзгартириш</a>
+                    </td>
                 </tr>
                 count++;
             }
@@ -69,7 +73,7 @@
                 <td class="text-center"></td>
                 <td class="text-center"><span id="totalPrice"></span></td>
                 <td class="text-center"><span id="totalResidual"></span></td>
-                <td class="text-center"></td>
+                <td colspan="2"></td>
             </tr>
         }
     </tbody>

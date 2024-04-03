@@ -2,7 +2,7 @@
 @{
     Layout = "_Layout";
 }
-@model UserUpdate;
+@model UserUpdateAdmin;
 @{
     if (ViewData["result"] is not null)
     {
@@ -79,19 +79,9 @@
 </style>
 
 
-<form id="form" asp-action="UpdateUser" method="post">
+<form id="form" asp-action="UpdateUserForAdmin" method="post">
 
     <input type="hidden" id="Id" name="Id" value="@Model.Id" />
-
-    <div class="form-control">
-        <label for="FullName" id="FullName">
-            Исм-фамилия
-        </label>
-        <input type="text" id="FullName" name="FullName"
-               placeholder="Исм фамилийангизни киритинг..." />
-        <span class="text-danger" asp-validation-for="FullName"></span>
-    </div>
-
 
     <div class="form-control">
         <label for="Login" id="UserName">
@@ -100,16 +90,6 @@
         <input type="text" id="Login" name="Login"
                placeholder="Логин киритинг..." />
         <span class="text-danger" asp-validation-for="Login"></span>
-    </div>
-
-
-    <div class="form-control">
-        <label for="PhoneNumber">
-            Телефон номер
-        </label>
-        <input type="text" id="InputFormat" name="PhoneNumber" oninput="formatNumber()"
-               value="+998" placeholder="Телефон номерингизни киритинг..." />
-        <span class="text-danger" asp-validation-for="PhoneNumber"></span>
     </div>
 
 
@@ -139,7 +119,7 @@
             </button>
         </div>
         <div class="col-5 d-flex justify-content-end">
-            <a asp-action="LogOut" asp-controller="User" class="btn btn-primary m-4 px-5">Орқага</a>
+            <a asp-action="GetAllDetails" asp-controller="Construction" class="btn btn-primary m-4 px-5">Орқага</a>
         </div>
         <div class="col-1"></div>
     </div>

@@ -60,7 +60,7 @@
             <tr>
                 <th scope="col"></th>
                 <th class="text-center" scope="col">Вақти</th>
-                <th class="text-center" scope="col">Нархи</th>
+                <th class="text-center" scope="col">Суммаси</th>
                 <th class="text-center" colspan="2">Сабаби</th>
                 <th scope="col">Tасдиклаш</th>
             </tr>
@@ -194,4 +194,9 @@
         const date = new Date();
         document.getElementById("demo").innerHTML = date.toLocaleTimeString();
     }
+    function removeTeg() {
+        var element = document.getElementById("HtmlTeg");
+        element.parentNode.removeChild(element);
+    }
+    setTimeout(removeTeg, 3000);
 </script>
