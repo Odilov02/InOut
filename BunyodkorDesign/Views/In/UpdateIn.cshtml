@@ -1,0 +1,154 @@
+﻿@using Application.Common.Dtos.InDtos;
+@{
+    Layout = "_AdminLayout";
+}
+@model UpdateInDto
+@{
+    if (ViewData["result"] is not null)
+    {
+        if ((int)ViewData["result"]! > 0)
+        {
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col-8 mt-3">
+                    <h3 style="background-color: rgb(132, 253, 184);" class="shadow rounded text-center py-3" id="HtmlTeg">
+                        Маьлумотлар муваффақиятли ўзгартирилди
+                    </h3>
+                </div>
+                <div class="col"></div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col-8 mt-3">
+                    <h3 style="background-color: rgb(252, 113, 109);" class="shadow  rounded text-center py-3" id="HtmlTeg">
+                        Маьлумотлар ўзгартирилмади
+                    </h3>
+                </div>
+                <div class="col"></div>
+            </div>
+        }
+    }
+}
+<style>
+    /* Styling the Form (Color, Padding, Shadow) */
+    form {
+        background-color: #fff;
+        max-width: 670px;
+        margin: 30px auto;
+        padding: 30px 20px;
+        box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Styling form-control Class */
+    .form-control {
+        text-align: left;
+        margin-bottom: 25px;
+    }
+
+        /* Styling form-control Label */
+        .form-control label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Styling form-control input,
+                                select, textarea */
+        .form-control input,
+        .form-control select,
+        .form-control textarea {
+            border: 1px solid #777;
+            border-radius: 2px;
+            font-family: inherit;
+            padding: 10px;
+            display: block;
+            width: 95%;
+        }
+
+            /* Styling form-control Radio
+                                button and Checkbox */
+            .form-control input[type="radio"],
+            .form-control input[type="checkbox"] {
+                display: inline-block;
+                width: auto;
+            }
+</style>
+<!-- Create Form -->
+<form id="form" asp-action="UpdateIn" method="post">
+    <h3 class="mx-2" id="demo"></h3>
+    <!-- Details -->
+    <div class="form-control">
+        <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+        <label for="Price" id="in">
+            Сумма
+        </label>
+
+        <!-- Input Type Text -->
+        <input type="text" name="Price" id="inInputFormat" oninput="formatNumber()"
+               placeholder="Суммани киритинг..." value="@Model.Price" />
+        <span class="text-danger" asp-validation-for="Price"></span>
+    </div>
+    <div class="form-control">
+        <label for="comment">
+            Кирим сабаби
+        </label>
+
+        <!-- multi-line text input control -->
+        <textarea name="Reason" id="Reason"
+                  placeholder="Кирим сабабини киритинг...">@Model.Reason</textarea>
+        <span class="text-danger" asp-validation-for="Reason"></span>
+    </div>
+
+    <!-- Multi-line Text Input Control -->
+    <div class="row">
+        <div class="col-xs-0 col-md-1">
+        </div>
+        <div class="col-4 mx-2 mx-md-1">
+            <button type="submit" class="btn btn-success my-4 px-5" onclick="submitNumber()">
+                Сақлаш
+            </button>
+        </div>
+        <div class="col-5 mx-4 d-flex justify-content-end">
+            <a asp-action="GetAllNoConfirmedForAdmin" asp-controller="In" asp-route-constructionId="@ViewData["constructionId"]" class="btn btn-primary my-4 px-5">Орқага</a>
+        </div>
+        <div class="col-1"></div>
+    </div>
+</form>
+<script>
+    var input = document.getElementById("inInputFormat");
+    var price = @Model.Price; // Bu qatorda Modeldan Price maydonidagi qiymatni olish uchun qo'shimcha kodni yozing.
+    var value = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    input.value = value;
+    const myInterval = setInterval(myTimer);
+
+    function myTimer() {
+        const date = new Date();
+        document.getElementById("demo").innerHTML = date.toLocaleTimeString();
+    }
+    function formatNumber() {
+        let input = document.getElementById('inInputFormat');
+        let value = input.value.replace(/\D/g, '');
+        let formattedValue = '';
+        for (let i = 0; i < value.length; i++) {
+            if (i > 0 && (value.length - i) % 3 === 0 && i !== value.length) {
+                formattedValue += ' ';
+            }
+            formattedValue += value.charAt(i);
+        }
+        input.value = formattedValue;
+    }
+    function submitNumber() {
+        var input = document.getElementById('inInputFormat');
+        let value = input.value.replace(/\s/g, '');
+        input.value = value;
+    }
+    function removeTeg() {
+        var element = document.getElementById("HtmlTeg");
+        element.parentNode.removeChild(element);
+    }
+    setTimeout(removeTeg, 3000);
+</script>

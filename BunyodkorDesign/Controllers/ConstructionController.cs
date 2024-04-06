@@ -42,13 +42,6 @@ public class ConstructionController : Controller
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
 
         var constructions = await _appDbContext.Constructions.OrderByDescending(x => x.CreatedDate).ToListAsync();
-        string? userId = HttpContext.Session.GetString("AdminId");
-        if (userId is null)
-            return RedirectToAction(actionName: "LogOut", controllerName: "User");
-
-        var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId);
-        ViewData["FullName"] = user!.FullName;
-        ViewData["PhoneNumber"] = user.PhoneNumber;
         return View(constructions);
     }
 
@@ -99,10 +92,30 @@ public class ConstructionController : Controller
         }
         var construction = _mapper.Map<Construction>(constructionDto);
         var user = _userManager.Users.FirstOrDefault(x => x.Id == construction.UserId);
-        await _appDbContext.Constructions.AddAsync(construction);
-        var result = await _appDbContext.SaveChangesAsync();
-        await _userManager.AddToRoleAsync(user!, "User");
-        ViewData["result"] = result;
+        using (var transaction = _appDbContext.Database.BeginTransaction())
+        {
+            try
+            {
+                await _appDbContext.Constructions.AddAsync(construction);
+                var result = await _appDbContext.SaveChangesAsync();
+                if(result<=0)
+                {
+                    throw new();
+                }
+
+                IdentityResult r = await _userManager.AddToRoleAsync(user!, "User");
+                if(!r.Succeeded)
+                {
+                    throw new();
+                }
+                transaction.Commit();
+                ViewData["result"] = result;
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+            }
+        }
         var newUsersAll = _userManager.Users.ToList();
         List<User> newUsers = new List<User>();
         foreach (var item in newUsersAll)
@@ -130,7 +143,7 @@ public class ConstructionController : Controller
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
 
 
-        List<Construction> constructions = _appDbContext.Constructions.ToList();
+        List<Construction> constructions = _appDbContext.Constructions.OrderByDescending(x=>x.CreatedDate).ToList();
         return View(constructions);
     }
 

@@ -106,13 +106,13 @@ public class InController : Controller
                 foreach (var item in ins)
                 {
                     item.IsConfirmed = true;
-                    user!.Residual += item.Price;
                     _appDbContext.Ins.Update(item);
                     var result = await _appDbContext.SaveChangesAsync();
                     if (result <= 0)
                     {
                         throw new();
                     }
+                    user!.Residual += item.Price;
                     user!.Construction!.In += item.Price;
                     user.Construction.InDate = DateTime.Now;
                     _appDbContext.Constructions.Update(user!.Construction!);
@@ -336,5 +336,122 @@ public class InController : Controller
             }
         }
         return View(personalIn);
+    }
+
+
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> UpdateIn(Guid id)
+    {
+        var @in =await _appDbContext.Ins.FirstOrDefaultAsync(x => x.Id == id);
+        UpdateInDto inDto = _mapper.Map<UpdateInDto>(@in);
+        ViewData["constructionId"] = @in!.User.Construction!.Id;
+        return View(inDto);
+    }
+
+
+
+    [Authorize(Roles = "Admin")]
+    [HttpPost]
+    public async Task<IActionResult> UpdateIn(UpdateInDto inDto)
+    {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
+
+        if (!ModelState.IsValid)    
+        {
+            return View(inDto);
+        }
+        var @in =await _appDbContext.Ins.FirstOrDefaultAsync(x => x.Id == inDto.Id);
+        if(@in == null)
+        {
+            throw new();
+        }
+
+        using (var transaction = _appDbContext.Database.BeginTransaction())
+        {
+            try
+            {
+                long oldPrice = @in.Price;
+                @in.Price = inDto.Price??0;
+                @in.Reason = inDto.Reason;
+                 _appDbContext.Ins.Update(@in);
+                var result = await _appDbContext.SaveChangesAsync();
+                if (result <= 0)
+                {
+                    throw new();
+                }
+                var adminId = HttpContext.Session.GetString("AdminId");
+                if (adminId is null)
+                    return RedirectToAction(actionName: "LogOut", controllerName: "User");
+                var admin = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == adminId);
+
+
+                admin!.Residual -= @in.Price-oldPrice;
+                _appDbContext.Users.Update(admin);
+                result = await _appDbContext.SaveChangesAsync();
+
+                if (result <= 0)
+                {
+                    throw new();
+                }
+                transaction.Commit();
+                ViewData["result"] = result;
+                ViewData["constructionId"] = @in!.User.Construction!.Id;
+                UpdateInDto newInDto = _mapper.Map<UpdateInDto>(@in);
+                return View(newInDto);
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+            }
+        }
+        return View(inDto);
+    }
+
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteIn(Guid id)
+    {
+        var @in = await _appDbContext.Ins.FirstOrDefaultAsync(x => x.Id == id);
+        if (@in == null)
+        {
+            throw new();
+        }
+        Guid? constructionId = @in.User.Construction!.Id;
+        if (constructionId is null)
+        {
+            throw new();
+        }
+        var adminId = HttpContext.Session.GetString("AdminId");
+        if (adminId is null)
+            return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
+        var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == adminId);
+
+        using (var transaction = _appDbContext.Database.BeginTransaction())
+        {
+            try
+            {
+                user!.Residual += @in.Price;
+                _appDbContext.Users.Update(user);
+                var result = await _appDbContext.SaveChangesAsync();
+                if (result <= 0)
+                {
+                    throw new();
+                }
+                _appDbContext.Ins.Remove(@in);
+                result = await _appDbContext.SaveChangesAsync();
+                if (result <= 0)
+                {
+                    throw new();
+                }
+                transaction.Commit();
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+            }
+        }
+        return RedirectToAction(actionName: "GetAllNoConfirmedForAdmin", new { constructionId = constructionId });
     }
 }

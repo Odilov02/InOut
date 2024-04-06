@@ -123,11 +123,10 @@ public class UserController : Controller
             return RedirectToAction("GetAllConstruction","User");
         UserUpdateAdmin userUpdate = new()
         {
-            Id = user!.Id
+            Id = user!.Id,
         };
         return View(userUpdate);
     }
-
 
     [Authorize(Roles = "Admin")]
     [HttpPost]

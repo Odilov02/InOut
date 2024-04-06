@@ -7,6 +7,7 @@ public class InMapping : Profile
     public InMapping()
     {
         CreateMap<AddInDto, In>();
+        CreateMap<In, UpdateInDto>();
         CreateMap<PersonalIn, In>();
         CreateMap<In, ConfirmationIn>();
     }

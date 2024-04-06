@@ -29,7 +29,7 @@
             <th scope="col"></th>
             <th class="text-center" scope="col">Вақти</th>
             <th class="text-center" scope="col">Суммаси</th>
-            <th class="text-center" colspan="2">Сабаби</th>
+            <th class="text-center">Сабаби</th>
         </tr>
     </thead>
     <tbody>
@@ -41,13 +41,14 @@
                     <th scope="row">@count</th>
                     <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
                     <td class="text-center price"><span>@item.Price</span></td>
-                    <td class="text-center" colspan="2">@item.Reason</td>
+                    <td class="text-center">@item.Reason</td>
+                  
                 </tr>
                 count++;
             }
             <tr class="total-row">
                 <th scope="row">Жами</th>
-                <td class="text-center">/td>
+                <td class="text-center"></td>
                 <td class="text-center"><span id="totalPrice"></span></td>
                 <td class="text-center" colspan="2"></td>
             </tr>
