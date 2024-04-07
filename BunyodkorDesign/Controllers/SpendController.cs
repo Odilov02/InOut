@@ -111,6 +111,64 @@ public class SpendController : Controller
 
 
 
+    [Authorize(Roles = "User")]
+    public async Task<IActionResult> DeleteSpend(Guid id)
+    {
+        var spend = await _appDbContext.Spends.FirstOrDefaultAsync(x => x.Id == id);
+        if (spend == null) throw new();
+        Guid? constructionId = spend.User.Construction!.Id;
+        if (constructionId == null) throw new();
+        _appDbContext.Spends.Remove(spend);
+        await _appDbContext.SaveChangesAsync();
+        return RedirectToAction(actionName: "GetAllNoConfirmed", controllerName: "Spend", new { constructionId = constructionId });
+    }
+
+
+
+    [Authorize(Roles = "User")]
+    public async Task<IActionResult> UpdateSpend(Guid id)
+    {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        var spendTypes = _appDbContext.SpendTypes.ToList();
+        ViewData["SpendTypes"] = spendTypes;
+        var spend = await _appDbContext.Spends.FirstOrDefaultAsync(x => x.Id == id);
+        if (spend == null) throw new();
+        var spendDto = _mapper.Map<UpdateSpendDto>(spend);
+        return View(spendDto);
+    }
+
+
+
+
+    [Authorize(Roles = "User")]
+    [HttpPost]
+    public async Task<IActionResult> UpdateSpend(UpdateSpendDto spendDto)
+    {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
+
+        if (!ModelState.IsValid)
+        {
+            ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
+            return View(spendDto);
+        }
+
+        Spend? spend = await _appDbContext.Spends.FirstOrDefaultAsync(x => x.Id == spendDto.Id);
+        if (spend is null) throw new();
+        spend.SpendType = (await _appDbContext.SpendTypes.FirstOrDefaultAsync(x => x.Id == spendDto!.SpendTypeId!))!;
+        spend.Price = spendDto.Price ?? 0;
+        spend.Reason = spendDto.Reason;
+
+        _appDbContext.Spends.Update(spend);
+        var result = await _appDbContext.SaveChangesAsync();
+        ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
+        ViewData["result"] = result;
+        return View(spendDto);
+    }
+
+
 
 
     //<<=====        Admin Action        ========>>
@@ -387,4 +445,5 @@ public class SpendController : Controller
         ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
         return View();
     }
+
 }

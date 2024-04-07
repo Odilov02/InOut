@@ -2,7 +2,7 @@
 @{
     Layout = "_UserLayout";
 }
-@model AddSpendDto
+@model UpdateSpendDto
 @{
     List<Domain.Entities.SpendType>? spendTypes = (List<Domain.Entities.SpendType>)ViewData["SpendTypes"]!;
 }
@@ -16,7 +16,7 @@
                 </div>
                 <div class="col-8 mt-3">
                     <h3 style="background-color: rgb(132, 253, 184);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
-                        Маьлумотлар муваффақиятли қўшилди
+                        Маьлумотлар муваффақиятли ўзгарилди
                     </h3>
                 </div>
                 <div class="col"></div>
@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-8 mt-3">
                     <h3 style="background-color: rgb(252, 113, 109);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
-                        Маьлумотлар қўшилмади
+                        Маьлумотлар  ўзгарилмади
                     </h3>
                 </div>
                 <div class="col"></div>
@@ -75,17 +75,22 @@
 </style>
 
 <!-- Create Form -->
-<form id="form" asp-action="AddSpend" method="post">
+<form id="form" asp-action="UpdateSpend" method="post">
     <h3 class="mx-2" id="demo"></h3>
     <!-- Details -->
+        <input type="hidden" name="Id" value="@Model.Id"/>
+
+
     <div class="form-control">
         <label for="Price" id="Price">
             Сумма
         </label>
-      
+
         <!-- Input Type Text -->
+
+
         <input type="text" id="PriceInput" name="Price"
-               placeholder="Чиқим суммасини киритинг..." oninput="formatNumber()" />
+               placeholder="Чиқим суммасини киритинг..." oninput="formatNumber()" value="@Model.Price" />
         <span class="text-danger" asp-validation-for="Price"></span>
     </div>
     <div class="form-control">
@@ -95,7 +100,6 @@
 
         <!-- Dropdown options -->
         <select name="SpendTypeId" id="SpendTypeId">
-                <option value="@null">Чиқим турини танланг!</option>
             @{
                 if (spendTypes is null)
                 {
@@ -105,7 +109,14 @@
                 {
                     foreach (var outType in spendTypes)
                     {
-                        <option value="@outType.Id">@outType.Name</option>
+                        if (outType.Id == Model.SpendTypeId)
+                        {
+                            <option value="@outType.Id" selected>@outType.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@outType.Id">@outType.Name</option>
+                        }
                     }
                 }
             }
@@ -120,7 +131,7 @@
 
         <!-- multi-line text input control -->
         <textarea name="Reason" id="Reason"
-                  placeholder="Чиқим сабабини киритинг..."></textarea>
+                  placeholder="Чиқим сабабини киритинг...">@Model.Reason</textarea>
         <span class="text-danger" asp-validation-for="Reason"></span>
     </div>
     <div class="row">
@@ -132,12 +143,16 @@
             </button>
         </div>
         <div class="col-5 mx-4 d-flex justify-content-end">
-            <a asp-action="Choose" asp-controller="Spend" asp-route-constructionId="Choose" class="btn btn-primary my-4 px-5">Орқага</a>
+            <a asp-action="GetAllNoConfirmed" asp-controller="Spend" class="btn btn-primary my-4 px-5">Орқага</a>
         </div>
         <div class="col-1"></div>
     </div>
 </form>
 <script>
+    var input = document.getElementById("PriceInput");
+    var price = @Model.Price; // Bu qatorda Modeldan Price maydonidagi qiymatni olish uchun qo'shimcha kodni yozing.
+    var value = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    input.value = value;
     const myInterval = setInterval(myTimer);
 
     function myTimer() {

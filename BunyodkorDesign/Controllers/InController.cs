@@ -342,6 +342,9 @@ public class InController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateIn(Guid id)
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
         var @in =await _appDbContext.Ins.FirstOrDefaultAsync(x => x.Id == id);
         UpdateInDto inDto = _mapper.Map<UpdateInDto>(@in);
         ViewData["constructionId"] = @in!.User.Construction!.Id;
@@ -408,6 +411,8 @@ public class InController : Controller
         }
         return View(inDto);
     }
+
+
 
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteIn(Guid id)
