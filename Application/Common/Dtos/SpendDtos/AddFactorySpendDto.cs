@@ -14,7 +14,7 @@ public class AddFactorySpendDto
     public long? Price { get; set; }
 
 
-    [Required(ErrorMessage = "Обьект танланишлиги киритилиши шарт!")]
+    [Required(ErrorMessage = "Обьект танланишлиги шарт!")]
     public Guid? ConstructionId { get; set; }
 
     [Required]

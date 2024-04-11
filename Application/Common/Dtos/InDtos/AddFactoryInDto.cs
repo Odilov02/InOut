@@ -15,9 +15,9 @@ namespace Application.Common.Dtos.InDtos
         public long? Price { get; set; }
 
 
-        [Required(ErrorMessage = "Обьект танланишлиги киритилиши шарт!")]
+        [Required(ErrorMessage = "Обьект танланишлиги шарт!")]
         public Guid? ConstructionId { get; set; }
-
+        
         [Required]
         public Guid? FactoryId { get; set; }
     }

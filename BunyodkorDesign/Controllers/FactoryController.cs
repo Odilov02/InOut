@@ -105,7 +105,8 @@ public class FactoryController : Controller
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
 
-        var inDto = new AddFactorySpendDto()
+        ViewData["Constructions"] = _appDbContext.Constructions.ToList();
+        var inDto = new AddFactoryInDto()
         {
             FactoryId = factoryId
         };
@@ -121,7 +122,7 @@ public class FactoryController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
-        ViewData["constructions"] = _appDbContext.Constructions.ToList();
+        ViewData["Constructions"] = _appDbContext.Constructions.ToList();
         if (!ModelState.IsValid)
             return View(inDto);
         var @in = _mapper.Map<In>(inDto);
@@ -165,7 +166,7 @@ public class FactoryController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
-        ViewData["constructions"] = _appDbContext.Constructions.ToList();
+        ViewData["Constructions"] = _appDbContext.Constructions.ToList();
         var spendDto = new AddFactorySpendDto()
         {
             FactoryId = factoryId
@@ -181,10 +182,12 @@ public class FactoryController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
-        ViewData["constructions"] = _appDbContext.Constructions.ToList();
+        ViewData["Constructions"] = _appDbContext.Constructions.ToList();
         if (!ModelState.IsValid)
             return View(spendDto);
         var spend = _mapper.Map<Spend>(spendDto);
+        spend.IsConfirmed = true;
+        spend.SpendType =(await _appDbContext.SpendTypes.FirstOrDefaultAsync(x => x.Name == "Қурилиш материаллар"))??new();
         var factory = await _appDbContext.Factories.FirstOrDefaultAsync(x => x.Id == spendDto.FactoryId);
 
         using (var transaction = _appDbContext.Database.BeginTransaction())
@@ -198,6 +201,11 @@ public class FactoryController : Controller
                 factory!.Spend += spend.Price;
                 _appDbContext.Factories.Update(factory);
                 result = await _appDbContext.SaveChangesAsync();
+                if (result <= 0)
+                    throw new();
+                spend.Construction!.Spend += spend.Price;
+                _appDbContext.Constructions.Update(spend.Construction);
+                result= await _appDbContext.SaveChangesAsync();
                 if (result <= 0)
                     throw new();
                 transaction.Commit();

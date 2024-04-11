@@ -116,22 +116,20 @@
         });
     });
     function filterTable() {
-        var turFilter = document.getElementById("AdminOrUserFilter").value.toLowerCase();
+        var ConstructionFilter = document.getElementById("ConstructionFilter").value.toLowerCase();
         var vaktFilter = document.getElementById("DateFilter").value.toLowerCase();
         var narxFilter = document.getElementById("PriceFilter").value.toLowerCase();
-        var chiqimFilter = document.getElementById("SpendTypeFilter").value.toLowerCase();
         var sababFilter = document.getElementById("ReasonFilter").value.toLowerCase();
 
         var rows = document.querySelectorAll("#dataTable tbody .Search");
         var totalAmount = 0;
         rows.forEach(function (row) {
-            var tur = row.cells[1].innerText.toLowerCase();
+            var Construction = row.cells[1].innerText.toLowerCase();
             var vakti = row.cells[2].innerText.toLowerCase();
             var narxi = row.cells[3].innerText.toLowerCase();
-            var chiqimTuri = row.cells[4].innerText.toLowerCase();
-            var sababi = row.cells[5].innerText.toLowerCase();
+            var sababi = row.cells[4].innerText.toLowerCase();
             var priceFormat = parseFloat(row.cells[3].innerText.replace(/\s/g, ''));
-            if (tur.includes(turFilter) && vakti.includes(vaktFilter) && narxi.includes(narxFilter) && chiqimTuri.includes(chiqimFilter) && sababi.includes(sababFilter)) {
+            if (Construction.includes(ConstructionFilter) && vakti.includes(vaktFilter) && narxi.includes(narxFilter) && sababi.includes(sababFilter)) {
                 var price = priceFormat;
                 totalAmount += price;
                 row.style.display = "";

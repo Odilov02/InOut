@@ -270,6 +270,7 @@ public class SpendController : Controller
         ViewData["constructionId"] = constructionId;
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
         List<AllSpend> allSpends = new List<AllSpend>();
+        var ss = _appDbContext.Spends.ToList();
         List<Spend> spends = await _appDbContext.Spends.Where(x => x.ConstructionId == construction!.Id && x.IsConfirmed == true).ToListAsync();
         if (spends is null)
         {

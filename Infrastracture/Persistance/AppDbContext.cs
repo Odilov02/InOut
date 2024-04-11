@@ -39,8 +39,8 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
         new SpendType
         {
             Id = Guid.NewGuid(),
-            Name = "Иш хаклари",
-            Descraption = "Иш хаклари"
+            Name = "Иш хақлари",
+            Descraption = "Иш хақлари"
         },
         new SpendType
         {
@@ -57,19 +57,19 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
         new SpendType
         {
             Id = Guid.NewGuid(),
-            Name = "Курилиш материаллар",
-            Descraption = "Курилиш материаллар харажатлари"
+            Name = "Қурилиш материаллар",
+            Descraption = "Қурилиш материаллар харажатлари"
         },
         new SpendType
         {
             Id = Guid.NewGuid(),
-            Name = "Иш куроллар",
-            Descraption = "Иш куроллар харажатлари"
+            Name = "Иш қуроллар",
+            Descraption = "Иш қуроллар харажатлари"
         },
         new SpendType
         {
             Id = Guid.NewGuid(),
-            Name = "Бошка майда харажатлар",
+            Name = "Бошқа майда харажатлар",
             Descraption = "Бошка майда харажатлар"
         });
 

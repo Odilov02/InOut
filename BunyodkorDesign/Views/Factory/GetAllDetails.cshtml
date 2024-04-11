@@ -36,8 +36,7 @@
             <th class="text-center" scope="col">Вақти</th>
             <th class="text-center" scope="col"><span>Чиқими</span></th>
             <th class="text-center" scope="col"><span>Кирими</span></th>
-            <th class="text-center" scope="col"><span>Қолдиги</span></th>
-            <th class="text-center" scope="col"><span>Номери</span></th>
+            <th class="text-center" scope="col"><span>Қарзи</span></th>
         </tr>
     </thead>
     <tbody>
@@ -49,11 +48,10 @@
                 <tr class="Search">
                     <th scope="row">@count</th>
                     <td class="text-center"><span>@item.FullName</span></td>
-                    <td class="text-center">@item.CreatedDate.ToString("dd.MM.yyyy")</td>
+                    <td class="text-center">@item.CreatedDate.ToString("HH:mm dd.MM.yyyy")</td>
                     <td class="outs text-center"><span id="Spend">@item.Spend</span></td>
                     <td class="price text-center"><span id="In">@item.In</span></td>
                     <td class="residual text-center"><span id="formattedNumber">@residual</span></td>
-                    <td class="text-center" id="phoneNumber"></td>
                 </tr>
                 count++;
             }
@@ -63,7 +61,6 @@
                 <td class="text-center"><span id="totalOuts"></span></td>
                 <td class="text-center"><span id="totalPrice"></span></td>
                 <td class="text-center"><span id="totalResidual"></span></td>
-                <td colspan="2"></td>
             </tr>
         }
     </tbody>
