@@ -5,13 +5,13 @@ namespace Application.Common.Dtos.InDtos
     public class AddFactoryInDto
     {
 
-        [Required(ErrorMessage = "Чиқим сабабини киритиш шарт!")]
-        [MaxLength(200, ErrorMessage = "Чиқим сабаби узунлиги 200 тадан кам болиш шарт!")]
+        [Required(ErrorMessage = "Кирим сабабини киритиш шарт!")]
+        [MaxLength(200, ErrorMessage = "Кирим сабаби узунлиги 200 тадан кам болиш шарт!")]
         public string Reason { get; set; }
 
 
-        [Required(ErrorMessage = "Чиқим сумма киритиш шарт!")]
-        [Range(1, long.MaxValue, ErrorMessage = "Чиқим сумма киритиш шарт!")]
+        [Required(ErrorMessage = "Кирим сумма киритиш шарт!")]
+        [Range(1, long.MaxValue, ErrorMessage = "Кирим сумма киритиш шарт!")]
         public long? Price { get; set; }
 
 
