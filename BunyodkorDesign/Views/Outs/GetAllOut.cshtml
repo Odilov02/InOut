@@ -1,0 +1,181 @@
+﻿@using Application.Common.Models;
+@using Domain.Entities;
+@{
+    Layout = "_AdminLayout";
+}
+<br />
+<br />
+@model List<Out>
+<div class="row py-2">
+    <div class="col-4">
+        <h2 class="text-center">Шахсий чиқимлар</h2>
+    </div>
+    <div class="col-2 py-2">
+        <div class="contianer">
+            <div class="form-group">
+                <div class="input-group" value=" ">
+                    <input type="text" id="Search" placeholder="Қидирмоқ..." class="form-control ">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-2 py-2">
+        <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
+    </div>
+    <div class="col-2 py-2">
+        <a asp-action="AddOut" asp-controller="Outs" class="btn btn-outline-success px-3">Чиқим қўшиш</a>
+    </div>
+  <div class="col-2 py-2">
+        <a asp-action="GetAllDetailsForSuperAdmin" asp-controller="Construction" class="btn btn-primary px-3">Орқага</a>
+    </div>
+</div>
+<table id="dataTable" class="table table-bordered table-success table-striped table-hover">
+    <thead>
+        <tr>
+            <th class="text-center" scope="col"></th>
+            <th class="text-center" scope="col">Обьекти</th>
+            <th class="text-center" scope="col">Вақти</th>
+            <th class="text-center" scope="col">Суммаси</th>
+            <th class="text-center" scope="col">Сабаби</th>
+        </tr>
+        <tr id="filterRow">
+            <td></td>
+            <td>
+                <input type="text" class="form-control" id="ConstructionFilter" placeholder="Қидирмоқ.." />
+            </td>
+            <td>
+                <input type="text" class="form-control" id="DateFilter" placeholder="Қидирмоқ..." />
+            </td>
+            <td class="price">
+                <input class="form-control" type="text" id="PriceFilter" placeholder="Қидирмоқ...">
+            </td>
+            <td>
+                <input type="text" class="form-control" id="ReasonFilter" placeholder="Қидирмоқ...">
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int count = 1;
+            foreach (var item in Model)
+            {
+                <tr class="Search">
+                    <th scope="row">@count</th>
+                    <td class="text-center">@item.Construction.FullName</td>
+                    <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
+                    <td id="formattedNumberPrice" class="text-center price">@item.Price</td>
+                    <td class="text-center">@item.Reason</td>
+                </tr>
+                count++;
+            }
+            <tr class="total-row">
+                <th scope="row">Жами</th>
+                <td colspan="2"></td>
+                <th class="text-center" id="totalPrice"></th>
+                <td></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        function contains(text_one, text_two) {
+            return text_one.indexOf(text_two) != -1;
+        }
+
+        $("#Search").keyup(function () {
+            var searchtext = $("#Search").val().toLowerCase();
+
+            // Barcha yashirilgan qatorlarni olib tashlash
+            var hiddenRows = $(".Search:hidden");
+
+            // Barcha yashirilgan qatorlarni hiddenRowsContainer ga joylashtirish
+            $("#hiddenRowsContainer").empty(); // Avvalgi ma'lumotlarni tozalash
+            $("#hiddenRowsContainer").append(hiddenRows);
+
+
+            $(".Search").each(function () {
+                if (!contains($(this).text().toLowerCase(), searchtext)) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+            });
+            var totalAmount = 0;
+
+            $(".Search:visible .price").each(function () {
+                var price = parseFloat($(this).text().replace(/\s/g, ''));
+                totalAmount += price;
+            });
+
+            // Jami pricelarni chiqarish
+            document.getElementById("totalPrice").innerText = totalAmount.toLocaleString('en').replace(/,/g, ' ');
+        });
+    });
+    function filterTable() {
+        var obyektFilter = document.getElementById("ConstructionFilter").value.toLowerCase();
+        var vaktFilter = document.getElementById("DateFilter").value.toLowerCase();
+        var narxFilter = document.getElementById("PriceFilter").value.toLowerCase();
+        var sababFilter = document.getElementById("ReasonFilter").value.toLowerCase();
+
+        var rows = document.querySelectorAll("#dataTable tbody .Search");
+        var totalAmount = 0;
+        rows.forEach(function (row) {
+            var obyekti = row.cells[1].innerText.toLowerCase();
+            var vakti = row.cells[2].innerText.toLowerCase();
+            var narxi = row.cells[3].innerText.toLowerCase();
+            var sababi = row.cells[4].innerText.toLowerCase();
+            var priceFormat = parseFloat(row.cells[3].innerText.replace(/\s/g, ''));
+            if (obyekti.includes(obyektFilter) && vakti.includes(vaktFilter) && narxi.includes(narxFilter) && sababi.includes(sababFilter)) {
+                var price = priceFormat;
+                totalAmount += price;
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+            row.cells[3].innerText = priceFormat.toLocaleString('en').replace(/,/g, ' ');
+            document.getElementById("totalPrice").innerText = totalAmount.toLocaleString('en').replace(/,/g, ' ');
+        });
+    }
+
+    // Input o'zgarishlari uchun filtratsiya qilish
+    document.querySelectorAll("#filterRow input").forEach(function (input) {
+        input.addEventListener("keyup", filterTable);
+    });
+
+    filterTable();
+
+
+
+    //<=======================================>
+    function exportToExcel() {
+        const table = document.getElementById('dataTable');
+        const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+
+        function s2ab(s) {
+            const buf = new ArrayBuffer(s.length);
+            const view = new Uint8Array(buf);
+            for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        }
+
+        const blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
+        const fileName = "data.xlsx";
+
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, fileName);
+        } else {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            document.body.appendChild(a);
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+    }
+</script>
+

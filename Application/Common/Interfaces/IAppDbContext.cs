@@ -9,9 +9,11 @@ public interface IAppDbContext
     EntityEntry Entry(object entity);
     DbSet<In> Ins { get; }
     DbSet<Spend> Spends { get; }
-    DbSet<AdminSpend> AdminSpends { get; }
+    DbSet<Document> Documents { get; }
+    DbSet<Factory> Factories { get; }
     DbSet<SpendType> SpendTypes { get; }
     DbSet<Construction> Constructions { get; }
     DbSet<User> Users { get; }
+    public DbSet<Out> Outs { get; set; }
     Task<int> SaveChangesAsync(CancellationToken token = default);
 }

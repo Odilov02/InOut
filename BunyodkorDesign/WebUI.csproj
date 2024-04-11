@@ -30,4 +30,8 @@
     <ProjectReference Include="..\Infrastracture\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Documents\" />
+  </ItemGroup>
+
 </Project>

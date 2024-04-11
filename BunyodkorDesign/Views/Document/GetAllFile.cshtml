@@ -1,0 +1,108 @@
+﻿@using Domain.Entities;
+@{
+    Layout = "_AdminLayout";
+}
+@model List<Document>
+<br />
+<div class="row py-2">
+    <div class="col-4">
+        <h2 class="text-center">Барча хужжатлар </h2>
+    </div>
+    <div class="col-3 py-2">
+        <div class="contianer">
+            <div class="form-group">
+                <div class="input-group" value=" ">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+                    <input type="text" id="Search" placeholder="Қидирмоқ..." class="form-control ">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3 py-2">
+        <a asp-action="AddFile" asp-controller="Document" class="btn btn-success">Хужжат қўшиш</a>
+    </div>
+    <div class="col-2 py-2">
+        <a asp-action="GetAllDetails" asp-controller="Construction" class="btn btn-outline-primary">Орқага</a>
+    </div>
+</div>
+
+<table id="dataTable" class="table table-bordered table-success table-striped">
+    <thead>
+        <tr class="my-5">
+            <th scope="col"></th>
+            <th class="text-center" scope="col">Вақти</th>
+            <th class="text-center" scope="col">Номи</th>
+            <th class="text-center" scope="col">Маьлумот</th>
+            <th class="text-center" scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int count = 1;
+            foreach (var item in Model)
+            {
+                <tr class="Search my-5 py-5">
+                    <th scope="row">@count</th>
+                    <td class="text-center">@item.Time.ToString("HH:mm dd.MM.yyyy")</td>
+                    <td class="text-center price"><span>@item.Name</span></td>
+                    <td class="text-center price"><span>@item.Description</span></td>
+                    <td class="text-center">
+                        <a asp-action="DownloadFile" asp-controller="Document" asp-route-id="@item.Id" class="btn btn-success">Йуклаб олиш</a>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@item.Id">
+                            Ўчириш
+                        </button>
+                        <div class="modal fade" id="@item.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="@item.Id+Label" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-danger text-white">
+                                        <h2 class="modal-title mx-5" id="@item.Id+Label">Файлни ўчириш</h2>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body bg-info text-dark">
+                                        <h3 class="mx-4">Файл номи:</h3>
+                                        <h5 class="mx-4 ">@item.Name</h5>
+                                        <h3 class="mx-4">Вақти:</h3>
+                                        <h5 class="mx-4">@item.Time.ToString("HH:mm dd.MM.yyyy")</h5>
+                                        <h3 class="mx-4">Маьлумот:</h3>
+                                        <h5 class="mx-4">@item.Description</h5>
+                                    </div>
+                                    <div class="modal-footer bg-info text-dark">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Орқага</button>
+                                        <a asp-action="DeleteFile" asp-controller="Document" asp-route-id="@item.Id" class="btn btn-danger">Ўчириш</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                count++;
+            }
+        }
+    </tbody>
+</table>
+<script>
+
+    $(document).ready(function () {
+        function contains(text_one, text_two) {
+            return text_one.indexOf(text_two) != -1;
+        }
+
+        $("#Search").keyup(function () {
+            var searchtext = $("#Search").val().toLowerCase();
+
+            var hiddenRows = $(".Search:hidden");
+
+            $("#hiddenRowsContainer").empty();
+            $("#hiddenRowsContainer").append(hiddenRows);
+
+
+            $(".Search").each(function () {
+                if (!contains($(this).text().toLowerCase(), searchtext)) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+            });
+        });
+    });
+</script>

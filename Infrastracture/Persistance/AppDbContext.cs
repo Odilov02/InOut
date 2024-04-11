@@ -10,31 +10,32 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
 {
     public DbSet<In> Ins { get; set; }
     public DbSet<Spend> Spends { get; set; }
-    public DbSet<AdminSpend> AdminSpends { get; set; }
+    public DbSet<Factory> Factories { get; set; }
+    public DbSet<Document> Documents { get; set; }
     public DbSet<Construction> Constructions { get; set; }
     public DbSet<SpendType> SpendTypes { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Out> Outs { get; set; }
     public AppDbContext(DbContextOptions<AppDbContext> options)
        : base(options)
     {
-    }
-    public AppDbContext()
-    {
-        
     }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<SpendType>().HasData(new SpendType
         {
-            Id=Guid.NewGuid(),
+            Id = Guid.NewGuid(),
             Name = "У́зимизни ишчилар",
             Descraption = "У́зимизни ишчилар харажатлари"
         },
+
         new SpendType
         {
             Id = Guid.NewGuid(),
             Name = "Озик-овкат",
             Descraption = "Озик-овкат харажатлари"
         },
+
         new SpendType
         {
             Id = Guid.NewGuid(),
@@ -72,24 +73,25 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
             Descraption = "Бошка майда харажатлар"
         });
 
-        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         Guid adminId = Guid.NewGuid();
-        Guid roleId = Guid.NewGuid();
+        Guid adminRoleId = Guid.NewGuid();
+        Guid superAdminId = Guid.NewGuid();
+        Guid superAdminRoleId = Guid.NewGuid();
 
         builder.Entity<Role>().HasData(new Role
         {
             Name = "SuperAdmin",
             NormalizedName = "SUPERADMIN",
-            Id = Guid.NewGuid(),
+            Id = superAdminRoleId,
         });
 
         builder.Entity<Role>().HasData(new Role
         {
             Name = "Admin",
             NormalizedName = "ADMIN",
-            Id = roleId,
-            ConcurrencyStamp = Guid.NewGuid().ToString(),
+            Id = adminRoleId,
         });
+
         builder.Entity<Role>().HasData(new Role
         {
             Name = "User",
@@ -102,16 +104,37 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
             Id = adminId,
             FullName = "Diyorbek Odilov",
             Login = "DiyorbekOdilov19",
-            PhoneNumber="+998942922288",
-            UserName=Guid.NewGuid().ToString(),
+            PhoneNumber = "+998942922288",
+            UserName = Guid.NewGuid().ToString(),
             Password = "DiyorbekOdilov19".stringHash(),
-            SecurityStamp = Guid.NewGuid().ToString()
-        });;
+            SecurityStamp = Guid.NewGuid().ToString(),
+            Residual = 0
+        });
+
+        builder.Entity<User>().HasData(new User
+        {
+            Id = superAdminId,
+            FullName = "Diyorbek Odilov",
+            Login = "DiyorbekOdilov20",
+            PhoneNumber = "+998942922282",
+            UserName = Guid.NewGuid().ToString(),
+            Password = "DiyorbekOdilov20".stringHash(),
+            SecurityStamp = Guid.NewGuid().ToString(),
+            Residual = 0
+        });
+
         builder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
         {
-            RoleId = roleId,
+            RoleId = adminRoleId,
             UserId = adminId
         });
+
+        builder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+        {
+            RoleId = superAdminRoleId,
+            UserId = superAdminId
+        });
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(builder);
     }
 }

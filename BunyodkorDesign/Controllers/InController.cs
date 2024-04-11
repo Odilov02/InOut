@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.RateLimiting;
 
 namespace WebUI.Controllers;
-[EnableRateLimiting("fixed")]
 public class InController : Controller
 {
     private readonly IAppDbContext _appDbContext;
@@ -16,7 +15,6 @@ public class InController : Controller
     [Authorize(Roles = "User")]
     public IActionResult Choose()
     {
-
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
         return View();
@@ -27,7 +25,6 @@ public class InController : Controller
     [Authorize(Roles = "User")]
     public IActionResult GetAllConfirmed()
     {
-
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
 
@@ -36,7 +33,7 @@ public class InController : Controller
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
 
-        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true && x.User.Id.ToString() == userId).ToList();
+        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true && x.UserId.ToString() == userId).ToList();
         return View(ins);
     }
 
@@ -54,7 +51,7 @@ public class InController : Controller
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
 
-        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && x.User.Id.ToString() == userId).ToList();
+        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).ToList();
         return View(ins);
     }
 
@@ -62,7 +59,7 @@ public class InController : Controller
 
 
     [Authorize(Roles = "User")]
-    public async Task<IActionResult> ConfirmationIn()
+    public IActionResult ConfirmationIn()
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
@@ -72,11 +69,9 @@ public class InController : Controller
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
 
-        List<In?> ins = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList();
+        List<In?> ins = _appDbContext.Ins.Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).ToList()!;
         return View(ins);
     }
-
-
 
 
 
@@ -93,10 +88,21 @@ public class InController : Controller
 
         if (!ModelState.IsValid)
         {
-            List<In?> insdto = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList();
-            return View(insdto);
+            List<In?> newIns = _appDbContext.Ins.Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).ToList()!;
+            return View(newIns);
         }
-        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && insDto.Any(y => y.Id == x.Id && y.IsConfirmed == true)).ToList();
+        List<In> ins = new();
+            List<In> insModel = _appDbContext.Ins.Where(x => x.IsConfirmed == false).ToList();
+            foreach (var item in insModel)
+            {
+                foreach (var item2 in insDto)
+                {
+                    if(item.Id==item2!.Id&&item2.IsConfirmed)
+                    {
+                        ins.Add(item);
+                    }
+                }
+            }
         var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId);
 
         using (var transaction = _appDbContext.Database.BeginTransaction())
@@ -112,7 +118,6 @@ public class InController : Controller
                     {
                         throw new();
                     }
-                    user!.Residual += item.Price;
                     user!.Construction!.In += item.Price;
                     user.Construction.InDate = DateTime.Now;
                     _appDbContext.Constructions.Update(user!.Construction!);
@@ -121,21 +126,26 @@ public class InController : Controller
                     {
                         throw new();
                     }
+                    user!.Residual += item.Price;
+                    _appDbContext.Users.Update(user);
+                    result = await _appDbContext.SaveChangesAsync();
+                    if (result <= 0)
+                    {
+                        throw new();
+                    }
                 }
                 transaction.Commit();
                 ViewData["result"] = ins.Count;
-                ins = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList()!;
+                ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).ToList();
                 return View(ins);
             }
             catch (Exception)
             {
                 transaction.Rollback();
             }
-            List<In?> newInsDto = (await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId))!.Ins!.Where(x => x.IsConfirmed == false)!.ToList();
-            return View(newInsDto);
+            return View(insDto);
         }
     }
-
 
 
 
@@ -184,19 +194,19 @@ public class InController : Controller
                 @in.Date = DateTime.Now;
                 await _appDbContext.Ins.AddAsync(@in);
                 var result = await _appDbContext.SaveChangesAsync();
-                if(result<=0)
+                if (result <= 0)
                 {
                     throw new();
                 }
-                var adminId= HttpContext.Session.GetString("AdminId");
+                var adminId = HttpContext.Session.GetString("AdminId");
                 if (adminId is null)
                     return RedirectToAction(actionName: "LogOut", controllerName: "User");
-                var admin =await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == adminId);
 
+                var admin = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == adminId);
 
                 admin!.Residual -= @in.Price;
                 _appDbContext.Users.Update(admin);
-                result =await _appDbContext.SaveChangesAsync();
+                result = await _appDbContext.SaveChangesAsync();
 
                 if (result <= 0)
                 {
@@ -210,7 +220,7 @@ public class InController : Controller
                 ViewData["result"] = result;
                 return View(inResult);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 transaction.Rollback();
             }
@@ -227,13 +237,11 @@ public class InController : Controller
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
 
-
         ViewData["constructionId"] = constructionId;
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
-        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && x.User.Id == construction!.UserId).ToList();
+        List<In> ins = _appDbContext.Ins.Where(x => x.IsConfirmed == false && x.UserId == construction!.UserId).ToList();
         return View(ins);
     }
-
 
 
 
@@ -246,7 +254,7 @@ public class InController : Controller
 
         ViewData["constructionId"] = constructionId;
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
-        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true && x.User.Id == construction!.UserId).ToList();
+        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true && x.UserId == construction!.UserId).ToList();
         return View(ins);
     }
 
@@ -265,10 +273,9 @@ public class InController : Controller
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
 
         ViewData["UserId"] = userId;
-        List<In> ins = await _appDbContext.Ins.Where(x => x.User.Id.ToString() == userId).ToListAsync();
+        List<In> ins = await _appDbContext.Ins.Where(x => x.UserId.ToString() == userId).ToListAsync();
         return View(ins);
     }
-
 
 
 
@@ -292,7 +299,6 @@ public class InController : Controller
 
 
 
-
     [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddPersonalIn(PersonalIn personalIn)
@@ -303,6 +309,7 @@ public class InController : Controller
         if (!ModelState.IsValid)
             return View(personalIn);
         var @in = _mapper.Map<In>(personalIn);
+        @in.IsConfirmed = true;
         var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id == personalIn.UserId);
         if (user == null)
             return View(personalIn);
@@ -313,22 +320,21 @@ public class InController : Controller
                 await _appDbContext.Ins.AddAsync(@in);
                 var result = await _appDbContext.SaveChangesAsync();
                 ViewData["result"] = result;
-                if (result > 0)
-                {
-                    user.Residual += @in.Price;
-                    _appDbContext.Users.Update(user);
-                    await _appDbContext.SaveChangesAsync();
-                    var inDto = new PersonalIn()
-                    {
-                        UserId = user.Id
-                    };
-                    transaction.Commit();
-                    return View(inDto);
-                }
-                else
+                if (result <= 0)
                 {
                     throw new();
                 }
+
+                user.Residual += @in.Price;
+                _appDbContext.Users.Update(user);
+                await _appDbContext.SaveChangesAsync();
+                var inDto = new PersonalIn()
+                {
+                    UserId = user.Id
+                };
+                transaction.Commit();
+                return View(inDto);
+
             }
             catch (Exception)
             {
@@ -345,9 +351,9 @@ public class InController : Controller
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
 
-        var @in =await _appDbContext.Ins.FirstOrDefaultAsync(x => x.Id == id);
+        var @in = await _appDbContext.Ins.FirstOrDefaultAsync(x => x.Id == id);
         UpdateInDto inDto = _mapper.Map<UpdateInDto>(@in);
-        ViewData["constructionId"] = @in!.User.Construction!.Id;
+        ViewData["constructionId"] = @in!.ConstructionId;
         return View(inDto);
     }
 
@@ -361,12 +367,12 @@ public class InController : Controller
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
 
 
-        if (!ModelState.IsValid)    
+        if (!ModelState.IsValid)
         {
             return View(inDto);
         }
-        var @in =await _appDbContext.Ins.FirstOrDefaultAsync(x => x.Id == inDto.Id);
-        if(@in == null)
+        var @in = await _appDbContext.Ins.FirstOrDefaultAsync(x => x.Id == inDto.Id);
+        if (@in == null)
         {
             throw new();
         }
@@ -376,9 +382,9 @@ public class InController : Controller
             try
             {
                 long oldPrice = @in.Price;
-                @in.Price = inDto.Price??0;
+                @in.Price = inDto.Price ?? 0;
                 @in.Reason = inDto.Reason;
-                 _appDbContext.Ins.Update(@in);
+                _appDbContext.Ins.Update(@in);
                 var result = await _appDbContext.SaveChangesAsync();
                 if (result <= 0)
                 {
@@ -387,10 +393,11 @@ public class InController : Controller
                 var adminId = HttpContext.Session.GetString("AdminId");
                 if (adminId is null)
                     return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
                 var admin = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == adminId);
 
 
-                admin!.Residual -= @in.Price-oldPrice;
+                admin!.Residual -= @in.Price - oldPrice;
                 _appDbContext.Users.Update(admin);
                 result = await _appDbContext.SaveChangesAsync();
 
@@ -400,7 +407,7 @@ public class InController : Controller
                 }
                 transaction.Commit();
                 ViewData["result"] = result;
-                ViewData["constructionId"] = @in!.User.Construction!.Id;
+                ViewData["constructionId"] = @in!.ConstructionId;
                 UpdateInDto newInDto = _mapper.Map<UpdateInDto>(@in);
                 return View(newInDto);
             }
@@ -422,7 +429,7 @@ public class InController : Controller
         {
             throw new();
         }
-        Guid? constructionId = @in.User.Construction!.Id;
+        Guid? constructionId = @in.ConstructionId;
         if (constructionId is null)
         {
             throw new();

@@ -25,56 +25,6 @@ namespace Infrastructure.Persistance.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.AdminSpend", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ConstructionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool?>("IsCash")
-                        .IsRequired()
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("Lasted")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("Price")
-                        .IsRequired()
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<Guid?>("SpendTypeId")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ConstructionId");
-
-                    b.HasIndex("SpendTypeId");
-
-                    b.ToTable("AdminSpends");
-                });
-
             modelBuilder.Entity("Domain.Entities.Construction", b =>
                 {
                     b.Property<Guid>("Id")
@@ -120,7 +70,35 @@ namespace Infrastructure.Persistance.Migrations
                     b.ToTable("Constructions");
                 });
 
-            modelBuilder.Entity("Domain.Entities.In", b =>
+            modelBuilder.Entity("Domain.Entities.Document", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ImgUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Factory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -132,8 +110,62 @@ namespace Infrastructure.Persistance.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<long>("In")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("InDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Lasted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Spend")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("SpendDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Factories");
+                });
+
+            modelBuilder.Entity("Domain.Entities.In", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ConstructionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("FactoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsConfirmed")
                         .HasColumnType("bit");
@@ -152,14 +184,45 @@ namespace Infrastructure.Persistance.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ConstructionId");
+
+                    b.HasIndex("FactoryId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Ins");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Out", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ConstructionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConstructionId");
+
+                    b.ToTable("Outs");
                 });
 
             modelBuilder.Entity("Domain.Entities.Role", b =>
@@ -192,20 +255,19 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2ea89bb7-30a4-45b1-914e-080294fb93eb"),
+                            Id = new Guid("aca04af2-390b-4f35-a7a8-5807bced992e"),
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = new Guid("944b117d-b9e7-492b-a03e-9b6aa3d18ff5"),
-                            ConcurrencyStamp = "5851e2a3-50d3-4ab2-b170-ce2e14355463",
+                            Id = new Guid("4e2090ac-e08a-44f0-af75-28a446071d4f"),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("0c51f51c-7702-4463-a783-bc544ceda221"),
+                            Id = new Guid("9dad60de-5417-4d30-8c0d-201ac93dfda2"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -217,6 +279,9 @@ namespace Infrastructure.Persistance.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ConstructionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -225,6 +290,12 @@ namespace Infrastructure.Persistance.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("FactoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsCash")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsConfirmed")
                         .HasColumnType("bit");
@@ -239,16 +310,19 @@ namespace Infrastructure.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Reason")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("SpendTypeId")
+                    b.Property<Guid?>("SpendTypeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ConstructionId");
+
+                    b.HasIndex("FactoryId");
 
                     b.HasIndex("SpendTypeId");
 
@@ -278,49 +352,49 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("cf29d11b-35e3-4095-bd29-1ba41c7e9f51"),
+                            Id = new Guid("cf7f8452-f1a6-4d63-84cd-579d0dfa8486"),
                             Descraption = "У́зимизни ишчилар харажатлари",
                             Name = "У́зимизни ишчилар"
                         },
                         new
                         {
-                            Id = new Guid("5839a01b-e75e-4ee6-a96a-d9de217cb5cc"),
+                            Id = new Guid("f25464fe-f270-48a4-b78b-6b5f3e7a4ac7"),
                             Descraption = "Озик-овкат харажатлари",
                             Name = "Озик-овкат"
                         },
                         new
                         {
-                            Id = new Guid("c6f3bb80-3e22-4dda-965c-82f0b1a8eeb3"),
+                            Id = new Guid("5b1ade1b-5c42-41bd-bf0c-381c4772b0e8"),
                             Descraption = "Иш хаклари",
                             Name = "Иш хаклари"
                         },
                         new
                         {
-                            Id = new Guid("79dba2b3-8852-48a2-8f3c-230e9f876024"),
+                            Id = new Guid("c9667b45-9174-4433-9835-457214127daa"),
                             Descraption = "Транспорт харажатлари",
                             Name = "Транспорт"
                         },
                         new
                         {
-                            Id = new Guid("32ee44ed-b5bd-4a94-8262-25349da0c80a"),
+                            Id = new Guid("4f96bb7d-70c8-4ae4-bb3c-4aef016ee75e"),
                             Descraption = "Хужжатлар ва офис харажатлари",
                             Name = "Хужжатлар ва офис"
                         },
                         new
                         {
-                            Id = new Guid("b2c80faf-ebb5-4892-bf63-8909923796f6"),
+                            Id = new Guid("cfafc153-2ce2-46c2-98c1-2d24ce5cd7cc"),
                             Descraption = "Курилиш материаллар харажатлари",
                             Name = "Курилиш материаллар"
                         },
                         new
                         {
-                            Id = new Guid("1b0d98da-09c6-42f9-a286-338982033faf"),
+                            Id = new Guid("23807371-4e89-4b00-bb1e-6714875efa49"),
                             Descraption = "Иш куроллар харажатлари",
                             Name = "Иш куроллар"
                         },
                         new
                         {
-                            Id = new Guid("09a041f9-be08-4c44-b0b2-49b691ec5afd"),
+                            Id = new Guid("035f846b-7e7b-44ec-b0d6-0a9fcb567e5d"),
                             Descraption = "Бошка майда харажатлар",
                             Name = "Бошка майда харажатлар"
                         });
@@ -420,9 +494,9 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a3957eb8-c4ca-4155-bcd0-c6be83d4cdac"),
+                            Id = new Guid("1f804ed8-e4d6-40f5-bd05-a7e24125e71e"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "753b9f32-a73c-4993-8880-0338975fd884",
+                            ConcurrencyStamp = "21c141eb-e368-40e1-abd0-b4d5d52e4854",
                             EmailConfirmed = false,
                             FullName = "Diyorbek Odilov",
                             LockoutEnabled = false,
@@ -431,9 +505,26 @@ namespace Infrastructure.Persistance.Migrations
                             PhoneNumber = "+998942922288",
                             PhoneNumberConfirmed = false,
                             Residual = 0L,
-                            SecurityStamp = "f20bf4d8-0883-4d29-a469-eeb59d85e513",
+                            SecurityStamp = "414af33b-5ae6-41e7-a93d-810253668ca8",
                             TwoFactorEnabled = false,
-                            UserName = "e26c2b28-2e58-4c18-b897-3493e32449ce"
+                            UserName = "8a6923a5-110f-4ead-84bf-5795fe15ab26"
+                        },
+                        new
+                        {
+                            Id = new Guid("15c15572-bd14-44b5-bc08-8cc05e4b7ed5"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "421b7cef-c2b3-45ac-a656-21e3dfec6033",
+                            EmailConfirmed = false,
+                            FullName = "Diyorbek Odilov",
+                            LockoutEnabled = false,
+                            Login = "DiyorbekOdilov20",
+                            Password = "7ad602d3fbdcf50882c9053907c8700dc910240d2954bf45012972f3f983de3b",
+                            PhoneNumber = "+998942922282",
+                            PhoneNumberConfirmed = false,
+                            Residual = 0L,
+                            SecurityStamp = "33df4e8e-f85e-484d-9ae8-3b2b8053189e",
+                            TwoFactorEnabled = false,
+                            UserName = "1bd586dc-f4e8-4b5b-9af1-b35506a62099"
                         });
                 });
 
@@ -523,8 +614,13 @@ namespace Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("a3957eb8-c4ca-4155-bcd0-c6be83d4cdac"),
-                            RoleId = new Guid("944b117d-b9e7-492b-a03e-9b6aa3d18ff5")
+                            UserId = new Guid("1f804ed8-e4d6-40f5-bd05-a7e24125e71e"),
+                            RoleId = new Guid("4e2090ac-e08a-44f0-af75-28a446071d4f")
+                        },
+                        new
+                        {
+                            UserId = new Guid("15c15572-bd14-44b5-bc08-8cc05e4b7ed5"),
+                            RoleId = new Guid("aca04af2-390b-4f35-a7a8-5807bced992e")
                         });
                 });
 
@@ -547,25 +643,6 @@ namespace Infrastructure.Persistance.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.AdminSpend", b =>
-                {
-                    b.HasOne("Domain.Entities.Construction", "Construction")
-                        .WithMany("AdminSpends")
-                        .HasForeignKey("ConstructionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.SpendType", "SpendType")
-                        .WithMany("AdminSpends")
-                        .HasForeignKey("SpendTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Construction");
-
-                    b.Navigation("SpendType");
-                });
-
             modelBuilder.Entity("Domain.Entities.Construction", b =>
                 {
                     b.HasOne("Domain.Entities.User", "User")
@@ -579,28 +656,57 @@ namespace Infrastructure.Persistance.Migrations
 
             modelBuilder.Entity("Domain.Entities.In", b =>
                 {
+                    b.HasOne("Domain.Entities.Construction", "Construction")
+                        .WithMany("Ins")
+                        .HasForeignKey("ConstructionId");
+
+                    b.HasOne("Domain.Entities.Factory", "Factory")
+                        .WithMany("Ins")
+                        .HasForeignKey("FactoryId");
+
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany("Ins")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Construction");
+
+                    b.Navigation("Factory");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Spend", b =>
+            modelBuilder.Entity("Domain.Entities.Out", b =>
                 {
-                    b.HasOne("Domain.Entities.SpendType", "SpendType")
-                        .WithMany("Spends")
-                        .HasForeignKey("SpendTypeId")
+                    b.HasOne("Domain.Entities.Construction", "Construction")
+                        .WithMany("Outs")
+                        .HasForeignKey("ConstructionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Construction");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Spend", b =>
+                {
+                    b.HasOne("Domain.Entities.Construction", "Construction")
+                        .WithMany("Spends")
+                        .HasForeignKey("ConstructionId");
+
+                    b.HasOne("Domain.Entities.Factory", "Factory")
+                        .WithMany("Spends")
+                        .HasForeignKey("FactoryId");
+
+                    b.HasOne("Domain.Entities.SpendType", "SpendType")
+                        .WithMany("Spends")
+                        .HasForeignKey("SpendTypeId");
+
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany("Spends")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Construction");
+
+                    b.Navigation("Factory");
 
                     b.Navigation("SpendType");
 
@@ -660,13 +766,22 @@ namespace Infrastructure.Persistance.Migrations
 
             modelBuilder.Entity("Domain.Entities.Construction", b =>
                 {
-                    b.Navigation("AdminSpends");
+                    b.Navigation("Ins");
+
+                    b.Navigation("Outs");
+
+                    b.Navigation("Spends");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Factory", b =>
+                {
+                    b.Navigation("Ins");
+
+                    b.Navigation("Spends");
                 });
 
             modelBuilder.Entity("Domain.Entities.SpendType", b =>
                 {
-                    b.Navigation("AdminSpends");
-
                     b.Navigation("Spends");
                 });
 

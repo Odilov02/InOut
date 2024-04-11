@@ -2,7 +2,6 @@
 
 namespace WebUI.Controllers;
 
-[EnableRateLimiting("fixed")]
 public class UserController : Controller
 {
     private readonly IAppDbContext _appDbContext;
@@ -33,7 +32,6 @@ public class UserController : Controller
         else
             return View(userRegister);
     }
-
 
 
 
@@ -82,6 +80,10 @@ public class UserController : Controller
             HttpContext.Session.SetString("UserId", user.Id.ToString());
             return RedirectToAction("Choose", "Spend");
         }
+        else if(roles.Contains("SuperAdmin"))
+        {
+            return RedirectToAction("GetAllDetailsForSuperAdmin", "Construction");
+        }
         else
         {
             HttpContext.Session.Remove("UserId");
@@ -115,7 +117,6 @@ public class UserController : Controller
 
 
     [Authorize(Roles = "Admin")]
-    
     public async Task<IActionResult> UpdateUserForAdmin(Guid constructionId)
     {
         User? user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Construction!.Id == constructionId);
@@ -127,6 +128,7 @@ public class UserController : Controller
         };
         return View(userUpdate);
     }
+
 
     [Authorize(Roles = "Admin")]
     [HttpPost]

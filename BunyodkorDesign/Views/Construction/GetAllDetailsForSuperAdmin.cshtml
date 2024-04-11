@@ -23,11 +23,8 @@
     <div class="col-2 py-2">
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
-     <div class="col-2 py-2">
-        <a asp-action="GetAllFile" asp-controller="Document" class="btn btn-warning">Хужжатлар</a>
-    </div>
     <div class="col-2 py-2">
-        <a asp-action="GetAllConstruction" asp-controller="Construction" class="btn btn-primary">Орқага</a>
+        <a asp-action="GetAllOut" asp-controller="Outs" class="btn btn-outline-success">Шахсий чиқимлар</a>
     </div>
 </div>
 <br />
@@ -40,10 +37,6 @@
             <th class="text-center" scope="col">Шартнома сумма</th>
             <th class="text-center" scope="col"><span>Чиқими</span></th>
             <th class="text-center" scope="col"><span>Сарф фоизи</span></th>
-            <th class="text-center" scope="col"><span>Кирими</span></th>
-            <th class="text-center" scope="col"><span>Қолдиги</span></th>
-            <th class="text-center" scope="col"><span>Номери</span></th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -56,15 +49,9 @@
                     <th scope="row">@count</th>
                     <td class="text-center"><span>@item.FullName</span></td>
                     <td class="text-center">@item.CreatedDate.ToString("dd.MM.yyyy")</td>
-                    <td class="contractPrice text-center"><span id="ContractPrice">@item.ContractPrice</span></td>
-                    <td class="outs text-center"><span id="Spend">@item.Spend</span></td>
+                    <td class="contractPrice text-center"><span>@item.ContractPrice</span></td>
+                    <td class="spend text-center"><span>@item.Spend</span></td>
                     <td class="text-center"><h6>@percentage %</h6></td>
-                    <td class="price text-center"><span id="In">@item.In</span></td>
-                    <td class="residual text-center"><span id="formattedNumber">@item.User.Residual</span></td>
-                    <td class="text-center" id="phoneNumber"><p>@item.User.PhoneNumber</p></td>
-                    <td class="text-center">
-                        <a asp-action="UpdateUserForAdmin" asp-controller="User" asp-route-constructionId="@item.Id" class="btn btn-secondary">Ўзгартириш</a>
-                    </td>
                 </tr>
                 count++;
             }
@@ -72,17 +59,14 @@
                 <th scope="row">Жами</th>
                 <td colspan="2"></td>
                 <td class="text-center"><span id="contractPrice"></span></td>
-                <td class="text-center"><span id="totalOuts"></span></td>
+                <td class="text-center"><span id="totalSpends"></span></td>
                 <td class="text-center"></td>
-                <td class="text-center"><span id="totalPrice"></span></td>
-                <td class="text-center"><span id="totalResidual"></span></td>
-                <td colspan="2"></td>
             </tr>
         }
     </tbody>
 </table>
 <script>
-   
+
     formatTableNumbers();
 
 
@@ -151,44 +135,23 @@
 
         var totalAmount = 0;
 
-        $(".Search:visible .price").each(function () {
+        $(".Search:visible .spend").each(function () {
             var price = parseFloat($(this).text().replace(/\s/g, ''));
             totalAmount += price;
         });
 
-        $("#totalPrice").text(totalAmount);
-
-        var totalOuts = 0;
-
-        $(".Search:visible .outs").each(function () {
-            var outs = parseFloat($(this).text().replace(/\s/g, ''));
-            totalOuts += outs;
-        });
-
-        $("#totalOuts").text(totalOuts);
+        $("#totalSpends").text(totalAmount);
 
 
-        var totalResidual = 0;
 
-        $(".Search:visible .residual").each(function () {
-            var Residual = parseFloat($(this).text().replace(/\s/g, ''));
-            totalResidual += Residual;
-        });
-
-        $("#totalResidual").text(totalResidual);
-
-        // Qatordan ma'lumotlarni olib olish
         var rows = document.querySelectorAll('tbody tr');
 
-        // Har bir qator uchun
         rows.forEach(function (row) {
-            // Har bir ustunni olib olish
             var cells = row.querySelectorAll('td span');
 
-            // Har bir ustunni formatlab berish
             cells.forEach(function (cell) {
                 var text = cell.textContent.trim();
-                var number = parseFloat(text.replace(/\s/g, '')); // Agar koma orqali ajratilgan sonlar bo'lsa
+                var number = parseFloat(text.replace(/\s/g, '')); 
                 if (!isNaN(number)) {
                     cell.textContent = formatNumber(number);
                 }
@@ -209,5 +172,5 @@
         return phoneNumber.replace(/(\+998)(\d{2})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5');
 
     }
-    
+
 </script>

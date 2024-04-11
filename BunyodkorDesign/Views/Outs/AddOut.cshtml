@@ -1,10 +1,10 @@
-﻿@using Domain.Entities;
+﻿@using Application.Common.Dtos.OutDto;
 @{
     Layout = "_AdminLayout";
 }
-@model AdminSpend
+@model AddOutDto
 @{
-    List<Domain.Entities.SpendType>? spendTypes = (List<Domain.Entities.SpendType>)ViewData["SpendTypes"]!;
+    List<Domain.Entities.Construction>? constructions = (List<Domain.Entities.Construction>)ViewData["Construction"]!;
 }
 @{
     if (ViewData["result"] is not null)
@@ -15,8 +15,8 @@
                 <div class="col">
                 </div>
                 <div class="col-8 mt-3">
-                    <h3 style="background-color: rgb(132, 253, 184);" class="shadow rounded text-center py-3" id="HtmlTeg">
-                        Маьлумотлар мувоффақиятли қўшилди!
+                    <h3 style="background-color: rgb(132, 253, 184);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
+                        Маьлумотлар муваффақиятли қўшилди
                     </h3>
                 </div>
                 <div class="col"></div>
@@ -28,8 +28,8 @@
                 <div class="col">
                 </div>
                 <div class="col-8 mt-3">
-                    <h3 style="background-color: rgb(252, 113, 109);" class="shadow rounded text-center py-3" id="HtmlTeg">
-                        Маьлумотлар қўшилмади!
+                    <h3 style="background-color: rgb(252, 113, 109);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
+                        Маьлумотлар қўшилмади
                     </h3>
                 </div>
                 <div class="col"></div>
@@ -38,7 +38,6 @@
     }
 }
 <style>
-    /* Styling the Form (Color, Padding, Shadow) */
     form {
         background-color: #fff;
         max-width: 670px;
@@ -47,20 +46,16 @@
         box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
     }
 
-    /* Styling form-control Class */
     .form-control {
         text-align: left;
         margin-bottom: 25px;
     }
 
-        /* Styling form-control Label */
         .form-control label {
             display: block;
             margin-bottom: 10px;
         }
 
-        /* Styling form-control input,
-                                    select, textarea */
         .form-control input,
         .form-control select,
         .form-control textarea {
@@ -72,68 +67,52 @@
             width: 95%;
         }
 
-            /* Styling form-control Radio
-                                    button and Checkbox */
             .form-control input[type="radio"],
             .form-control input[type="checkbox"] {
                 display: inline-block;
                 width: auto;
             }
 </style>
-<!-- Create Form -->
 
-<form id="form" asp-action="AddAdminSpend" method="post">
+<!-- Create Form -->
+<form id="form" asp-action="AddOut" method="post">
     <h3 class="mx-2" id="demo"></h3>
+    <!-- Details -->
     <div class="form-control">
         <label for="Price" id="Price">
             Сумма
         </label>
 
         <!-- Input Type Text -->
-        <input type="hidden" id="ConstructionId" name="ConstructionId" value="@Model.ConstructionId" />
-        <input type="text" id="priceInput" name="Price" placeholder="Суммани киритинг..." oninput="formatNumber()" />
+        <input type="text" id="PriceInput" name="Price"
+               placeholder="Чиқим суммасини киритинг..." oninput="formatNumber()" />
         <span class="text-danger" asp-validation-for="Price"></span>
     </div>
     <div class="form-control">
-        <label for="SpendTypeId" id="SpendTypeId">
-            Чиқим тури
+        <label for="ConstructionId" id="ConstructionId">
+            Обьект 
         </label>
 
         <!-- Dropdown options -->
-        <select name="SpendTypeId" id="SpendTypeId">
+        <select name="ConstructionId" id="ConstructionId">
+            <option value="@null">Обьект танланг!</option>
             @{
-                <option value="@null">Чиқим турини танланг!</option>
-                if (spendTypes is null)
+                if (constructions is null)
                 {
-                    <option value="@null">Чиқим тури мавжуд емас</option>
+                    <option value="@null">Обьект мавжуд емас</option>
                 }
                 else
                 {
-                    foreach (var outType in spendTypes)
+                    foreach (var construction in constructions)
                     {
-                        <option value="@outType.Id">@outType.Name</option>
+                        <option value="@construction.Id">@construction.FullName</option>
                     }
                 }
             }
 
         </select>
-        <span class="text-danger" asp-validation-for="SpendTypeId"></span>
+        <span class="text-danger" asp-validation-for="ConstructionId"></span>
     </div>
-
-    <div class="form-control">
-        <label for="IsCash" id="IsCash">
-            Пул тури
-        </label>
-        <select name="IsCash" id="IsCash">
-            <option value="@null">Пул турини танланг!</option>
-            <option value="@true">Нақт пул</option>
-            <option value="@false">Нақт емас</option>
-        </select>
-        <span class="text-danger" asp-validation-for="IsCash"></span>
-    </div>
-
-
-
     <div class="form-control">
         <label for="comment">
             Чиқим сабаби
@@ -144,8 +123,6 @@
                   placeholder="Чиқим сабабини киритинг..."></textarea>
         <span class="text-danger" asp-validation-for="Reason"></span>
     </div>
-
-    <!-- Multi-line Text Input Control -->
     <div class="row">
         <div class="col-xs-0 col-md-1">
         </div>
@@ -155,10 +132,9 @@
             </button>
         </div>
         <div class="col-5 mx-4 d-flex justify-content-end">
-            <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@Model.ConstructionId" class="btn btn-primary my-4 px-5">Орқага</a>
+            <a asp-action="GetAllOut" asp-controller="Outs"  class="btn btn-primary my-4 px-5">Орқага</a>
         </div>
-        <div class="col-xs-0 col-md-2 ">
-        </div>
+        <div class="col-1"></div>
     </div>
 </form>
 <script>
@@ -169,7 +145,7 @@
         document.getElementById("demo").innerHTML = date.toLocaleTimeString();
     }
     function formatNumber() {
-        let input = document.getElementById('priceInput');
+        let input = document.getElementById('PriceInput');
         let value = input.value.replace(/\D/g, '');
         let formattedValue = '';
         for (let i = 0; i < value.length; i++) {
@@ -181,7 +157,7 @@
         input.value = formattedValue;
     }
     function submitNumber() {
-        var input = document.getElementById('priceInput');
+        let input = document.getElementById('PriceInput');
         let value = input.value.replace(/\s/g, '');
         input.value = value;
     }

@@ -1,4 +1,6 @@
-﻿namespace WebUI.Services;
+﻿using WebUI.Services.Interfaces;
+
+namespace WebUI.Services;
 
 public class FileService : IFileService
 {
@@ -8,22 +10,48 @@ public class FileService : IFileService
         _webHostEnvironment = webHostEnvironment;
     }
 
-    public Task<bool?> RemoveFile(string fileName)
+    public string GetFilePath(string fileName)
     {
-        throw new NotImplementedException();
+        return Path.Combine(_webHostEnvironment.WebRootPath, "Documents", fileName);
+    }
+    public bool RemoveFile(string fileName)
+    {
+        try
+        {
+
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return false;
+            }
+
+            string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Documents", fileName);
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return false;
+            }
+
+            System.IO.File.Delete(filePath);
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 
-    public async Task<string?> SaveFile(IFormFile file)
+    public async Task<string?> SaveFileAsync(IFormFile file)
     {
         if (file.Length <= 0 || file is null) return null;
 
-        var fileNime = Guid.NewGuid() + file.FileName;
-        var path = Path.Combine(_webHostEnvironment.WebRootPath, "img", fileNime);
+        var fileName = Guid.NewGuid() + file.FileName;
+        var path = Path.Combine(_webHostEnvironment.WebRootPath, "Documents", fileName);
         using (var stream = new FileStream(path, FileMode.Create))
         {
             await file.CopyToAsync(stream);
         }
-        return fileNime;
+        return fileName;
     }
 
 }

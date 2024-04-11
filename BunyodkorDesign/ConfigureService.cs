@@ -1,4 +1,6 @@
 ﻿using Infrastructure.Persistance;
+using WebUI.Services;
+using WebUI.Services.Interfaces;
 
 namespace WebUI;
 
@@ -11,6 +13,7 @@ public static class ConfigureService
                 .AddRoleManager<RoleManager<Role>>()
                 .AddEntityFrameworkStores<AppDbContext>()
         .AddSignInManager();
+        services.AddScoped<IFileService, FileService>();
         return services;
     }
 }
