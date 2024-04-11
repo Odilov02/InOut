@@ -7,15 +7,15 @@ public class AdminSpendDto
 {
     public DateTime Date { get; set; } = DateTime.Now;
 
-    [Required(ErrorMessage = "Чиқим суммаси киритиши шарт!")]
-    [Range(1, long.MaxValue, ErrorMessage = "Чиқим суммаси киритиши шарт!")]
+    [Required(ErrorMessage = "Чиқим суммасини киритиш шарт!")]
+    [Range(1, long.MaxValue, ErrorMessage = "Чиқим суммасини киритиш шарт!")]
     public long? Price { get; set; }
 
-    [Required(ErrorMessage = "Чиқим сабаби киритиши шарт!")]
+    [Required(ErrorMessage = "Чиқим сабабини киритиш шарт!")]
     public string Reason { get; set; }
-    [Required(ErrorMessage = "Чиқим тури танланишлиги шарт!")]
+    [Required(ErrorMessage = "Чиқим турини танлаш шарт!")]
     public Guid? SpendTypeId { get; set; }
-    [Required(ErrorMessage = "Пул тури танланишлиги  шарт!")]
+    [Required(ErrorMessage = "Пул турини танлаш  шарт!")]
     public bool? IsCash { get; set; }
     [Required]
     public Guid? ConstructionId { get; set; }
