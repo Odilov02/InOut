@@ -5,12 +5,14 @@ public class InController : Controller
 {
     private readonly IAppDbContext _appDbContext;
     private readonly IMapper _mapper;
-    public InController(IAppDbContext appDbContext, IMapper mapper)
+    private readonly IDateTimeService _dateTime;
+
+    public InController(IAppDbContext appDbContext, IMapper mapper, IDateTimeService dateTime)
     {
         _appDbContext = appDbContext;
         _mapper = mapper;
+        _dateTime = dateTime;
     }
-
 
     [Authorize(Roles = "User")]
     public IActionResult Choose()
@@ -119,7 +121,7 @@ public class InController : Controller
                         throw new();
                     }
                     user!.Construction!.In += item.Price;
-                    user.Construction.InDate = DateTime.Now;
+                    user.Construction.InDate = _dateTime.NowTime();
                     _appDbContext.Constructions.Update(user!.Construction!);
                     result = await _appDbContext.SaveChangesAsync();
                     if (result <= 0)
@@ -185,13 +187,13 @@ public class InController : Controller
             return View(inDto);
         }
         In @in = _mapper.Map<In>(inDto);
-
+     
         using (var transaction = _appDbContext.Database.BeginTransaction())
         {
             try
             {
                 @in.User = user;
-                @in.Date = DateTime.Now;
+                @in.Date = _dateTime.NowTime();
                 await _appDbContext.Ins.AddAsync(@in);
                 var result = await _appDbContext.SaveChangesAsync();
                 if (result <= 0)
@@ -310,6 +312,7 @@ public class InController : Controller
             return View(personalIn);
         var @in = _mapper.Map<In>(personalIn);
         @in.IsConfirmed = true;
+        @in.Date= _dateTime.NowTime();
         var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id == personalIn.UserId);
         if (user == null)
             return View(personalIn);

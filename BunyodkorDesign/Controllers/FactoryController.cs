@@ -6,12 +6,14 @@ public class FactoryController : Controller
 {
     private readonly IAppDbContext _appDbContext;
     private readonly IMapper _mapper;
-    public FactoryController(IAppDbContext appDbContext, IMapper mapper)
+   private readonly IDateTimeService _dateTime;
+
+    public FactoryController(IAppDbContext appDbContext, IMapper mapper, IDateTimeService dateTime)
     {
         _appDbContext = appDbContext;
         _mapper = mapper;
+        _dateTime = dateTime;
     }
-
 
     [Authorize(Roles = "Admin")]
     public IActionResult GetAllFactory()
@@ -57,6 +59,9 @@ public class FactoryController : Controller
         if (!ModelState.IsValid)
             return View(factoryDto);
         Factory factory = _mapper.Map<Factory>(factoryDto);
+        factory.SpendDate = _dateTime.NowTime();
+        factory.InDate = _dateTime.NowTime();
+        factory.CreatedDate = _dateTime.NowTime();
         await _appDbContext.Factories.AddAsync(factory);
         var result = await _appDbContext.SaveChangesAsync();
         if (result <= 0)
@@ -126,6 +131,7 @@ public class FactoryController : Controller
         if (!ModelState.IsValid)
             return View(inDto);
         var @in = _mapper.Map<In>(inDto);
+        @in.Date = _dateTime.NowTime();
         var factory = await _appDbContext.Factories.FirstOrDefaultAsync(x => x.Id == inDto.FactoryId);
 
         using (var transaction = _appDbContext.Database.BeginTransaction())
@@ -187,6 +193,7 @@ public class FactoryController : Controller
             return View(spendDto);
         var spend = _mapper.Map<Spend>(spendDto);
         spend.IsConfirmed = true;
+        spend.Date = _dateTime.NowTime();
         spend.SpendType =(await _appDbContext.SpendTypes.FirstOrDefaultAsync(x => x.Name == "Қурилиш материаллар"))??new();
         var factory = await _appDbContext.Factories.FirstOrDefaultAsync(x => x.Id == spendDto.FactoryId);
 

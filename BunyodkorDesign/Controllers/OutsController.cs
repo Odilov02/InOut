@@ -6,11 +6,13 @@ namespace WebUI.Controllers
     {
         private readonly IAppDbContext _appDbContext;
         private readonly IMapper _mapper;
+        private readonly IDateTimeService _dateTime;
 
-        public OutsController(IAppDbContext appDbContext, IMapper mapper)
+        public OutsController(IAppDbContext appDbContext, IMapper mapper, IDateTimeService dateTime)
         {
             _appDbContext = appDbContext;
             _mapper = mapper;
+            _dateTime = dateTime;
         }
 
         [Authorize(Roles = "SuperAdmin")]
@@ -40,20 +42,20 @@ namespace WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddOut(AddOutDto outDto)
         {
-                ViewData["FullName"] = HttpContext.Session.GetString("FullName");
-                ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
-                var construction = _appDbContext.Constructions.OrderByDescending(x => x.CreatedDate).ToList();
+            ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+            ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+            var construction = _appDbContext.Constructions.OrderByDescending(x => x.CreatedDate).ToList();
             if (!ModelState.IsValid)
             {
                 ViewData["construction"] = construction;
                 return View(outDto);
             }
-                var @out = _mapper.Map<Out>(outDto);
-                @out.Date = DateTime.Now;
-                await _appDbContext.Outs.AddAsync(@out);
-                var result =await _appDbContext.SaveChangesAsync();
-                ViewData["result"] = result;
-                ViewData["construction"] = construction;
+            var @out = _mapper.Map<Out>(outDto);
+            @out.Date = _dateTime.NowTime();
+            await _appDbContext.Outs.AddAsync(@out);
+            var result = await _appDbContext.SaveChangesAsync();
+            ViewData["result"] = result;
+            ViewData["construction"] = construction;
             return View();
         }
     }

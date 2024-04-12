@@ -6,9 +6,9 @@ public class Construction:BaseEntity
     public string Description { get; set; }
     public long In { get; set; }
     public long Spend { get; set; }
-    public DateTime CreatedDate { get; set; }=DateTime.Now;
-    public DateTime SpendDate { get; set; } = DateTime.Now;
-    public DateTime InDate { get; set; } = DateTime.Now;
+    public DateTime CreatedDate { get; set; }
+    public DateTime SpendDate { get; set; }
+    public DateTime InDate { get; set; }
     public Guid UserId { get; set; }
     public virtual User User { get; set; }
     public  long ContractPrice { get; set; }

@@ -6,13 +6,15 @@ public class ConstructionController : Controller
     private readonly IAppDbContext _appDbContext;
     private readonly IMapper _mapper;
     private readonly UserManager<User> _userManager;
-    public ConstructionController(IAppDbContext appDbContext, UserManager<User> userManager, IMapper mapper)
+    private readonly IDateTimeService _dateTime;
+
+    public ConstructionController(IAppDbContext appDbContext, IMapper mapper, UserManager<User> userManager, IDateTimeService dateTime)
     {
         _appDbContext = appDbContext;
-        _userManager = userManager;
         _mapper = mapper;
+        _userManager = userManager;
+        _dateTime = dateTime;
     }
-
 
     [Authorize(Roles = "User")]
     public async Task<IActionResult> GetResidual()
@@ -88,6 +90,9 @@ public class ConstructionController : Controller
             return View(constructionDto);
         }
         var construction = _mapper.Map<Construction>(constructionDto);
+        construction.CreatedDate = _dateTime.NowTime();
+        construction.SpendDate = _dateTime.NowTime();
+        construction.InDate = _dateTime.NowTime();
         var user = _userManager.Users.FirstOrDefault(x => x.Id == construction.UserId);
         using (var transaction = _appDbContext.Database.BeginTransaction())
         {

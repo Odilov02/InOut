@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Infrastructure.Persistance;
+using Infrastructure.Persistance.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +17,7 @@ public static class RegisterService
         });
 
         services.AddScoped<IAppDbContext, AppDbContext>();
+        services.AddScoped<IDateTimeService, DateTimeService>();
         return services;
 
     }

@@ -8,13 +8,14 @@ namespace WebUI.Controllers
     {
         private readonly IAppDbContext _appDbContext;
         private readonly IFileService _fileService;
+        private readonly IDateTimeService _dateTime;
 
-        public DocumentController(IAppDbContext appDbContext, IFileService fileService)
+        public DocumentController(IAppDbContext appDbContext, IFileService fileService, IDateTimeService dateTime)
         {
             _appDbContext = appDbContext;
             _fileService = fileService;
+            _dateTime = dateTime;
         }
-
 
         [Authorize(Roles = "Admin")]
         public IActionResult GetAllFile()
@@ -53,7 +54,7 @@ namespace WebUI.Controllers
             {
                 ImgUrl = imgUrl,
                 Name = file.Name,
-                Time = DateTime.Now,
+                Time = _dateTime.NowTime(),
                 Description = file.Description,
             };
             await _appDbContext.Documents.AddAsync(document);

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.RateLimiting;
+using System;
 
 namespace WebUI.Controllers;
 
@@ -6,10 +7,13 @@ public class SpendController : Controller
 {
     private readonly IAppDbContext _appDbContext;
     private readonly IMapper _mapper;
-    public SpendController(IAppDbContext appDbContext, IMapper mapper)
+   private readonly IDateTimeService _dateTime;
+
+    public SpendController(IAppDbContext appDbContext, IMapper mapper, IDateTimeService dateTime)
     {
         _appDbContext = appDbContext;
         _mapper = mapper;
+        _dateTime = dateTime;
     }
 
     [Authorize(Roles = "User")]
@@ -46,9 +50,9 @@ public class SpendController : Controller
 
         Spend spend = _mapper.Map<Spend>(SpendDto);
         spend.SpendType = (await _appDbContext.SpendTypes.FirstOrDefaultAsync(x => x.Id == spend.SpendTypeId))!;
-        spend.Date = DateTime.Now;
+        spend.Date = _dateTime.NowTime();
         spend.UserId = user!.Id;
-        spend.ConstructionId = user.Construction.Id;
+        spend.ConstructionId = user.Construction!.Id;
         await _appDbContext.Spends.AddAsync(spend);
         var result = await _appDbContext.SaveChangesAsync();
         ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
@@ -222,7 +226,7 @@ public class SpendController : Controller
                         throw new();
                     }
                     construction!.Spend += item.Price;
-                    construction.SpendDate = DateTime.Now;
+                    construction.SpendDate = _dateTime.NowTime();
                     _appDbContext.Constructions.Update(construction!);
 
                     result = await _appDbContext.SaveChangesAsync();
@@ -404,7 +408,7 @@ public class SpendController : Controller
             try
             {
                 spend.SpendType = (await _appDbContext.SpendTypes.FirstOrDefaultAsync(x => x.Id == spend.SpendTypeId))!;
-                spend.Date = DateTime.Now;
+                spend.Date = _dateTime.NowTime();
                 spend.UserId = user!.Id;
                 await _appDbContext.Spends.AddAsync(spend);
                 var result = await _appDbContext.SaveChangesAsync();
@@ -475,6 +479,7 @@ public class SpendController : Controller
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
         Spend spend = _mapper.Map<Spend>(adminSpend);
         spend.IsConfirmed = true;
+        spend.Date= _dateTime.NowTime();
         spend.User =await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId);
         using (var transaction = _appDbContext.Database.BeginTransaction())
         {
@@ -487,7 +492,7 @@ public class SpendController : Controller
                     throw new();
                 }
                 construction.Spend += adminSpend.Price ?? 0;
-                construction.SpendDate = DateTime.Now;
+                construction.SpendDate = _dateTime.NowTime();
                 _appDbContext.Constructions.Update(construction);
                 result = await _appDbContext.SaveChangesAsync();
                 if (result <= 0)
