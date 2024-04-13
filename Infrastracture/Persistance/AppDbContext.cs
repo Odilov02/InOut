@@ -102,11 +102,11 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
         builder.Entity<User>().HasData(new User
         {
             Id = adminId,
-            FullName = "Diyorbek Odilov",
-            Login = "DiyorbekOdilov19",
-            PhoneNumber = "+998942922288",
+            FullName = "Admin",
+            Login = "Admin111",
+            PhoneNumber = "+998912345678",
             UserName = Guid.NewGuid().ToString(),
-            Password = "DiyorbekOdilov19".stringHash(),
+            Password = "Admin111".stringHash(),
             SecurityStamp = Guid.NewGuid().ToString(),
             Residual = 0
         });
@@ -114,11 +114,11 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
         builder.Entity<User>().HasData(new User
         {
             Id = superAdminId,
-            FullName = "Diyorbek Odilov",
-            Login = "DiyorbekOdilov20",
-            PhoneNumber = "+998942922282",
+            FullName = "Admin",
+            Login = "Admin000",
+            PhoneNumber = "+998901234567",
             UserName = Guid.NewGuid().ToString(),
-            Password = "DiyorbekOdilov20".stringHash(),
+            Password = "Admin000".stringHash(),
             SecurityStamp = Guid.NewGuid().ToString(),
             Residual = 0
         });
