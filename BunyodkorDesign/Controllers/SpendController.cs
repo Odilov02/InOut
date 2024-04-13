@@ -112,6 +112,8 @@ public class SpendController : Controller
     [Authorize(Roles = "User")]
     public async Task<IActionResult> DeleteSpend(Guid id)
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
         var spend = await _appDbContext.Spends.FirstOrDefaultAsync(x => x.Id == id);
         if (spend == null) throw new();
         Guid? constructionId = spend.ConstructionId;

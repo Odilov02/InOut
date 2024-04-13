@@ -18,6 +18,8 @@ public class FactoryController : Controller
     [Authorize(Roles = "Admin")]
     public IActionResult GetAllFactory()
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
         var factory = _appDbContext.Factories.OrderByDescending(x => x.CreatedDate).ToList();
         return View(factory);
     }

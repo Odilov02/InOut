@@ -134,8 +134,12 @@ public class ConstructionController : Controller
 
 
     [Authorize(Roles = "Admin")]
-    public IActionResult Choose(Guid constructionId) => View(constructionId);
-
+    public IActionResult Choose(Guid constructionId)
+    {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        return View(constructionId);
+    }
 
     [Authorize(Roles = "Admin")]
     public IActionResult GetAllDetails()

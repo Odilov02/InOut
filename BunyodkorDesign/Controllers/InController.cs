@@ -427,6 +427,9 @@ public class InController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteIn(Guid id)
     {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+
         var @in = await _appDbContext.Ins.FirstOrDefaultAsync(x => x.Id == id);
         if (@in == null)
         {
