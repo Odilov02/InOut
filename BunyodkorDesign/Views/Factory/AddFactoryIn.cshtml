@@ -4,9 +4,6 @@
 }
 @model AddFactoryInDto
 @{
-    List<Domain.Entities.Construction>? constructions = (List<Domain.Entities.Construction>)ViewData["Constructions"]!;
-}
-@{
     if (ViewData["result"] is not null)
     {
         if ((int)ViewData["result"]! > 0)
@@ -89,31 +86,6 @@
         <span class="text-danger" asp-validation-for="Price"></span>
     </div>
     <input type="hidden" name="factoryId" id="factoryId" value="@Model.FactoryId" />
-    <div class="form-control">
-        <label for="ConstructionId" id="ConstructionId">
-            Обьект номи
-        </label>
-
-        <!-- Dropdown options -->
-        <select name="ConstructionId" id="ConstructionId">
-            <option value="@null">Обьект номини танланг!</option>
-            @{
-                if (constructions is null)
-                {
-                    <option value="@null">Обьект мавжуд емас</option>
-                }
-                else
-                {
-                    foreach (var construction in constructions)
-                    {
-                        <option value="@construction.Id">@construction.FullName</option>
-                    }
-                }
-            }
-
-        </select>
-        <span class="text-danger" asp-validation-for="ConstructionId"></span>
-    </div>
     <div class="form-control">
         <label for="comment">
             Кирим сабаби

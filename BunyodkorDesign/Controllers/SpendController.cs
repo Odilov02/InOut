@@ -214,6 +214,13 @@ public class SpendController : Controller
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == spendsConfirming.ConstructionId);
 
         List<Spend> entities = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && spendsConfirming.Spends.Any(y => y.Id == x.Id && y.IsConfirmed == true)).ToList();
+        List<Spend> entitiesFalse = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && spendsConfirming.Spends.Any(y => y.Id == x.Id && y.IsConfirmed == false)).ToList();
+        foreach (var item in entitiesFalse)
+        {
+            item.Comment = spendsConfirming.Spends.FirstOrDefault(x => x.Id == item.Id)!.Comment;
+            _appDbContext.Spends.Update(item);
+           await _appDbContext.SaveChangesAsync();
+        }
         using (var transaction = _appDbContext.Database.BeginTransaction())
         {
             try

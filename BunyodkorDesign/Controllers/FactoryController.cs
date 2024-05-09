@@ -112,7 +112,6 @@ public class FactoryController : Controller
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
 
-        ViewData["Constructions"] = _appDbContext.Constructions.ToList();
         var inDto = new AddFactoryInDto()
         {
             FactoryId = factoryId
@@ -127,42 +126,48 @@ public class FactoryController : Controller
     [HttpPost]
     public async Task<IActionResult> AddFactoryIn(AddFactoryInDto inDto)
     {
-        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
-        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
-        ViewData["Constructions"] = _appDbContext.Constructions.ToList();
-        if (!ModelState.IsValid)
-            return View(inDto);
-        var @in = _mapper.Map<In>(inDto);
-        @in.Date = _dateTime.NowTime();
-        var factory = await _appDbContext.Factories.FirstOrDefaultAsync(x => x.Id == inDto.FactoryId);
-
-        using (var transaction = _appDbContext.Database.BeginTransaction())
+        try
         {
-            try
+            ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+            ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+            if (!ModelState.IsValid)
+                return View(inDto);
+            In @in = _mapper.Map<In>(inDto);
+            @in.Date = _dateTime.NowTime();
+            var factory = await _appDbContext.Factories.FirstOrDefaultAsync(x => x.Id == inDto.FactoryId);
+
+            using (var transaction = _appDbContext.Database.BeginTransaction())
             {
-                await _appDbContext.Ins.AddAsync(@in);
-                var result = await _appDbContext.SaveChangesAsync();
-                if (result <= 0)
-                    throw new();
-                factory!.In += @in.Price;
-                _appDbContext.Factories.Update(factory);
-                result = await _appDbContext.SaveChangesAsync();
-                if (result <= 0)
-                    throw new();
-                transaction.Commit();
-                ViewData["result"] = result;
-                var newInDto = new AddFactoryInDto()
+                try
                 {
-                    FactoryId = factory.Id
-                };
-                return View(newInDto);
+                    await _appDbContext.Ins.AddAsync(@in);
+                    var result = await _appDbContext.SaveChangesAsync();
+                    if (result <= 0)
+                        throw new();
+                    factory!.In += @in.Price;
+                    _appDbContext.Factories.Update(factory);
+                    result = await _appDbContext.SaveChangesAsync();
+                    if (result <= 0)
+                        throw new();
+                    transaction.Commit();
+                    ViewData["result"] = result;
+                    var newInDto = new AddFactoryInDto()
+                    {
+                        FactoryId = factory.Id
+                    };
+                    return View(newInDto);
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                }
             }
-            catch (Exception)
-            {
-                transaction.Rollback();
-            }
+            ViewData["result"] = 0;
         }
-        ViewData["result"] = 0;
+        catch (Exception e)
+        {
+            throw;
+        }
         return View(inDto);
     }
 

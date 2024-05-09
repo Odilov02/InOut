@@ -64,6 +64,7 @@
                 <th class="text-center" scope="col">Суммаси</th>
                 <th class="text-center" scope="col">Чиқим тури</th>
                 <th class="text-center" scope="col">Сабаби</th>
+                <th class="text-center" scope="col">Изох</th>
                 <th scope="col">Тасдиқлаш</th>
             </tr>
         </thead>
@@ -77,8 +78,11 @@
                         <th scope="row">@count</th>
                         <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
                         <td class="price text-center"><span>@item.Price</span></td>
-                        <td class="text-center">@item.SpendType.Name</td>
+                        <td class="text-center">@item.SpendType!.Name</td>
                         <td class="text-center">@item.Reason</td>
+                        <td class="text-center">
+                            <input type="text" name="Spends[@index].Comment" class="form-control"/>
+                        </td>
                         <td>
                             <input type="hidden" name="Spends[@index].Id" value="@item.Id" />
                             <div class="form-check">
@@ -103,7 +107,7 @@
                     <td class="text-center"><span id="totalPrice"></span></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
-                    <td>----</td>
+                    <td colspan="2"></td>
                 </tr>
             }
         </tbody>

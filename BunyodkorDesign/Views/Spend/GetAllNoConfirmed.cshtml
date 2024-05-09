@@ -19,7 +19,7 @@
             </div>
         </div>
     </div>
-    <div class="col-3 py-2">
+    <div class="col-3 py-3">
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
 </div>
@@ -32,6 +32,7 @@
             <th class="text-center" scope="col">Суммаси</th>
             <th class="text-center" scope="col">Чиқим тури</th>
             <th class="text-center" colspan="2">Сабаби</th>
+            <th class="text-center" colspan="2">Изох</th>
             <th class="text-center" scope="col"></th>
         </tr>
     </thead>
@@ -44,8 +45,9 @@
                     <th scope="row">@count</th>
                     <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
                     <td class="text-center price"><span>@item.Price</span></td>
-                    <td class="text-center">@item.SpendType.Name</td>
+                    <td class="text-center">@item.SpendType!.Name</td>
                     <td class="text-center" colspan="2">@item.Reason</td>
+                    <td class="text-center" colspan="2">@item.Comment</td>
                     <td class="text-center">
                         <a asp-controller="Spend" asp-action="UpdateSpend" asp-route-id="@item.Id" class="btn btn-primary">Ўзгартириш</a>
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@item.Id">
@@ -84,7 +86,7 @@
                 <td class="text-center"></td>
                 <td class="text-center"><span id="totalPrice"></span></td>
                 <td class="text-center"></td>
-                <td class="text-center" colspan="3"></td>
+                <td class="text-center" colspan="5"></td>
             </tr>
         }
     </tbody>

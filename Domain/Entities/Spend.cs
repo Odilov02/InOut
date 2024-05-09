@@ -16,4 +16,5 @@ public class Spend : BaseAuditableEntity
     public Guid? ConstructionId { get; set; }
     public virtual Construction? Construction { get; set; }
     public  bool IsCash { get; set; }
+    public string? Comment { get; set; }
 }

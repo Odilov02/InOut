@@ -310,6 +310,7 @@ namespace Infrastructure.Persistance.Migrations
                     FactoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ConstructionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsCash = table.Column<bool>(type: "bit", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Lasted = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -345,9 +346,9 @@ namespace Infrastructure.Persistance.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("d5c2ed54-38d2-4979-af6a-3cfc2989b9da"), null, "SuperAdmin", "SUPERADMIN" },
-                    { new Guid("d7f42e42-328e-4425-8967-613cd8b65cbe"), null, "User", "USER" },
-                    { new Guid("f07db2ec-319c-40d7-8930-973fbd15ea76"), null, "Admin", "ADMIN" }
+                    { new Guid("0ba18909-ca5e-45a7-b39f-2639fe3e74a2"), null, "Admin", "ADMIN" },
+                    { new Guid("503e17d3-0151-4e2b-931f-4dff686f6eb3"), null, "SuperAdmin", "SUPERADMIN" },
+                    { new Guid("d9e42cf2-17bc-4aae-b295-6f70a76d9212"), null, "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
@@ -355,8 +356,8 @@ namespace Infrastructure.Persistance.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "Login", "NormalizedEmail", "NormalizedUserName", "Password", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("6d2c8ed8-ea6c-4f44-ab91-71f864c7ed68"), 0, "899cf801-823e-466f-ba3a-d8f137932720", null, false, "Admin", false, null, "Admin000", null, null, "628d9f9579184c682f76a9cf717c09050a6f97211477c948c6e027f0da26baa1", null, "+998901234567", false, "da83bd2b-c354-4fa7-9330-8b8ce33d10e3", false, "2f6c3311-643a-4ec3-9cba-dc622e3d6292" },
-                    { new Guid("bd54bb5a-f399-4715-a937-6357cbcb9809"), 0, "7f1b2a5a-4365-4471-92ba-9125d8b082ca", null, false, "Admin", false, null, "Admin111", null, null, "5b94a8e5341dff953d9847b049d2cebf27f3e96035e9608ea634df0b7a95d2c4", null, "+998912345678", false, "7d11ba36-2e98-4601-bebb-55057fe7e290", false, "c8caa243-986b-40f4-9c13-7d9f91e1d358" }
+                    { new Guid("3343f9f1-0a21-4117-b193-1e53731f58df"), 0, "aac3ddec-65a9-488a-bae1-a671923ec872", null, false, "Admin", false, null, "Admin111", null, null, "5b94a8e5341dff953d9847b049d2cebf27f3e96035e9608ea634df0b7a95d2c4", null, "+998912345678", false, "03704632-b9f1-4ff3-9187-274a35f5d76b", false, "6025440e-5fbe-458e-8074-f1e408aaa776" },
+                    { new Guid("878962d1-4a08-492e-a9e2-87f0265917a0"), 0, "2c8855d2-46a2-4033-b222-1abe257e2dc0", null, false, "Admin", false, null, "Admin000", null, null, "628d9f9579184c682f76a9cf717c09050a6f97211477c948c6e027f0da26baa1", null, "+998901234567", false, "b9901369-fdf8-41a1-ad06-23b3d22a2ab6", false, "07f1a493-03de-4c2e-b474-b10af9c2f64f" }
                 });
 
             migrationBuilder.InsertData(
@@ -364,14 +365,14 @@ namespace Infrastructure.Persistance.Migrations
                 columns: new[] { "Id", "Descraption", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("1f8ce26a-21c4-4fbb-84bb-f1464d5c2560"), "Бошка майда харажатлар", "Бошқа майда харажатлар" },
-                    { new Guid("9d2586e2-62c5-441c-97a5-a55091e51dae"), "Иш қуроллар харажатлари", "Иш қуроллар" },
-                    { new Guid("c555c74d-b762-4459-9a4d-e2ece6a99ea4"), "У́зимизни ишчилар харажатлари", "У́зимизни ишчилар" },
-                    { new Guid("ccbc93b4-7b38-4803-99dd-2056f47e5aa0"), "Иш хақлари", "Иш хақлари" },
-                    { new Guid("d2b87f5c-d597-4325-b13a-ddc4a2f7c037"), "Хужжатлар ва офис харажатлари", "Хужжатлар ва офис" },
-                    { new Guid("d3f95754-f034-4ed7-a5e9-470069ab171c"), "Озик-овкат харажатлари", "Озик-овкат" },
-                    { new Guid("f51b770b-0047-468e-9181-d34ff75c9371"), "Қурилиш материаллар харажатлари", "Қурилиш материаллар" },
-                    { new Guid("fb4100d5-e676-4a9e-82f7-50dcc4b28984"), "Транспорт харажатлари", "Транспорт" }
+                    { new Guid("0482f5bd-e81b-4b29-a359-7e6c8d46a1a8"), "Бошка майда харажатлар", "Бошқа майда харажатлар" },
+                    { new Guid("3b7c5c49-f6fc-4421-9769-7955a3581a52"), "Иш хақлари", "Иш хақлари" },
+                    { new Guid("4b418010-a902-45d6-bdf6-0124cec4fa28"), "Хужжатлар ва офис харажатлари", "Хужжатлар ва офис" },
+                    { new Guid("5ee2126e-498d-421f-897e-ca5278ab8881"), "Қурилиш материаллар харажатлари", "Қурилиш материаллар" },
+                    { new Guid("867a89b9-1900-471e-9bf4-5eca8796272b"), "Озик-овкат харажатлари", "Озик-овкат" },
+                    { new Guid("92366285-fb88-424b-a143-0fb44e44b5dc"), "У́зимизни ишчилар харажатлари", "У́зимизни ишчилар" },
+                    { new Guid("ba354941-33ca-4b35-8832-bac3e510b96d"), "Иш қуроллар харажатлари", "Иш қуроллар" },
+                    { new Guid("e11b3aca-4de8-48db-aada-e6ebcdd031c5"), "Транспорт харажатлари", "Транспорт" }
                 });
 
             migrationBuilder.InsertData(
@@ -379,8 +380,8 @@ namespace Infrastructure.Persistance.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("d5c2ed54-38d2-4979-af6a-3cfc2989b9da"), new Guid("6d2c8ed8-ea6c-4f44-ab91-71f864c7ed68") },
-                    { new Guid("f07db2ec-319c-40d7-8930-973fbd15ea76"), new Guid("bd54bb5a-f399-4715-a937-6357cbcb9809") }
+                    { new Guid("0ba18909-ca5e-45a7-b39f-2639fe3e74a2"), new Guid("3343f9f1-0a21-4117-b193-1e53731f58df") },
+                    { new Guid("503e17d3-0151-4e2b-931f-4dff686f6eb3"), new Guid("878962d1-4a08-492e-a9e2-87f0265917a0") }
                 });
 
             migrationBuilder.CreateIndex(

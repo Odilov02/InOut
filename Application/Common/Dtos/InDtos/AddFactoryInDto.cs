@@ -14,10 +14,6 @@ namespace Application.Common.Dtos.InDtos
         [Range(1, long.MaxValue, ErrorMessage = "Кирим сумма киритиш шарт!")]
         public long? Price { get; set; }
 
-
-        [Required(ErrorMessage = "Обьект танлаш шарт!")]
-        public Guid? ConstructionId { get; set; }
-        
         [Required]
         public Guid? FactoryId { get; set; }
     }

@@ -32,16 +32,12 @@
     <thead>
         <tr>
             <th class="text-center" scope="col"></th>
-            <th class="text-center" scope="col">Обьекти</th>
             <th class="text-center" scope="col">Вақти</th>
             <th class="text-center" scope="col">Суммаси</th>
             <th class="text-center" scope="col">Сабаби</th>
         </tr>
         <tr id="filterRow">
             <td></td>
-            <td>
-                <input type="text" class="form-control" id="ConstructionFilter" placeholder="Қидирмоқ.." />
-            </td>
             <td>
                 <input type="text" class="form-control" id="DateFilter" placeholder="Қидирмоқ..." />
             </td>
@@ -60,7 +56,6 @@
             {
                 <tr class="Search">
                     <th scope="row">@count</th>
-                    <td class="text-center">@item.Construction!.FullName</td>
                     <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
                     <td id="formattedNumberPrice" class="text-center price">@item.Price</td>
                     <td class="text-center">@item.Reason</td>
@@ -69,7 +64,7 @@
             }
             <tr class="total-row">
                 <th scope="row">Жами</th>
-                <td colspan="2"></td>
+                <td></td>
                 <th class="text-center" id="totalPrice"></th>
                 <td></td>
             </tr>
@@ -113,7 +108,6 @@
         });
     });
     function filterTable() {
-        var ConstructionFilter = document.getElementById("ConstructionFilter").value.toLowerCase();
         var vaktFilter = document.getElementById("DateFilter").value.toLowerCase();
         var narxFilter = document.getElementById("PriceFilter").value.toLowerCase();
         var sababFilter = document.getElementById("ReasonFilter").value.toLowerCase();
@@ -121,12 +115,11 @@
         var rows = document.querySelectorAll("#dataTable tbody .Search");
         var totalAmount = 0;
         rows.forEach(function (row) {
-            var Construction = row.cells[1].innerText.toLowerCase();
-            var vakti = row.cells[2].innerText.toLowerCase();
-            var narxi = row.cells[3].innerText.toLowerCase();
-            var sababi = row.cells[4].innerText.toLowerCase();
-            var priceFormat = parseFloat(row.cells[3].innerText.replace(/\s/g, ''));
-            if (Construction.includes(ConstructionFilter) && vakti.includes(vaktFilter) && narxi.includes(narxFilter) && sababi.includes(sababFilter)) {
+            var vakti = row.cells[1].innerText.toLowerCase();
+            var narxi = row.cells[2].innerText.toLowerCase();
+            var sababi = row.cells[3].innerText.toLowerCase();
+            var priceFormat = parseFloat(row.cells[2].innerText.replace(/\s/g, ''));
+            if (vakti.includes(vaktFilter) && narxi.includes(narxFilter) && sababi.includes(sababFilter)) {
                 var price = priceFormat;
                 totalAmount += price;
                 row.style.display = "";
