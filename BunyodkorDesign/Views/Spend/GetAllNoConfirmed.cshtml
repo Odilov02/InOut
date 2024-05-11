@@ -7,7 +7,7 @@
 <br />
 <div class="row py-2">
     <div class="col-6">
-        <h1 class="justify-content-center">Тасдиқланмаган чиқимлар</h1>
+        <h3 class="justify-content-center">Тасдиқланмаган чиқимлар</h3>
     </div>
     <div class="col-3 py-3">
         <div class="contianer">
@@ -24,73 +24,75 @@
     </div>
 </div>
 
-<table id="dataTable" class="table table-bordered table-success table-striped">
-    <thead>
-        <tr>
-            <th scope="col"></th>
-            <th class="text-center" scope="col">Вақти</th>
-            <th class="text-center" scope="col">Суммаси</th>
-            <th class="text-center" scope="col">Чиқим тури</th>
-            <th class="text-center" colspan="2">Сабаби</th>
-            <th class="text-center" colspan="2">Изох</th>
-            <th class="text-center" scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            int count = 1;
-            foreach (var item in Model)
-            {
-                <tr class="Search">
-                    <th scope="row">@count</th>
-                    <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
-                    <td class="text-center price"><span>@item.Price</span></td>
-                    <td class="text-center">@item.SpendType!.Name</td>
-                    <td class="text-center" colspan="2">@item.Reason</td>
-                    <td class="text-center" colspan="2">@item.Comment</td>
-                    <td class="text-center">
-                        <a asp-controller="Spend" asp-action="UpdateSpend" asp-route-id="@item.Id" class="btn btn-primary">Ўзгартириш</a>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@item.Id">
-                            Ўчириш
-                        </button>
-                        <div class="modal fade" id="@item.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="@item.Id+Label" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-danger text-white">
-                                        <h2 class="modal-title mx-5" id="@item.Id+Label">Киримни ўчириш</h2>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body bg-info text-dark">
-                                        <h3 class="mx-4">Суммаси:</h3>
-                                        <h5 class="mx-4 ">@item.Price</h5>
-                                        <h3 class="mx-4">Вақти:</h3>
-                                        <h5 class="mx-4">@item.Date.ToString("HH:mm dd.MM.yyyy")</h5>
-                                        <h3 class="mx-4">Чиқим тури:</h3>
-                                        <h5 class="mx-4">@item.SpendType.Name</h5>
-                                        <h3 class="mx-4">Сабаби:</h3>
-                                        <h5 class="mx-4">@item.Reason</h5>
-                                    </div>
-                                    <div class="modal-footer bg-info text-dark">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Орқага</button>
-                                        <a asp-controller="Spend" asp-action="DeleteSpend" asp-route-id="@item.Id" class="btn btn-danger">Ўчириш</a>
+<div class="container">
+    <table id="dataTable" class="table table-bordered table-success table-striped">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th class="text-center" scope="col">Вақти</th>
+                <th class="text-center" scope="col">Суммаси</th>
+                <th class="text-center" scope="col">Чиқим тури</th>
+                <th class="text-center" colspan="2">Сабаби</th>
+                <th class="text-center" colspan="2">Изох</th>
+                <th class="text-center" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int count = 1;
+                foreach (var item in Model)
+                {
+                    <tr class="Search">
+                        <th scope="row">@count</th>
+                        <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
+                        <td class="text-center price"><span>@item.Price</span></td>
+                        <td class="text-center">@item.SpendType!.Name</td>
+                        <td class="text-center" colspan="2">@item.Reason</td>
+                        <td class="text-center" colspan="2">@item.Comment</td>
+                        <td class="text-center">
+                            <a asp-controller="Spend" asp-action="UpdateSpend" asp-route-id="@item.Id" class="btn btn-primary">Ўзгартириш</a>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@item.Id">
+                                Ўчириш
+                            </button>
+                            <div class="modal fade" id="@item.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="@item.Id+Label" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h2 class="modal-title mx-5" id="@item.Id+Label">Чиқим ўчириш</h2>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body bg-info text-dark">
+                                            <h3 class="mx-4">Суммаси:</h3>
+                                            <h5 class="mx-4 ">@item.Price</h5>
+                                            <h3 class="mx-4">Вақти:</h3>
+                                            <h5 class="mx-4">@item.Date.ToString("HH:mm dd.MM.yyyy")</h5>
+                                            <h3 class="mx-4">Чиқим тури:</h3>
+                                            <h5 class="mx-4">@item.SpendType.Name</h5>
+                                            <h3 class="mx-4">Сабаби:</h3>
+                                            <h5 class="mx-4">@item.Reason</h5>
+                                        </div>
+                                        <div class="modal-footer bg-info text-dark">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Орқага</button>
+                                            <a asp-controller="Spend" asp-action="DeleteSpend" asp-route-id="@item.Id" class="btn btn-danger">Ўчириш</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </td>
+                        </td>
+                    </tr>
+                    count++;
+                }
+                <tr class="total-row">
+                    <th scope="row">Жами</th>
+                    <td class="text-center"></td>
+                    <td class="text-center"><span id="totalPrice"></span></td>
+                    <td class="text-center"></td>
+                    <td class="text-center" colspan="5"></td>
                 </tr>
-                count++;
             }
-            <tr class="total-row">
-                <th scope="row">Жами</th>
-                <td class="text-center"></td>
-                <td class="text-center"><span id="totalPrice"></span></td>
-                <td class="text-center"></td>
-                <td class="text-center" colspan="5"></td>
-            </tr>
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 <script>
     formatTableNumbers();
     $(document).ready(function () {

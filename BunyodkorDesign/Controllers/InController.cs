@@ -35,7 +35,7 @@ public class InController : Controller
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
 
-        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true && x.UserId.ToString() == userId).ToList();
+        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true && x.UserId.ToString() == userId).OrderByDescending(x=>x.Date).ToList();
         return View(ins);
     }
 
@@ -53,7 +53,7 @@ public class InController : Controller
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
 
-        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).ToList();
+        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).OrderByDescending(x=>x.Date).ToList();
         return View(ins);
     }
 
@@ -71,7 +71,7 @@ public class InController : Controller
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
 
-        List<In?> ins = _appDbContext.Ins.Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).ToList()!;
+        List<In?> ins = _appDbContext.Ins.Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).OrderByDescending(x => x.Date).ToList()!;
         return View(ins);
     }
 
@@ -90,7 +90,7 @@ public class InController : Controller
 
         if (!ModelState.IsValid)
         {
-            List<In?> newIns = _appDbContext.Ins.Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).ToList()!;
+            List<In?> newIns = _appDbContext.Ins.Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).OrderByDescending(x => x.Date).ToList()!;
             return View(newIns);
         }
         List<In> ins = new();
@@ -138,7 +138,7 @@ public class InController : Controller
                 }
                 transaction.Commit();
                 ViewData["result"] = ins.Count;
-                ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).ToList();
+                ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).OrderByDescending(x => x.Date).ToList();
                 return View(ins);
             }
             catch (Exception)
@@ -241,7 +241,7 @@ public class InController : Controller
 
         ViewData["constructionId"] = constructionId;
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
-        List<In> ins = _appDbContext.Ins.Where(x => x.IsConfirmed == false && x.UserId == construction!.UserId).ToList();
+        List<In> ins = _appDbContext.Ins.Where(x => x.IsConfirmed == false && x.UserId == construction!.UserId).OrderByDescending(x => x.Date).ToList();
         return View(ins);
     }
 
@@ -256,7 +256,7 @@ public class InController : Controller
 
         ViewData["constructionId"] = constructionId;
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
-        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true && x.UserId == construction!.UserId).ToList();
+        List<In> ins = _appDbContext.Ins.ToList().Where(x => x.IsConfirmed == true && x.UserId == construction!.UserId).OrderByDescending(x => x.Date).ToList();
         return View(ins);
     }
 
@@ -275,7 +275,7 @@ public class InController : Controller
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
 
         ViewData["UserId"] = userId;
-        List<In> ins = await _appDbContext.Ins.Where(x => x.UserId.ToString() == userId).ToListAsync();
+        List<In> ins = await _appDbContext.Ins.Where(x => x.UserId.ToString() == userId).OrderByDescending(x=>x.Date).ToListAsync();
         return View(ins);
     }
 

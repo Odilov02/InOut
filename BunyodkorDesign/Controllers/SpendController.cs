@@ -85,7 +85,7 @@ public class SpendController : Controller
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
 
-        List<Spend> spends = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == true && x.UserId.ToString() == userId).ToList();
+        List<Spend> spends = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == true && x.UserId.ToString() == userId).OrderByDescending(x => x.Date).ToList();
         return View(spends);
     }
 
@@ -103,7 +103,7 @@ public class SpendController : Controller
         if (userId is null)
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
 
-        List<Spend> spends = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).ToList();
+        List<Spend> spends = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && x.UserId.ToString() == userId).OrderByDescending(x => x.Date).ToList();
         return View(spends);
     }
 
@@ -191,7 +191,7 @@ public class SpendController : Controller
 
 
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
-        List<Spend> spends = _appDbContext.Spends.Where(x => x.ConstructionId == construction!.Id && x.IsConfirmed == false).ToList();
+        List<Spend> spends = _appDbContext.Spends.Where(x => x.ConstructionId == construction!.Id && x.IsConfirmed == false).OrderByDescending(x => x.Date).ToList();
         var spendsConfirming = new SpendsConfirming()
         {
             ConstructionId = constructionId,
@@ -213,8 +213,8 @@ public class SpendController : Controller
 
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == spendsConfirming.ConstructionId);
 
-        List<Spend> entities = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && spendsConfirming.Spends.Any(y => y.Id == x.Id && y.IsConfirmed == true)).ToList();
-        List<Spend> entitiesFalse = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && spendsConfirming.Spends.Any(y => y.Id == x.Id && y.IsConfirmed == false)).ToList();
+        List<Spend> entities = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && spendsConfirming.Spends.Any(y => y.Id == x.Id && y.IsConfirmed == true)).OrderByDescending(x => x.Date).ToList();
+        List<Spend> entitiesFalse = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && spendsConfirming.Spends.Any(y => y.Id == x.Id && y.IsConfirmed == false)).OrderByDescending(x=>x.Date).ToList();
         foreach (var item in entitiesFalse)
         {
             item.Comment = spendsConfirming.Spends.FirstOrDefault(x => x.Id == item.Id)!.Comment;

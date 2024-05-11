@@ -84,7 +84,7 @@ public class FactoryController : Controller
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
 
-        var spends = _appDbContext.Spends.Where(x => x.FactoryId == factoryId).ToList();
+        var spends = _appDbContext.Spends.Where(x => x.FactoryId == factoryId).OrderByDescending(x=>x.Date).ToList();
         ViewData["factoryId"] = factoryId;
         return View(spends);
     }
@@ -98,7 +98,7 @@ public class FactoryController : Controller
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
 
-        var ins = _appDbContext.Ins.Where(x => x.FactoryId == factoryId).ToList();
+        var ins = _appDbContext.Ins.Where(x => x.FactoryId == factoryId).OrderByDescending(x=>x.Date).ToList();
         ViewData["factoryId"] = factoryId;
         return View(ins);
     }

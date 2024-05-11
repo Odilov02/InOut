@@ -43,15 +43,24 @@ public class FileService : IFileService
 
     public async Task<string?> SaveFileAsync(IFormFile file)
     {
-        if (file.Length <= 0 || file is null) return null;
-
-        var fileName = Guid.NewGuid() + file.FileName;
-        var path = Path.Combine(_webHostEnvironment.WebRootPath, "Documents", fileName);
-        using (var stream = new FileStream(path, FileMode.Create))
+        try
         {
-            await file.CopyToAsync(stream);
+            if (file.Length <= 0 || file is null) return null;
+
+            var fileName = Guid.NewGuid() + file.FileName;
+            var path = Path.Combine(_webHostEnvironment.WebRootPath, "Documents", fileName);
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+            return fileName;
         }
-        return fileName;
+        catch (Exception e)
+        {
+
+            return null;
+        }
+      
     }
 
 }
