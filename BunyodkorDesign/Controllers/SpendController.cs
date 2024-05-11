@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.RateLimiting;
-using System;
-
-namespace WebUI.Controllers;
+﻿namespace WebUI.Controllers;
 
 public class SpendController : Controller
 {
     private readonly IAppDbContext _appDbContext;
     private readonly IMapper _mapper;
-   private readonly IDateTimeService _dateTime;
+    private readonly IDateTimeService _dateTime;
 
     public SpendController(IAppDbContext appDbContext, IMapper mapper, IDateTimeService dateTime)
     {
@@ -21,6 +18,7 @@ public class SpendController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        ViewData["Construction"] = HttpContext.Session.GetString("Construction");
 
         var spendTypes = _appDbContext.SpendTypes.ToList();
         ViewData["SpendTypes"] = spendTypes;
@@ -35,6 +33,7 @@ public class SpendController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        ViewData["Construction"] = HttpContext.Session.GetString("Construction");
 
 
         if (!ModelState.IsValid)
@@ -56,6 +55,7 @@ public class SpendController : Controller
         await _appDbContext.Spends.AddAsync(spend);
         var result = await _appDbContext.SaveChangesAsync();
         ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
+ 
         ViewData["result"] = result;
         return View();
     }
@@ -67,6 +67,7 @@ public class SpendController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        ViewData["Construction"] = HttpContext.Session.GetString("Construction");
 
         return View();
     }
@@ -79,6 +80,7 @@ public class SpendController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        ViewData["Construction"] = HttpContext.Session.GetString("Construction");
 
 
         string? userId = HttpContext.Session.GetString("UserId");
@@ -97,6 +99,7 @@ public class SpendController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        ViewData["Construction"] = HttpContext.Session.GetString("Construction");
 
 
         string? userId = HttpContext.Session.GetString("UserId");
@@ -114,6 +117,8 @@ public class SpendController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        ViewData["Construction"] = HttpContext.Session.GetString("Construction");
+
         var spend = await _appDbContext.Spends.FirstOrDefaultAsync(x => x.Id == id);
         if (spend == null) throw new();
         Guid? constructionId = spend.ConstructionId;
@@ -132,6 +137,7 @@ public class SpendController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        ViewData["Construction"] = HttpContext.Session.GetString("Construction");
 
         var spendTypes = _appDbContext.SpendTypes.ToList();
         ViewData["SpendTypes"] = spendTypes;
@@ -151,6 +157,7 @@ public class SpendController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        ViewData["Construction"] = HttpContext.Session.GetString("Construction");
 
 
         if (!ModelState.IsValid)
@@ -214,12 +221,12 @@ public class SpendController : Controller
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == spendsConfirming.ConstructionId);
 
         List<Spend> entities = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && spendsConfirming.Spends.Any(y => y.Id == x.Id && y.IsConfirmed == true)).OrderByDescending(x => x.Date).ToList();
-        List<Spend> entitiesFalse = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && spendsConfirming.Spends.Any(y => y.Id == x.Id && y.IsConfirmed == false)).OrderByDescending(x=>x.Date).ToList();
+        List<Spend> entitiesFalse = _appDbContext.Spends.ToList().Where(x => x.IsConfirmed == false && spendsConfirming.Spends.Any(y => y.Id == x.Id && y.IsConfirmed == false)).OrderByDescending(x => x.Date).ToList();
         foreach (var item in entitiesFalse)
         {
             item.Comment = spendsConfirming.Spends.FirstOrDefault(x => x.Id == item.Id)!.Comment;
             _appDbContext.Spends.Update(item);
-           await _appDbContext.SaveChangesAsync();
+            await _appDbContext.SaveChangesAsync();
         }
         using (var transaction = _appDbContext.Database.BeginTransaction())
         {
@@ -301,7 +308,7 @@ public class SpendController : Controller
             if (item.UserId == construction!.UserId)
                 allSpend.AdminOrUser = "P";
             else if (item.FactoryId is not null)
-                allSpend.AdminOrUser = "Z";
+                allSpend.AdminOrUser = "T";
             else
                 allSpend.AdminOrUser = "A";
 
@@ -349,7 +356,7 @@ public class SpendController : Controller
         foreach (var item in adminSpends)
         {
             var adminSpend = new GettingPersonalSpend();
-            adminSpend.Construction = item.Construction??new() { FullName= "Умумий чиқим" };
+            adminSpend.Construction = item.Construction ?? new() { FullName = "Умумий чиқим" };
             adminSpend.Date = item.Date;
             adminSpend.Price = item.Price;
             adminSpend.Reason = item.Reason;
@@ -357,7 +364,7 @@ public class SpendController : Controller
             resultSpend.Add(adminSpend);
         }
 
-        List<In> ins = _appDbContext.Ins.Where(x => x.ConstructionId!=null).ToList();
+        List<In> ins = _appDbContext.Ins.Where(x => x.ConstructionId != null).ToList();
 
         foreach (var item in ins)
         {
@@ -368,6 +375,19 @@ public class SpendController : Controller
             inSpend.Reason = item.Reason;
             inSpend.SpendType = new SpendType() { Name = "Прорапга кирим" };
             resultSpend.Add(inSpend);
+        }
+
+        List<In> insFactory = _appDbContext.Ins.Where(x => x.ConstructionId == null&&x.IsCash&&x.Factory!=null).ToList();
+
+        foreach (var item in insFactory)
+        {
+            var factoryIn = new GettingPersonalSpend();
+            factoryIn.Construction = new Construction() { FullName = "Умумий чиқим" };
+            factoryIn.Date = item.Date;
+            factoryIn.Price = item.Price;
+            factoryIn.Reason = item.Reason;
+            factoryIn.SpendType = new SpendType() { Name = "Таминотчига кирим" };
+            resultSpend.Add(factoryIn);
         }
 
         resultSpend = resultSpend.OrderByDescending(x => x.Date).ToList();
@@ -421,20 +441,22 @@ public class SpendController : Controller
                 spend.UserId = user!.Id;
                 await _appDbContext.Spends.AddAsync(spend);
                 var result = await _appDbContext.SaveChangesAsync();
-                if (result > 0)
-                {
-                    user.Residual -= spend.Price;
-                    _appDbContext.Users.Update(user);
-                    await _appDbContext.SaveChangesAsync();
-                    transaction.Commit();
-                    ViewData["result"] = result;
-                    ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
-                    return View();
-                }
-                else
+                if (result <= 0)
                 {
                     throw new();
                 }
+                user.Residual -= spend.Price;
+                _appDbContext.Users.Update(user);
+                result = await _appDbContext.SaveChangesAsync();
+                if (result <= 0)
+                {
+                    throw new();
+                }
+                transaction.Commit();
+                ViewData["result"] = result;
+                ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
+                return View();
+
             }
             catch (Exception)
             {
@@ -488,8 +510,8 @@ public class SpendController : Controller
             return RedirectToAction(actionName: "LogOut", controllerName: "User");
         Spend spend = _mapper.Map<Spend>(adminSpend);
         spend.IsConfirmed = true;
-        spend.Date= _dateTime.NowTime();
-        spend.User =await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId);
+        spend.Date = _dateTime.NowTime();
+        spend.User = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId);
         using (var transaction = _appDbContext.Database.BeginTransaction())
         {
             try

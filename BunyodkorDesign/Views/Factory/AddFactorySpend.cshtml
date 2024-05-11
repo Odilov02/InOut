@@ -5,6 +5,7 @@
 @model AddFactorySpendDto
 @{
     List<Domain.Entities.Construction>? constructions = (List<Domain.Entities.Construction>)ViewData["Constructions"]!;
+    List<Domain.Entities.SpendType>? spendTypes = (List<Domain.Entities.SpendType>)ViewData["SpendTypes"]!;
 }
 @{
     if (ViewData["result"] is not null)
@@ -113,6 +114,31 @@
 
         </select>
         <span class="text-danger" asp-validation-for="ConstructionId"></span>
+    </div>
+    <div class="form-control">
+        <label for="SpendTypeId" id="SpendTypeId">
+            Чиқим тури
+        </label>
+
+        <!-- Dropdown options -->
+        <select name="SpendTypeId" id="SpendTypeId">
+            <option value="@null">Чиқим турини танланг!</option>
+            @{
+                if (spendTypes is null)
+                {
+                    <option value="@null">Бошқа харажатлар</option>
+                }
+                else
+                {
+                    foreach (var outType in spendTypes)
+                    {
+                        <option value="@outType.Id">@outType.Name</option>
+                    }
+                }
+            }
+
+        </select>
+        <span class="text-danger" asp-validation-for="SpendTypeId"></span>
     </div>
     <div class="form-control">
         <label for="comment">

@@ -78,6 +78,8 @@ public class UserController : Controller
         else if (roles.Contains("User"))
         {
             HttpContext.Session.SetString("UserId", user.Id.ToString());
+            HttpContext.Session.SetString("Construction", user.Construction!.FullName);
+
             return RedirectToAction("Choose", "Spend");
         }
         else if(roles.Contains("SuperAdmin"))

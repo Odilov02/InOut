@@ -19,4 +19,6 @@ public class AddFactorySpendDto
 
     [Required]
     public Guid? FactoryId { get; set; }
+    [Required(ErrorMessage = "Чиқим турини танлаш шарт!")]
+    public Guid? SpendTypeId { get; set; }
 }

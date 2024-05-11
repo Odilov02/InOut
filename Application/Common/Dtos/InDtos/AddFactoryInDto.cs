@@ -14,6 +14,8 @@ namespace Application.Common.Dtos.InDtos
         [Range(1, long.MaxValue, ErrorMessage = "Кирим сумма киритиш шарт!")]
         public long? Price { get; set; }
 
+        public bool? IsCash { get; set; }
+
         [Required]
         public Guid? FactoryId { get; set; }
     }

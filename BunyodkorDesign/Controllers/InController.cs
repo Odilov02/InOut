@@ -19,6 +19,7 @@ public class InController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        ViewData["Construction"] = HttpContext.Session.GetString("Construction");
         return View();
     }
 
@@ -29,6 +30,7 @@ public class InController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        ViewData["Construction"] = HttpContext.Session.GetString("Construction");
 
 
         string? userId = HttpContext.Session.GetString("UserId");
@@ -47,6 +49,7 @@ public class InController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        ViewData["Construction"] = HttpContext.Session.GetString("Construction");
 
 
         string? userId = HttpContext.Session.GetString("UserId");
@@ -65,6 +68,7 @@ public class InController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        ViewData["Construction"] = HttpContext.Session.GetString("Construction");
 
 
         string? userId = HttpContext.Session.GetString("UserId");
@@ -83,6 +87,7 @@ public class InController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        ViewData["Construction"] = HttpContext.Session.GetString("Construction");
 
         string? userId = HttpContext.Session.GetString("UserId");
         if (userId is null)

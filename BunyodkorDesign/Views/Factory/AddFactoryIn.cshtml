@@ -85,6 +85,19 @@
                placeholder="Кирим суммасини киритинг..." oninput="formatNumber()" />
         <span class="text-danger" asp-validation-for="Price"></span>
     </div>
+
+       <div class="form-control">
+        <label for="IsCash" id="IsCash">
+            Пул тури
+        </label>
+        <select name="IsCash" id="IsCash">
+            <option value="@null">Пул турини танланг!</option>
+            <option value="@true">Нақт пул</option>
+            <option value="@false">Нақт емас</option>
+        </select>
+        <span class="text-danger" asp-validation-for="IsCash"></span>
+    </div>
+
     <input type="hidden" name="factoryId" id="factoryId" value="@Model.FactoryId" />
     <div class="form-control">
         <label for="comment">

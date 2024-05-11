@@ -1,4 +1,5 @@
 ﻿using Application.Common.Dtos.FactoryDtos;
+using Domain.Entities;
 
 namespace WebUI.Controllers;
 
@@ -135,6 +136,12 @@ public class FactoryController : Controller
             In @in = _mapper.Map<In>(inDto);
             @in.Date = _dateTime.NowTime();
             var factory = await _appDbContext.Factories.FirstOrDefaultAsync(x => x.Id == inDto.FactoryId);
+            string? userId = HttpContext.Session.GetString("AdminId");
+
+            if (userId is null)
+                return RedirectToAction(actionName: "LogOut", controllerName: "User");
+
+            var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == userId);
 
             using (var transaction = _appDbContext.Database.BeginTransaction())
             {
@@ -144,6 +151,16 @@ public class FactoryController : Controller
                     var result = await _appDbContext.SaveChangesAsync();
                     if (result <= 0)
                         throw new();
+                    if(inDto.IsCash??false)
+                    {
+                        user!.Residual -= @in.Price;
+                        _appDbContext.Users.Update(user);
+                        result = await _appDbContext.SaveChangesAsync();
+                        if (result <= 0)
+                        {
+                            throw new();
+                        }
+                    }
                     factory!.In += @in.Price;
                     _appDbContext.Factories.Update(factory);
                     result = await _appDbContext.SaveChangesAsync();
@@ -180,6 +197,7 @@ public class FactoryController : Controller
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
         ViewData["Constructions"] = _appDbContext.Constructions.ToList();
+        ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
         var spendDto = new AddFactorySpendDto()
         {
             FactoryId = factoryId
@@ -193,6 +211,7 @@ public class FactoryController : Controller
     [HttpPost]
     public async Task<IActionResult> AddFactorySpend(AddFactorySpendDto spendDto)
     {
+        ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
         ViewData["Constructions"] = _appDbContext.Constructions.ToList();
@@ -201,7 +220,7 @@ public class FactoryController : Controller
         var spend = _mapper.Map<Spend>(spendDto);
         spend.IsConfirmed = true;
         spend.Date = _dateTime.NowTime();
-        spend.SpendType =(await _appDbContext.SpendTypes.FirstOrDefaultAsync(x => x.Name == "Қурилиш материаллар"))??new();
+        spend.SpendType  = (await _appDbContext.SpendTypes.FirstOrDefaultAsync(x => x.Id == spend.SpendTypeId))!;
         var factory = await _appDbContext.Factories.FirstOrDefaultAsync(x => x.Id == spendDto.FactoryId);
 
         using (var transaction = _appDbContext.Database.BeginTransaction())

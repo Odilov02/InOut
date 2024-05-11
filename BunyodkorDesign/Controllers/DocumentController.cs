@@ -98,11 +98,12 @@ namespace WebUI.Controllers
             return View("GetAllFile", documents);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DownloadFile(Guid id)
         {
             ViewData["FullName"] = HttpContext.Session.GetString("FullName");
             ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
-            var document =await _appDbContext.Documents.FirstOrDefaultAsync();
+            Document? document =await _appDbContext.Documents.FirstOrDefaultAsync(x=>x.Id==id);
             if (document is null)
                 return RedirectToAction(actionName:"GetAllFile",controllerName:"Document");
 

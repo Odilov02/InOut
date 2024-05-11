@@ -13,4 +13,5 @@ public class In : BaseAuditableEntity
     public virtual Factory? Factory   { get; set; }
     public Guid? ConstructionId { get; set; }
     public virtual Construction? Construction { get; set; }
+    public bool IsCash { get; set; }
 }

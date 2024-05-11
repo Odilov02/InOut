@@ -35,7 +35,7 @@
     <div class="col-sm-4 my-3  ">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title py-3 mx-4">Таминотчи</h4>
+                <h4 class="card-title py-3 mx-4">Таминотчилар</h4>
                 <a asp-action="GetAllFactory" asp-controller="Factory" class="btn  btn-outline-dark px-5 mx-4 my-2"><h4>Кириш</h4></a>
                 <h5 class="mt-1 text-end">--------</h5>
             </div>
@@ -55,7 +55,12 @@
                             <h4 class="card-title py-3 mx-4">@Model[i].FullName</h4>
                         </div>
                         <div class="col-2">
-                             <span class="badge bg-danger">@inCount+</span>
+                                    @{
+                                        if(inCount>0)
+                                        {
+                                            <span class="badge bg-danger">@inCount+</span>
+                                        }
+                                    }
                         </div>
                         </div>
                             <a asp-route-constructionId="@Model[i].Id" asp-controller="Construction" asp-action="Choose" class="btn btn-outline-success px-5 mx-4 my-2"><h4 class="mx-2">Кириш</h4></a>
