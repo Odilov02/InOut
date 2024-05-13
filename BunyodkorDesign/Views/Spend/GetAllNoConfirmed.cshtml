@@ -6,10 +6,10 @@
 @model List<Spend>
 <br />
 <div class="row py-2">
-    <div class="col-6">
-        <h3 class="justify-content-center">Тасдиқланмаган чиқимлар</h3>
+    <div class="col-12 col-md-6">
+        <h3 class="text-center  py-3">Тасдиқланмаган чиқимлар</h3>
     </div>
-    <div class="col-3 py-3">
+    <div class="col-6 col-md-3 px-5 px-md-0 py-3">
         <div class="contianer">
             <div class="form-group">
                 <div class="input-group" value=" ">
@@ -19,22 +19,21 @@
             </div>
         </div>
     </div>
-    <div class="col-3 py-3">
+    <div class="col-6 col-md-3 py-3">
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
 </div>
-
-<div class="container">
-    <table id="dataTable" class="table table-bordered table-success table-striped">
+<div class="overflow-auto">
+    <table id="dataTable" class="table table-bordered table-success table-striped ">
         <thead>
             <tr>
                 <th scope="col"></th>
-                <th class="text-center" scope="col">Вақти</th>
+                <th class="text-center" scope="col">Вақти!</th>
                 <th class="text-center" scope="col">Суммаси</th>
                 <th class="text-center" scope="col">Чиқим тури</th>
-                <th class="text-center" colspan="2">Сабаби</th>
-                <th class="text-center" colspan="2">Изох</th>
-                <th class="text-center" scope="col"></th>
+                <th class="text-center">Сабаби</th>
+                <th class="text-center">Изох</th>
+                <th class="text-center" colspan="4"></th>
             </tr>
         </thead>
         <tbody>
@@ -47,10 +46,12 @@
                         <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
                         <td class="text-center price"><span>@item.Price</span></td>
                         <td class="text-center">@item.SpendType!.Name</td>
-                        <td class="text-center" colspan="2">@item.Reason</td>
-                        <td class="text-center" colspan="2">@item.Comment</td>
+                        <td class="text-center">@item.Reason</td>
+                        <td class="text-center">@item.Comment</td>
                         <td class="text-center">
                             <a asp-controller="Spend" asp-action="UpdateSpend" asp-route-id="@item.Id" class="btn btn-primary">Ўзгартириш</a>
+                        </td>
+                        <td class="text-center">
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@item.Id">
                                 Ўчириш
                             </button>
@@ -87,12 +88,13 @@
                     <td class="text-center"></td>
                     <td class="text-center"><span id="totalPrice"></span></td>
                     <td class="text-center"></td>
-                    <td class="text-center" colspan="5"></td>
+                    <td class="text-center" colspan="4"></td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
 <script>
     formatTableNumbers();
     $(document).ready(function () {

@@ -2,44 +2,50 @@
     Layout = "_UserLayout";
 }
 <div class="row py-2">
-    <div class="col-sm-3">
+    <div class="col-12 col-sm-2 col-md-3">
     </div>
-    <div class="col-sm-6 ">
+    <div class="col-12 col-sm-8 col-md-6">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title py-3">Kиримларни тасдиқлаш</h4>
-                <a asp-action="ConfirmationIn" asp-controller="In" class="btn btn-primary mx-3 my-2"><h4>Кириш</h4></a>
+                <h4 class="card-title text-center text-primary py-3">Kиримларни тасдиқлаш</h4>
+                <div class=" d-flex justify-content-center">
+                <a asp-action="ConfirmationIn" asp-controller="In" class="btn btn-primary mx-3 px-5 my-2"><h4>Кириш</h4></a>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-12 col-sm-2 col-md-3">
     </div>
 </div>
 <div class="row pt-3 pb-2">
-    <div class="col-sm-3">
+    <div class="col-12 col-sm-2 col-md-3">
     </div>
-    <div class="col-sm-6 ">
+    <div class="col-12 col-sm-8 col-md-6">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title py-3">Тасдиқланган киримлар</h4>
-                <a asp-action="GetAllConfirmed" asp-controller="In" class="btn btn-success mx-3 my-2"><h4>Кириш</h4></a>
+                <h4 class="card-title text-center text-success py-3">Тасдиқланган киримлар</h4>
+                <div class=" d-flex justify-content-center">
+                    <a asp-action="GetAllConfirmed" asp-controller="In" class="btn btn-success mx-3 px-5 my-2"><h4>Кириш</h4></a>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-12 col-sm-2 col-md-3">
     </div>
 </div>
 <div class="row py-2">
-    <div class="col-sm-3">
+    <div class="col-12 col-sm-2 col-md-3">
     </div>
-    <div class="col-sm-6 ">
+    <div class="col-12 col-sm-8 col-md-6">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title py-3">Тасдиқланмаган киримлар</h4>
-                <a asp-action="GetAllNoConfirmed" asp-controller="In" class="btn btn-danger mx-3 my-2"><h4>Кириш</h4></a>
+                <h4 class="card-title text-center text-danger py-3">Тасдиқланмаган киримлар</h4>
+                <div class=" d-flex justify-content-center">
+                                   <a asp-action="GetAllNoConfirmed" asp-controller="In" class="btn btn-danger mx-3 px-5 my-2"><h4>Кириш</h4></a>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-12 col-sm-2 col-md-3">
     </div>
 </div>

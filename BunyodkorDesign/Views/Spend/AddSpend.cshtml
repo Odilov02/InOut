@@ -12,27 +12,27 @@
         if ((int)ViewData["result"]! > 0)
         {
             <div class="row">
-                <div class="col">
+                <div class="col-12 col-sm-1 col-md-2">
                 </div>
-                <div class="col-8 mt-3">
-                    <h3 style="background-color: rgb(132, 253, 184);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
-                        Маьлумотлар муваффақиятли қўшилди
+                <div class="col-12 col-sm-10 col-md-8 mt-3">
+                    <h3 style="background-color: rgb(132, 253, 184);" class="shadow mb-3  rounded text-center py-3" id="HtmlTeg">
+                        Маьлумотлар қўшилди
                     </h3>
                 </div>
-                <div class="col"></div>
+                <div class="col-12 col-sm-1 col-md-2"></div>
             </div>
         }
         else
         {
             <div class="row">
-                <div class="col">
+                <div class="col-12 col-sm-1 col-md-2">
                 </div>
-                <div class="col-8 mt-3">
-                    <h3 style="background-color: rgb(252, 113, 109);" class="shadow mb-5  rounded text-center py-3" id="HtmlTeg">
+                <div class="col-12 col-sm-10 col-md-8 mt-3">
+                    <h3 style="background-color: rgb(252, 113, 109);" class="shadow mb-3  rounded text-center py-3" id="HtmlTeg">
                         Маьлумотлар қўшилмади
                     </h3>
                 </div>
-                <div class="col"></div>
+                <div class="col-12 col-sm-10 col-md-8"></div>
             </div>
         }
     }
@@ -95,7 +95,7 @@
 
         <!-- Dropdown options -->
         <select name="SpendTypeId" id="SpendTypeId">
-                <option value="@null">Чиқим турини танланг!</option>
+                <option value="@null"></option>
             @{
                 if (spendTypes is null)
                 {
@@ -124,17 +124,17 @@
         <span class="text-danger" asp-validation-for="Reason"></span>
     </div>
     <div class="row">
-        <div class="col-xs-0 col-md-1">
+        <div class="col-12 col-md-1">
         </div>
-        <div class="col-4 mx-2 mx-md-1">
-            <button type="submit" class="btn btn-success my-4 px-5" onclick="submitNumber()">
+        <div class="col-5 col-md-4 d-flex justify-content-center">
+            <button type="submit" class="btn btn-success my-4 px-4" onclick="submitNumber()">
                 Сақлаш
             </button>
         </div>
-        <div class="col-5 mx-4 d-flex justify-content-end">
-            <a asp-action="Choose" asp-controller="Spend" asp-route-constructionId="Choose" class="btn btn-primary my-4 px-5">Орқага</a>
+        <div class="col-5 col-md-4  d-flex justify-content-end">
+            <a asp-action="Choose" asp-controller="Spend" asp-route-constructionId="Choose" class="btn btn-primary px-4 my-4">Орқага</a>
         </div>
-        <div class="col-1"></div>
+        <div class="col-12 col-md-1"></div>
     </div>
 </form>
 <script>

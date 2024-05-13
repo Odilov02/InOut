@@ -9,15 +9,15 @@
         <div class="card my-5 text-center">
             <div class="card-header">
                 <h4>Охирги қирим қилинган вақти</h4>
-                <h4>@Model.InDate.ToString("HH:mm dd.MM.yyyy")</h4>
+                <h4 class="text-danger">@Model.InDate.ToString("HH:mm dd.MM.yyyy")</h4>
             </div>
             <div class="card-body">
                 <h2 class="card-title">Умумий қолган сумма‌‌</h2>
-                <h1 id="formattedNumber">@Model.User.Residual</h1>
+                <h1 class="text-danger" id="formattedNumber">@Model.User.Residual</h1>
             </div>
             <div class="card-footer">
                 <h4>Охирги чиқим қилинган вақти</h4>
-                <h4>@Model.SpendDate.ToString("HH:mm dd.MM.yyyy")</h4>
+                <h4 class="text-danger">@Model.SpendDate.ToString("HH:mm dd.MM.yyyy")</h4>
             </div>
         </div>
     }

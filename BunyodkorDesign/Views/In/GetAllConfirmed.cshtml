@@ -5,20 +5,18 @@
 @model List<In>
 <br />
 <div class="row py-2">
-    <div class="col-6">
-        <h1 class="justify-content-center">Тасдиқланган киримлар </h1>
+    <div class="col-12 col-md-6">
+        <h3 class="text-center">Тасдиқланган киримлар </h3>
     </div>
-    <div class="col-3 py-2">
-        <div class="contianer">
+    <div class="col-6 col-md-3 py-2 d-flex justify-content-center">
             <div class="form-group">
                 <div class="input-group" value=" ">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
                     <input type="text" id="Search" placeholder="Қидирмоқ..." class="form-control ">
                 </div>
             </div>
-        </div>
     </div>
-    <div class="col-3 py-2">
+    <div class="col-6 col-md-3 py-2 d-flex justify-content-center">
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
 </div>
