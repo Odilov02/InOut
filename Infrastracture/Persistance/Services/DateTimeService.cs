@@ -6,6 +6,6 @@ public class DateTimeService : IDateTimeService
 {
     public DateTime NowTime()
     {
-        return DateTime.Now.AddHours(10);
+        return DateTime.UtcNow.AddHours(5);
     }
 }

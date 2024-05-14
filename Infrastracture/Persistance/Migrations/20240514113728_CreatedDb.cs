@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -17,10 +18,10 @@ namespace Infrastructure.Persistance.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -31,25 +32,25 @@ namespace Infrastructure.Persistance.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Login = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FullName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    Login = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Residual = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,11 +61,11 @@ namespace Infrastructure.Persistance.Migrations
                 name: "Documents",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ImgUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Time = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ImgUrl = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Time = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -75,18 +76,18 @@ namespace Infrastructure.Persistance.Migrations
                 name: "Factories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FullName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     In = table.Column<long>(type: "bigint", nullable: false),
                     Spend = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SpendDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    InDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Lasted = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    SpendDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    InDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Lasted = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    LastedBy = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -97,9 +98,9 @@ namespace Infrastructure.Persistance.Migrations
                 name: "SpendTypes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Descraption = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Descraption = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -110,11 +111,11 @@ namespace Infrastructure.Persistance.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClaimType = table.Column<string>(type: "text", nullable: true),
+                    ClaimValue = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -131,11 +132,11 @@ namespace Infrastructure.Persistance.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClaimType = table.Column<string>(type: "text", nullable: true),
+                    ClaimValue = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -152,10 +153,10 @@ namespace Infrastructure.Persistance.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    ProviderKey = table.Column<string>(type: "text", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -172,8 +173,8 @@ namespace Infrastructure.Persistance.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -196,10 +197,10 @@ namespace Infrastructure.Persistance.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -216,15 +217,15 @@ namespace Infrastructure.Persistance.Migrations
                 name: "Constructions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FullName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     In = table.Column<long>(type: "bigint", nullable: false),
                     Spend = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SpendDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    InDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    SpendDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    InDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     ContractPrice = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
@@ -242,19 +243,19 @@ namespace Infrastructure.Persistance.Migrations
                 name: "Ins",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Reason = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Reason = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Price = table.Column<long>(type: "bigint", nullable: false),
-                    IsConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    FactoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ConstructionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsCash = table.Column<bool>(type: "bit", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Lasted = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    IsConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    FactoryId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ConstructionId = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsCash = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Lasted = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    LastedBy = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -280,11 +281,11 @@ namespace Infrastructure.Persistance.Migrations
                 name: "Outs",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Price = table.Column<long>(type: "bigint", nullable: false),
-                    Reason = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConstructionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Reason = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ConstructionId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -301,21 +302,21 @@ namespace Infrastructure.Persistance.Migrations
                 name: "Spends",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Reason = table.Column<string>(type: "text", nullable: true),
                     Price = table.Column<long>(type: "bigint", nullable: false),
-                    IsConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    SpendTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    FactoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ConstructionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsCash = table.Column<bool>(type: "bit", nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Lasted = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    IsConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    SpendTypeId = table.Column<Guid>(type: "uuid", nullable: true),
+                    FactoryId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ConstructionId = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsCash = table.Column<bool>(type: "boolean", nullable: false),
+                    Comment = table.Column<string>(type: "text", nullable: true),
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Lasted = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    LastedBy = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -347,9 +348,9 @@ namespace Infrastructure.Persistance.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("0ac8a573-8fae-4c2a-95b8-2fe6c17c4b12"), null, "User", "USER" },
-                    { new Guid("d2d16f09-0046-4103-9d46-fa88b208f862"), null, "Admin", "ADMIN" },
-                    { new Guid("d870951d-9327-4a38-a5d4-4fdac5de01ff"), null, "SuperAdmin", "SUPERADMIN" }
+                    { new Guid("126eb452-60bf-4533-bb69-f33057d4595d"), null, "User", "USER" },
+                    { new Guid("82562461-6245-4f80-a02c-6a26459b6365"), null, "Admin", "ADMIN" },
+                    { new Guid("f169c95b-c9e4-4ab8-b03d-8884968dd711"), null, "SuperAdmin", "SUPERADMIN" }
                 });
 
             migrationBuilder.InsertData(
@@ -357,8 +358,8 @@ namespace Infrastructure.Persistance.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "Login", "NormalizedEmail", "NormalizedUserName", "Password", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("662e2fbe-9568-4a59-8d07-84006b457805"), 0, "c879cad7-2663-4e7b-b10d-b994399fe36b", null, false, "Admin", false, null, "Admin000", null, null, "628d9f9579184c682f76a9cf717c09050a6f97211477c948c6e027f0da26baa1", null, "+998901234567", false, "a8794522-a9ca-4975-8e88-25fe27dd9a6c", false, "1558d4d5-5a67-4fcd-92de-c627d3ae7493" },
-                    { new Guid("c4636117-0819-41b3-bf43-03137b0ddbac"), 0, "6f30abd9-4818-49de-85fc-daac5ac3a389", null, false, "Admin", false, null, "Admin111", null, null, "5b94a8e5341dff953d9847b049d2cebf27f3e96035e9608ea634df0b7a95d2c4", null, "+998912345678", false, "e06e9179-794a-4cd1-8fd4-0ffd34149762", false, "bbce3eed-94f1-4038-b61f-fccd0a6cd893" }
+                    { new Guid("3e67fe66-e253-4285-a1d8-2c5d9a4a8b2c"), 0, "55247d77-2101-46d7-a783-0af4176173e2", null, false, "Admin", false, null, "Admin111", null, null, "5b94a8e5341dff953d9847b049d2cebf27f3e96035e9608ea634df0b7a95d2c4", null, "+998912345678", false, "67e9fc3c-e0b4-4aab-9a58-4cd50a9dd97f", false, "bc2291f0-2db5-4147-b7e9-8a03b12ec1fe" },
+                    { new Guid("c5ede616-f70f-43c4-a02a-fb2f0b396713"), 0, "f97a4f1c-ad66-43a2-b745-72702a2463cf", null, false, "Admin", false, null, "Admin000", null, null, "628d9f9579184c682f76a9cf717c09050a6f97211477c948c6e027f0da26baa1", null, "+998901234567", false, "32afef20-7c4b-436b-9d74-b7f9e85923e9", false, "381ca63e-44c1-41fc-8cd7-d34842d60867" }
                 });
 
             migrationBuilder.InsertData(
@@ -366,14 +367,14 @@ namespace Infrastructure.Persistance.Migrations
                 columns: new[] { "Id", "Descraption", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("0063ce99-51f3-4b04-bd6a-f263a03badbb"), "Қурилиш материаллар харажатлари", "Қурилиш материаллар" },
-                    { new Guid("235c881d-a0e9-4900-956e-0b5d4c7f1ee1"), "Бошка майда харажатлар", "Бошқа майда харажатлар" },
-                    { new Guid("343eead4-824a-4444-b664-72b2556fda6b"), "У́зимизни ишчилар харажатлари", "У́зимизни ишчилар" },
-                    { new Guid("59d04214-f181-4f5d-8889-a77bd7d6ae9c"), "Иш қуроллар харажатлари", "Иш қуроллар" },
-                    { new Guid("5d8acb52-bb7c-42bb-832d-b7d7996b45d8"), "Транспорт харажатлари", "Транспорт" },
-                    { new Guid("6ee05216-034d-4401-a64e-3fc7b2423ab9"), "Озик-овкат харажатлари", "Озик-овкат" },
-                    { new Guid("80bfbfb9-05d4-42a8-840e-39a2dba7de53"), "Иш хақлари", "Иш хақлари" },
-                    { new Guid("f2e56213-84ac-4438-9070-bd9b86d448e5"), "Хужжатлар ва офис харажатлари", "Хужжатлар ва офис" }
+                    { new Guid("16a8f390-9818-4ccc-a618-6febf295c8b4"), "Озик-овкат харажатлари", "Озик-овкат" },
+                    { new Guid("1cd95651-0f58-420a-abaf-77a8fff41706"), "Транспорт харажатлари", "Транспорт" },
+                    { new Guid("4f48c3f2-bd21-4849-8750-2a887399100d"), "У́зимизни ишчилар харажатлари", "У́зимизни ишчилар" },
+                    { new Guid("65962610-40e4-4df8-a1c7-6d1d6eaed95a"), "Иш хақлари", "Иш хақлари" },
+                    { new Guid("73fdb1ec-7bd0-42b0-9b9d-3936074e6364"), "Хужжатлар ва офис харажатлари", "Хужжатлар ва офис" },
+                    { new Guid("d1c5a046-d3ce-4440-b07a-4fbd19e438ba"), "Бошка майда харажатлар", "Бошқа майда харажатлар" },
+                    { new Guid("d9139376-f08a-437a-9753-bde8a5cd6f97"), "Қурилиш материаллар харажатлари", "Қурилиш материаллар" },
+                    { new Guid("f1bddb54-4239-4163-8755-73d75a617eda"), "Иш қуроллар харажатлари", "Иш қуроллар" }
                 });
 
             migrationBuilder.InsertData(
@@ -381,8 +382,8 @@ namespace Infrastructure.Persistance.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("d870951d-9327-4a38-a5d4-4fdac5de01ff"), new Guid("662e2fbe-9568-4a59-8d07-84006b457805") },
-                    { new Guid("d2d16f09-0046-4103-9d46-fa88b208f862"), new Guid("c4636117-0819-41b3-bf43-03137b0ddbac") }
+                    { new Guid("82562461-6245-4f80-a02c-6a26459b6365"), new Guid("3e67fe66-e253-4285-a1d8-2c5d9a4a8b2c") },
+                    { new Guid("f169c95b-c9e4-4ab8-b03d-8884968dd711"), new Guid("c5ede616-f70f-43c4-a02a-fb2f0b396713") }
                 });
 
             migrationBuilder.CreateIndex(
@@ -394,8 +395,7 @@ namespace Infrastructure.Persistance.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -433,8 +433,7 @@ namespace Infrastructure.Persistance.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Constructions_UserId",
