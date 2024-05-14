@@ -35,99 +35,95 @@
         }
     }
 }
-<div class="row py-4">
-    <h3 class="mx-2" id="demo"></h3>
-    <div class="col-6">
-        <h1>Чиқимларни тасдиқлаш! </h1>
+<div class="row py-2">
+    <div class="col-12 col-md-6">
+        <h3 class="text-center">Чиқимларни тасдиқлаш </h3>
     </div>
-    <div class="col-2 py-2">
-        <div class="contianer">
-            <div class="form-group">
-                <div class="input-group" value=" ">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
-                    <input type="text" id="Search" placeholder="Қидирмоқ..." class="form-control ">
-                </div>
+    <div class="col-6 col-md-3 py-2 d-flex justify-content-center">
+        <div class="form-group">
+            <div class="input-group" value=" ">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+                <input type="text" id="Search" placeholder="Қидирмоқ..." class="form-control ">
             </div>
         </div>
     </div>
-    <div class="col-2 py-2">
+    <div class="col-6 col-md-3 py-2 d-flex justify-content-center">
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
 </div>
-<form asp-action="ConfirmSpend" method="post">
-                  <input type="hidden" name="ConstructionId" value="@Model.ConstructionId" />
-    <table id="dataTable" class="table table-bordered table-success table-striped">
-        <thead>
-            <tr>
-                <th scope="col"></th>
-                <th class="text-center" scope="col">Вақти</th>
-                <th class="text-center" scope="col">Суммаси</th>
-                <th class="text-center" scope="col">Чиқим тури</th>
-                <th class="text-center" scope="col">Сабаби</th>
-                <th class="text-center" scope="col">Изох</th>
-                <th scope="col">Тасдиқлаш</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                int count = 1;
-                foreach (var item in Model.Spends)
-                {
-                    int index = count - 1;
-                    <tr class="Search">
-                        <th scope="row">@count</th>
-                        <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
-                        <td class="price text-center"><span>@item.Price</span></td>
-                        <td class="text-center">@item.SpendType!.Name</td>
-                        <td class="text-center">@item.Reason</td>
-                        <td class="text-center">
-                            <input type="text" name="Spends[@index].Comment" class="form-control"/>
-                        </td>
-                        <td>
-                            <input type="hidden" name="Spends[@index].Id" value="@item.Id" />
-                            <div class="form-check">
-                                <input name="Spends[@index].IsConfirmed" class="form-check-input" type="checkbox" value="true" id="flexCheckChecked" checked>
-                            </div>
-                        </td>
-                    </tr>
-                    count++;
-                }
-                if(Model.Spends.Count==0)
-                {
-                    <tr>
-                    <td>
-                            <input type="hidden" name="ConstructionId" value="@Model.ConstructionId" />
-                            <input type="hidden" name="Spends" value="@null" />
-                    </td>
-                    </tr>
-                }
-                <tr class="total-row">
-                    <th scope="row">Жами</th>
-                    <td class="text-center"></td>
-                    <td class="text-center"><span id="totalPrice"></span></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td colspan="2"></td>
+    <form asp-action="ConfirmSpend" method="post">
+        <input type="hidden" name="ConstructionId" value="@Model.ConstructionId" />
+<div class="overflow-auto">
+        <table id="dataTable" class="table table-bordered table-success table-striped">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th class="text-center" scope="col">Вақти</th>
+                    <th class="text-center" scope="col">Суммаси</th>
+                    <th class="text-center" scope="col">Чиқим тури</th>
+                    <th class="text-center" scope="col">Сабаби</th>
+                    <th class="text-center" scope="col">Изох</th>
+                    <th scope="col">Тасдиқлаш</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-    <div class="row">
-        <div class="col-1">
+            </thead>
+            <tbody>
+                @{
+                    int count = 1;
+                    foreach (var item in Model.Spends)
+                    {
+                        int index = count - 1;
+                        <tr class="Search">
+                            <th scope="row">@count</th>
+                            <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
+                            <td class="price text-center"><span>@item.Price</span></td>
+                            <td class="text-center">@item.SpendType!.Name</td>
+                            <td class="text-center">@item.Reason</td>
+                            <td class="text-center">
+                                <input type="text" name="Spends[@index].Comment" class="form-control" />
+                            </td>
+                            <td>
+                                <input type="hidden" name="Spends[@index].Id" value="@item.Id" />
+                                <div class="form-check">
+                                    <input name="Spends[@index].IsConfirmed" class="form-check-input" type="checkbox" value="true" id="flexCheckChecked" checked>
+                                </div>
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                    if (Model.Spends.Count == 0)
+                    {
+                        <tr>
+                            <td>
+                                <input type="hidden" name="ConstructionId" value="@Model.ConstructionId" />
+                                <input type="hidden" name="Spends" value="@null" />
+                            </td>
+                        </tr>
+                    }
+                    <tr class="total-row">
+                        <th scope="row">Жами</th>
+                        <td class="text-center"></td>
+                        <td class="text-center"><span id="totalPrice"></span></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td colspan="2"></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+</div>
+        <div class="row">
+            <div class="col-6 d-flex justify-content-center">
+                <button class="btn btn-success px-5 py-2" type="submit">Сақлаш</button>
+            </div>
+            <div class="col-6 d-flex justify-content-center">
+                <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@Model.ConstructionId" class="btn btn-primary px-5 py-2">Орқага</a>
+            </div>
         </div>
-        <div class="col-5">
-            <button class="btn btn-success px-x py-2" type="submit"><h5 class="px-4">Сақлаш</h5></button>
-        </div>
-        <div class="col-5">
-            <a asp-action="Choose" asp-controller="Construction" asp-route-constructionId="@Model.ConstructionId" class="btn btn-primary px-4 py-2"><h5 class="px-4">Орқага</h5></a>
-        </div>
-        <div class="col-1">
-        </div>
-    </div>
-</form>
+    </form>
 <script>
     formatTableNumbers();
     $(document).ready(function () {
+        </div>
         function contains(text_one, text_two) {
             return text_one.indexOf(text_two) != -1;
         }

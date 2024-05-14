@@ -95,8 +95,8 @@
 
         <!-- Dropdown options -->
         <select name="SpendTypeId" id="SpendTypeId">
-                <option value="@null"></option>
             @{
+                    <option value="@null"> Чиқим турини танлаш</option>
                 if (spendTypes is null)
                 {
                     <option value="@null">Бошқа харажатлар</option>
@@ -127,12 +127,12 @@
         <div class="col-12 col-md-1">
         </div>
         <div class="col-5 col-md-4 d-flex justify-content-center">
-            <button type="submit" class="btn btn-success my-4 px-4" onclick="submitNumber()">
+            <button type="submit" class="btn btn-success my-4 px-3" onclick="submitNumber()">
                 Сақлаш
             </button>
         </div>
         <div class="col-5 col-md-4  d-flex justify-content-end">
-            <a asp-action="Choose" asp-controller="Spend" asp-route-constructionId="Choose" class="btn btn-primary px-4 my-4">Орқага</a>
+            <a asp-action="Choose" asp-controller="Spend" asp-route-constructionId="Choose" class="btn btn-primary px-3 my-4">Орқага</a>
         </div>
         <div class="col-12 col-md-1"></div>
     </div>

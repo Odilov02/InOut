@@ -5,61 +5,61 @@
 @model List<In>
 <br />
 <div class="row py-2">
-    <div class="col-3">
-        <h1 class="text-center">Киримлар</h1>
+    <div class="col-6 col-md-3 py-2">
+        <h3 class="text-center">Киримлар</h3>
     </div>
-    <div class="col-2 py-2">
-        <div class="contianer">
+    <div class="col-6 col-md-2 d-flex justify-content-center py-2">
             <div class="form-group">
                 <div class="input-group" value=" ">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
                     <input type="text" id="Search" placeholder="Қидирмоқ..." class="form-control ">
                 </div>
             </div>
-        </div>
     </div>
-    <div class="col-2 py-2">
+    <div class="col-4 col-md-2 py-2 d-flex justify-content-center py-2">
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
-    <div class="col-2 py-2">
-        <a asp-action="AddPersonalIn" asp-controller="In" class="btn btn-primary px-3">Кирим қўшиш </a>
+    <div class="col-4 col-md-2  py-2 d-flex justify-content-center py-2">
+        <a asp-action="AddPersonalIn" asp-controller="In" class="btn btn-primary">Кирим қўшиш </a>
     </div>
-    <div class="col-2 py-2">
-        <a asp-action="GetAllPersonalSpend" asp-controller="Spend" asp-route-constructionId="@ViewData["constructionId"]" class="btn btn-outline-danger px-3">Орқага</a>
+    <div class="col-4 col-md-2 py-2 d-flex justify-content-center py-2">
+        <a asp-action="GetAllPersonalSpend" asp-controller="Spend" asp-route-constructionId="@ViewData["constructionId"]" class="btn btn-outline-danger">Орқага</a>
     </div>
 </div>
+<div class="overflow-auto">
 
-<table id="dataTable" class="table table-bordered table-success table-striped">
-    <thead>
-        <tr>
-            <th scope="col"></th>
-            <th class="text-center" scope="col">Вақти</th>
-            <th class="text-center" scope="col">Суммаси</th>
-            <th class="text-center" colspan="2">Сабаби</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            int count = 1;
-            foreach (var item in Model)
-            {
-                <tr class="Search">
-                    <th scope="row">@count</th>
-                    <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
-                    <td class="text-center price"><span>@item.Price</span></td>
-                    <td class="text-center" colspan="2">@item.Reason</td>
-                </tr>
-                count++;
-            }
-            <tr class="total-row">
-                <th scope="row">Жами</th>
-                <td class="text-center"></td>
-                <th class="text-center"><span id="totalPrice"></span></th>
-                <td class="text-center" colspan="2"></td>
+    <table id="dataTable" class="table table-bordered table-success table-striped">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th class="text-center" scope="col">Вақти</th>
+                <th class="text-center" scope="col">Суммаси</th>
+                <th class="text-center" colspan="2">Сабаби</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @{
+                int count = 1;
+                foreach (var item in Model)
+                {
+                    <tr class="Search">
+                        <th scope="row">@count</th>
+                        <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
+                        <td class="text-center price"><span>@item.Price</span></td>
+                        <td class="text-center" colspan="2">@item.Reason</td>
+                    </tr>
+                    count++;
+                }
+                <tr class="total-row">
+                    <th scope="row">Жами</th>
+                    <td class="text-center"></td>
+                    <th class="text-center"><span id="totalPrice"></span></th>
+                    <td class="text-center" colspan="2"></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 <script>
     formatTableNumbers();
     $(document).ready(function () {

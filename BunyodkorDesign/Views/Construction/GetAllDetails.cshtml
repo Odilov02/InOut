@@ -5,12 +5,11 @@
 }
 @model List<Construction>
 <br />
-<br />
 <div class="row py-2">
-    <div class="col-4">
-        <h2 class="text-center">Умумий маьлумот </h2>
+    <div class="col-7 col-lg-4">
+        <h3 class="text-center">Умумий маьлумот </h3>
     </div>
-    <div class="col-2 py-2">
+    <div class="col-5 col-lg-2 d-flex justify-content-center">
         <div class="contianer">
             <div class="form-group">
                 <div class="input-group" value=" ">
@@ -20,18 +19,19 @@
             </div>
         </div>
     </div>
-    <div class="col-2 py-2">
+    <div class="col-4 col-lg-2 py-4 py-lg-0 d-flex justify-content-end">
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
-     <div class="col-2 py-2">
+    <div class="col-4 col-lg-2 py-4 py-lg-0 d-flex justify-content-end">
         <a asp-action="GetAllFile" asp-controller="Document" class="btn btn-warning">Хужжатлар</a>
     </div>
-    <div class="col-2 py-2">
+    <div class="col-4 col-lg-2 d-flex py-4 py-lg-0 justify-content-end">
         <a asp-action="GetAllConstruction" asp-controller="Construction" class="btn btn-primary">Орқага</a>
     </div>
 </div>
 <br />
-<table id="dataTable" class="table table-bordered table-success table-striped">
+<div class="overflow-auto">
+    <table id="dataTable" class="table table-bordered table-success table-striped">
     <thead>
         <tr>
             <th scope="col"></th>
@@ -81,6 +81,8 @@
         }
     </tbody>
 </table>
+</div>
+
 <script>
    
     formatTableNumbers();

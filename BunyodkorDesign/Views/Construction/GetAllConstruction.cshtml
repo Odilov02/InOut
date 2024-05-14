@@ -5,70 +5,100 @@
 @model List<Construction>;
 <br />
 <div class="row pt-3 pb-2">
-    <div class="col-sm-4 my-3 ">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title py-3 mx-4">Янги объект қу́шиш</h4>
-                <a asp-action="AddConstruction" asp-controller="Construction" class="btn btn-outline-info px-5 mx-4 my-2"><h4>Кириш</h4></a>
-                <h5 class="mt-1 text-end">--------</h5>
+    <div class="col-12 col-sm-10 col-md-6 my-3 col-lg-4">
+        <div class="row">
+            <div class="col-12 col-sm-2 col-md-12">
+            </div>
+            <div class="col-12 col-sm-10 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title py-3 mx-4">Янги объект қу́шиш</h4>
+                        <a asp-action="AddConstruction" asp-controller="Construction" class="btn btn-outline-info my-2"><h4>Кириш</h4></a>
+                        <h5 class="mt-1 text-end">--------</h5>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-4 my-3 ">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title py-3 mx-4"> Умумий маьлумотлар</h4>
-                <a asp-action="GetAllDetails" asp-controller="Construction" class="btn btn-outline-warning px-5 mx-4 my-2"><h4>Кириш</h4></a>
-                <h5 class="mt-1 text-end">--------</h5>
+    <div class="col-12 col-sm-10 col-md-6 my-3 col-lg-4">
+        <div class="row">
+            <div class="col-12 col-sm-2 col-md-12">
+            </div>
+            <div class="col-12 col-sm-10 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title py-3 mx-4"> Умумий маьлумотлар</h4>
+                        <a asp-action="GetAllDetails" asp-controller="Construction" class="btn btn-outline-warning my-2"><h4>Кириш</h4></a>
+                        <h5 class="mt-1 text-end">--------</h5>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-4  my-3 ">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title py-3 mx-4">Асосий касса</h4>
-                <a asp-action="GetAllPersonalSpend" asp-controller="Spend" class="btn btn-outline-danger px-5 mx-4 my-2"><h4>Кириш</h4></a>
-                <h5 class="mt-1 text-end">--------</h5>
+<div class="col-12 col-sm-10 col-md-6 my-3 col-lg-4">
+    <div class="row">
+        <div class="col-12 col-sm-2 col-md-12">
+        </div>
+        <div class="col-12 col-sm-10 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title py-3 mx-4">Асосий касса</h4>
+                    <a asp-action="GetAllPersonalSpend" asp-controller="Spend" class="btn btn-outline-danger px-5 mx-4 my-2"><h4>Кириш</h4></a>
+                    <h5 class="mt-1 text-end">--------</h5>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-4 my-3  ">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title py-3 mx-4">Таминотчилар</h4>
-                <a asp-action="GetAllFactory" asp-controller="Factory" class="btn  btn-outline-dark px-5 mx-4 my-2"><h4>Кириш</h4></a>
-                <h5 class="mt-1 text-end">--------</h5>
+</div>
+<div class="col-12 col-sm-10 col-md-6 my-3 col-lg-4 ">
+    <div class="row">
+        <div class="col-12 col-sm-2 col-md-12">
+        </div>
+        <div class="col-12 col-sm-10 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title py-3">Таминотчилар</h4>
+                    <a asp-action="GetAllFactory" asp-controller="Factory" class="btn  btn-outline-dark my-2"><h4>Кириш</h4></a>
+                    <h5 class="mt-1 text-end">--------</h5>
+                </div>
             </div>
         </div>
     </div>
-    @{
-        if (Model is not null)
+</div>
+@{
+    if (Model is not null)
+    {
+        @for (int i = 0; i < Model.Count; i++)
         {
-            @for (int i = 0; i < Model.Count; i++)
-            {
-                int? inCount = @Model[i].Spends.Where(x => !x.IsConfirmed).Count();
-                <div class="col-sm-4  my-3 ">
-                    <div class="card">
-                        <div class="card-body">
-                        <div class="row">
-                        <div class="col-10">
-                            <h4 class="card-title py-3 mx-4">@Model[i].FullName</h4>
-                        </div>
-                        <div class="col-2">
-                                    @{
-                                        if(inCount>0)
-                                        {
-                                            <span class="badge bg-danger">@inCount+</span>
+            int? inCount = @Model[i].Spends.Where(x => x!.IsConfirmed).Count();
+            <div class="col-12 col-sm-10 col-md-6 my-3 col-lg-4">
+                <div class="row">
+                    <div class="col-12 col-sm-2 col-md-12">
+                    </div>
+                    <div class="col-12 col-sm-10 col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-10">
+                                        <h4 class="card-title py-3 mx-4">@Model[i].FullName</h4>
+                                    </div>
+                                    <div class="col-2">
+                                        @{
+                                            if (inCount > 0)
+                                            {
+                                                <span class="badge bg-danger">@inCount+</span>
+                                            }
                                         }
-                                    }
-                        </div>
-                        </div>
-                            <a asp-route-constructionId="@Model[i].Id" asp-controller="Construction" asp-action="Choose" class="btn btn-outline-success px-5 mx-4 my-2"><h4 class="mx-2">Кириш</h4></a>
-                            <h5 class="mt-1 text-end"> @Model[i].User.FullName</h5>
+                                    </div>
+                                </div>
+                                <a asp-route-constructionId="@Model[i].Id" asp-controller="Construction" asp-action="Choose" class="btn btn-outline-success px-5 mx-4 my-2"><h4 class="mx-2">Кириш</h4></a>
+                                <h5 class="mt-1 text-end"> @Model[i].User.FullName</h5>
+                            </div>
                         </div>
                     </div>
                 </div>
-            }
+            </div>
         }
     }
+}
 </div>

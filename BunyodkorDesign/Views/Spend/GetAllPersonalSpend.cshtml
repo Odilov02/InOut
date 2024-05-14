@@ -7,31 +7,30 @@
 <br />
 
 <div class="row py-2 ms-2">
-    <div class="col-2 py-2">
+    <div class="col-4 col-md-2 py-2 d-flex justify-content-center">
         <a asp-action="GetAllInPersonal" asp-controller="In" class="btn btn-dark">Киримларга ўтиш</a>
     </div>
-    <div class="col-2 py-2">
+    <div class="col-4 col-md-2 py-2 d-flex justify-content-center">
         <a asp-action="AddSpendPersonal" asp-controller="Spend" class="btn btn-success">Чиқим қўшиш</a>
     </div>
-    <div class="col-2 py-2">
-        <div class="contianer">
+    <div class="col-4 col-md-2 py-2 d-flex justify-content-center">
             <div class="form-group">
                 <div class="input-group" value=" ">
                     <input type="text" id="Search" placeholder="Қидирмоқ..." class="form-control ">
                 </div>
             </div>
-        </div>
     </div>
-    <div class="col-2 py-2">
+    <div class="col-4 col-md-2 py-2 d-flex justify-content-center">
         <button class="btn btn-primary" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
-    <div class="col-2 py-2">
+    <div class="col-4 col-md-2 py-2 d-flex justify-content-center">
         <h3  class="text-center pt-1" id="formattedNumber">@ViewData["Residual"]</h3>
     </div>
-  <div class="col-2 py-2">
-        <a asp-action="GetAllConstruction" asp-controller="Construction" class="btn btn-danger px-4">Орқага</a>
+    <div class="col-4 col-md-2 py-2 d-flex justify-content-center">
+        <a asp-action="GetAllConstruction" asp-controller="Construction" class="btn btn-danger">Орқага</a>
     </div>
 </div>
+<div class="overflow-auto">
 
 <table id="dataTable" class="table table-bordered table-success table-striped table-hover">
     <thead>
@@ -86,6 +85,7 @@
         }
     </tbody>
 </table>
+</div>
 
 <script>
     var numberElement = document.getElementById('formattedNumber');

@@ -22,39 +22,40 @@
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
 </div>
-
-<table id="dataTable" class="table table-bordered table-success table-striped">
-    <thead>
-        <tr>
-            <th scope="col"></th>
-            <th class="text-center" scope="col">Вақти</th>
-            <th class="text-center" scope="col">Суммаси</th>
-            <th class="text-center">Сабаби</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            int count = 1;
-            foreach (var item in Model)
-            {
-                <tr class="Search">
-                    <th scope="row">@count</th>
-                    <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
-                    <td class="text-center price"><span>@item.Price</span></td>
-                    <td class="text-center">@item.Reason</td>
-                  
-                </tr>
-                count++;
-            }
-            <tr class="total-row">
-                <th scope="row">Жами</th>
-                <td class="text-center"></td>
-                <td class="text-center"><span id="totalPrice"></span></td>
-                <td class="text-center" colspan="2"></td>
+<div class="overflow-auto">
+    <table id="dataTable" class="table table-bordered table-success table-striped">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th class="text-center" scope="col">Вақти</th>
+                <th class="text-center" scope="col">Суммаси</th>
+                <th class="text-center">Сабаби</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @{
+                int count = 1;
+                foreach (var item in Model)
+                {
+                    <tr class="Search">
+                        <th scope="row">@count</th>
+                        <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
+                        <td class="text-center price"><span>@item.Price</span></td>
+                        <td class="text-center">@item.Reason</td>
+
+                    </tr>
+                    count++;
+                }
+                <tr class="total-row">
+                    <th scope="row">Жами</th>
+                    <td class="text-center"></td>
+                    <td class="text-center"><span id="totalPrice"></span></td>
+                    <td class="text-center" colspan="2"></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 <script>
     formatTableNumbers();
     $(document).ready(function () {
@@ -72,7 +73,7 @@
             $("#hiddenRowsContainer").empty(); // Avvalgi ma'lumotlarni tozalash
             $("#hiddenRowsContainer").append(hiddenRows);
 
-           
+
 
             $(".Search").each(function () {
                 if (!contains($(this).text().toLowerCase(), searchtext)) {
