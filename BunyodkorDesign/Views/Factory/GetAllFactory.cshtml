@@ -5,45 +5,70 @@
 @model List<Factory>;
 <br />
 <div class="row pt-3 pb-2">
-    <div class="col-sm-4 my-3 ">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title py-3 mx-4">Янги таминотчи қу́шиш</h4>
-                <a asp-action="AddFactory" asp-controller="Factory" class="btn btn-outline-info px-5 mx-4 my-2"><h4>Кириш</h4></a>
+    <div class="col-12 col-sm-10 col-md-6 my-3 col-lg-4">
+        <div class="row">
+            <div class="col-12 col-sm-2 col-md-12">
+            </div>
+            <div class="col-12 col-sm-10 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title py-3 mx-4">Янги таминотчи қу́шиш</h4>
+                        <a asp-action="AddFactory" asp-controller="Factory" class="btn btn-outline-info px-5 mx-4 my-2"><h4>Кириш</h4></a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-4 my-3 ">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title py-3 mx-4"> Умумий маьлумотлар</h4>
-                <a asp-action="GetAllDetails" asp-controller="Factory" class="btn btn-outline-warning px-5 mx-4 my-2"><h4>Кириш</h4></a>
+    <div class="col-12 col-sm-10 col-md-6 my-3 col-lg-4">
+        <div class="row">
+            <div class="col-12 col-sm-2 col-md-12">
+            </div>
+            <div class="col-12 col-sm-10 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title py-3 mx-4"> Умумий маьлумотлар</h4>
+                        <a asp-action="GetAllDetails" asp-controller="Factory" class="btn btn-outline-warning px-5 mx-4 my-2"><h4>Кириш</h4></a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-4 my-3 ">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title py-3 mx-4"> Обьектлар</h4>
-                <a asp-action="GetAllConstruction" asp-controller="Construction" class="btn btn-outline-dark px-5 mx-4 my-2"><h4>Кириш</h4></a>
+    <div class="col-12 col-sm-10 col-md-6 my-3 col-lg-4">
+        <div class="row">
+            <div class="col-12 col-sm-2 col-md-12">
+            </div>
+            <div class="col-12 col-sm-10 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title py-3 mx-4"> Обьектлар</h4>
+                        <a asp-action="GetAllConstruction" asp-controller="Construction" class="btn btn-outline-dark px-5 mx-4 my-2"><h4>Кириш</h4></a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     @{
         if (Model is not null)
         {
-            @for (int i = 0; i < Model.Count; i ++)
+            @for (int i = 0; i < Model.Count; i++)
             {
-                <div class="col-sm-4  my-3 ">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title py-3 mx-4">@Model[i].FullName</h4>
-                            <a asp-route-factoryId="@Model[i].Id" asp-controller="Factory" asp-action="GetAllFactorySpend" class="btn btn-outline-success px-5 mx-4 my-2"><h4 class="mx-2">Кириш</h4></a>
+                <div class="col-12 col-sm-10 col-md-6 my-3 col-lg-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-2 col-md-12">
+                        </div>
+                        <div class="col-12 col-sm-10 col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title py-3 mx-4">@Model[i].FullName</h4>
+                                    <a asp-route-factoryId="@Model[i].Id" asp-controller="Factory" asp-action="GetAllFactorySpend" class="btn btn-outline-success px-5 mx-4 my-2"><h4 class="mx-2">Кириш</h4></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             }
         }
     }
-</div>
+ </div>
+
 

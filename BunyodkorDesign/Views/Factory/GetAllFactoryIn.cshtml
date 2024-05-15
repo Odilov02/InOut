@@ -6,28 +6,27 @@
 <br />
 @model List<In>
 <div class="row py-2">
-    <div class="col-4">
-        <h2 class="text-center">Умумий киримлар</h2>
+    <div class="col-6 col-md-4  py-2">
+        <h3 class="text-center">Умумий киримлар</h3>
     </div>
-    <div class="col-2 py-2">
-        <div class="contianer">
+    <div class="col-6 col-md-2  pt-2 d-flex justify-content-center">
             <div class="form-group">
                 <div class="input-group" value=" ">
                     <input type="text" id="Search" placeholder="Қидирмоқ..." class="form-control ">
                 </div>
             </div>
-        </div>
     </div>
-    <div class="col-2 py-2">
+    <div class="col-4 col-md-2  pt-2 d-flex justify-content-center">
         <button class="btn btn-success" onclick="exportToExcel()">Йуклаб олиш</button>
     </div>
-      <div class="col-2 py-2">
+    <div class="col-4 col-md-2  pt-2 d-flex justify-content-center">
         <a asp-controller="Factory" asp-action="AddFactoryIn" asp-route-factoryId="@ViewData["factoryId"]" class="btn btn-success">Кирим қўшиш</a>
     </div>
-    <div class="col-2 py-2">
+    <div class="col-4 col-md-2 pt-2 d-flex justify-content-center">
         <a asp-controller="Factory" asp-action="GetAllFactorySpend" asp-route-factoryId="@ViewData["factoryId"]" class="btn btn-primary px-3">Орқага</a>
     </div>
 </div>
+<div class="overflow-auto">
 <table id="dataTable" class="table table-bordered table-success table-striped table-hover">
     <thead>
         <tr>
@@ -71,6 +70,7 @@
         }
     </tbody>
 </table>
+</div>
 
 <script>
     $(document).ready(function () {

@@ -91,7 +91,7 @@
             Пул тури
         </label>
         <select name="IsCash" id="IsCash">
-            <option value="@null">Пул турини танланг!</option>
+            <option value="@null">Пул турини танланг</option>
             <option value="@true">Нақт пул</option>
             <option value="@false">Нақт емас</option>
         </select>
@@ -110,14 +110,12 @@
         <span class="text-danger" asp-validation-for="Reason"></span>
     </div>
     <div class="row">
-        <div class="col-xs-0 col-md-1">
-        </div>
-        <div class="col-4 mx-2 mx-md-1">
+        <div class="col-6 d-flex justify-content-center">
             <button type="submit" class="btn btn-success my-4 px-5" onclick="submitNumber()">
                 Сақлаш
             </button>
         </div>
-        <div class="col-5 mx-4 d-flex justify-content-end">
+        <div class="col-6 d-flex justify-content-center">
             <a asp-action="GetAllFactoryIn" asp-controller="Factory" asp-route-factoryId="@Model.FactoryId" class="btn btn-primary my-4 px-5">Орқага</a>
         </div>
         <div class="col-1"></div>

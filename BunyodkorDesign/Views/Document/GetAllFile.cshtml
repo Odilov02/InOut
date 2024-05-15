@@ -5,27 +5,25 @@
 @model List<Document>
 <br />
 <div class="row py-2">
-    <div class="col-4">
-        <h2 class="text-center">Барча хужжатлар </h2>
+    <div class="col-12 col-md-4 py-3">
+        <h3 class="text-center">Барча хужжатлар </h3>
     </div>
-    <div class="col-3 py-2">
-        <div class="contianer">
+    <div class="col-4 col-md-3 py-3">
             <div class="form-group">
                 <div class="input-group" value=" ">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
                     <input type="text" id="Search" placeholder="Қидирмоқ..." class="form-control ">
                 </div>
             </div>
-        </div>
     </div>
-    <div class="col-3 py-2">
+    <div class="col-5 col-md-3 py-3">
         <a asp-action="AddFile" asp-controller="Document" class="btn btn-success">Хужжат қўшиш</a>
     </div>
-    <div class="col-2 py-2">
+    <div class="col-3 col-md-2 py-3">
         <a asp-action="GetAllDetails" asp-controller="Construction" class="btn btn-outline-primary">Орқага</a>
     </div>
 </div>
-
+<div class="overflow-auto">
 <table id="dataTable" class="table table-bordered table-success table-striped">
     <thead>
         <tr class="my-5">
@@ -33,7 +31,7 @@
             <th class="text-center" scope="col">Вақти</th>
             <th class="text-center" scope="col">Номи</th>
             <th class="text-center" scope="col">Маьлумот</th>
-            <th class="text-center" scope="col"></th>
+            <th class="text-center" colspan="2"></th>
         </tr>
     </thead>
     <tbody>
@@ -48,6 +46,8 @@
                     <td class="text-center price"><span>@item.Description</span></td>
                     <td class="text-center">
                         <a asp-action="DownloadFile" asp-controller="Document" asp-route-id="@item.Id" class="btn btn-success">Йуклаб олиш</a>
+                    </td>
+                        <td class="text-center">
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@item.Id">
                             Ўчириш
                         </button>
@@ -80,6 +80,7 @@
         }
     </tbody>
 </table>
+</div>
 <script>
 
     $(document).ready(function () {
