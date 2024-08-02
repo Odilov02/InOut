@@ -32,59 +32,59 @@
 <br />
 <div class="overflow-auto">
     <table id="dataTable" class="table table-bordered table-success table-striped">
-    <thead>
-        <tr>
-            <th scope="col"></th>
-            <th class="text-center" scope="col"><span>Номи</span></th>
-            <th class="text-center" scope="col">Вақти</th>
-            <th class="text-center" scope="col">Шартнома сумма</th>
-            <th class="text-center" scope="col"><span>Чиқими</span></th>
-            <th class="text-center" scope="col"><span>Сарф фоизи</span></th>
-            <th class="text-center" scope="col"><span>Кирими</span></th>
-            <th class="text-center" scope="col"><span>Қолдиги</span></th>
-            <th class="text-center" scope="col"><span>Номери</span></th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            int count = 1;
-            foreach (var item in Model)
-            {
-                string percentage = (((double)item.Spend) / ((double)@item.ContractPrice) * 100).ToString("0.0");
-                <tr class="Search">
-                    <th scope="row">@count</th>
-                    <td class="text-center"><span>@item.FullName</span></td>
-                    <td class="text-center">@item.CreatedDate.ToString("dd.MM.yyyy")</td>
-                    <td class="contractPrice text-center"><span id="ContractPrice">@item.ContractPrice</span></td>
-                    <td class="outs text-center"><span id="Spend">@item.Spend</span></td>
-                    <td class="text-center"><h6>@percentage %</h6></td>
-                    <td class="price text-center"><span id="In">@item.In</span></td>
-                    <td class="residual text-center"><span id="formattedNumber">@item.User.Residual</span></td>
-                    <td class="text-center" id="phoneNumber"><p>@item.User.PhoneNumber</p></td>
-                    <td class="text-center">
-                        <a asp-action="UpdateUserForAdmin" asp-controller="User" asp-route-constructionId="@item.Id" class="btn btn-secondary">Ўзгартириш</a>
-                    </td>
-                </tr>
-                count++;
-            }
-            <tr class="total-row">
-                <th scope="row">Жами</th>
-                <td colspan="2"></td>
-                <td class="text-center"><span id="contractPrice"></span></td>
-                <td class="text-center"><span id="totalOuts"></span></td>
-                <td class="text-center"></td>
-                <td class="text-center"><span id="totalPrice"></span></td>
-                <td class="text-center"><span id="totalResidual"></span></td>
-                <td colspan="2"></td>
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th class="text-center" scope="col"><span>Номи</span></th>
+                <th class="text-center" scope="col">Вақти</th>
+                <th class="text-center" scope="col">Шартнома сумма</th>
+                <th class="text-center" scope="col"><span>Чиқими</span></th>
+                <th class="text-center" scope="col"><span>Сарф фоизи</span></th>
+                <th class="text-center" scope="col"><span>Кирими</span></th>
+                <th class="text-center" scope="col"><span>Қолдиги</span></th>
+                <th class="text-center" scope="col"><span>Номери</span></th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @{
+                int count = 1;
+                foreach (var item in Model)
+                {
+                    string percentage = (((double)item.Spend) / ((double)@item.ContractPrice) * 100).ToString("0.0");
+                    <tr class="Search">
+                        <th scope="row">@count</th>
+                        <td class="text-center"><span>@item.FullName</span></td>
+                        <td class="text-center">@item.CreatedDate.ToString("dd.MM.yyyy")</td>
+                        <td class="contractPrice text-center"><span id="ContractPrice">@item.ContractPrice</span></td>
+                        <td class="outs text-center"><span id="Spend">@item.Spend</span></td>
+                        <td class="text-center"><h6>@percentage %</h6></td>
+                        <td class="price text-center"><span id="In">@item.In</span></td>
+                        <td class="residual text-center"><span id="formattedNumber">@item.User.Residual</span></td>
+                        <td class="text-center" id="phoneNumber"><p>@item.User.PhoneNumber</p></td>
+                        <td class="text-center">
+                            <a asp-action="UpdateUserForAdmin" asp-controller="User" asp-route-constructionId="@item.Id" class="btn btn-secondary">Ўзгартириш</a>
+                        </td>
+                    </tr>
+                    count++;
+                }
+                <tr class="total-row">
+                    <th scope="row">Жами</th>
+                    <td colspan="2"></td>
+                    <td class="text-center"><span id="contractPrice"></span></td>
+                    <td class="text-center"><span id="totalOuts"></span></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"><span id="totalPrice"></span></td>
+                    <td class="text-center"><span id="totalResidual"></span></td>
+                    <td colspan="2"></td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
 <script>
-   
+
     formatTableNumbers();
 
 
@@ -194,22 +194,42 @@
                 if (!isNaN(number)) {
                     cell.textContent = formatNumber(number);
                 }
-            });
-            var cellsNumber = row.querySelectorAll('td p');
-            cellsNumber.forEach(function (cell) {
-                var number = cell.textContent.trim();
-                cell.textContent = formatPhoneNumber(number);
-            });
+            }); 
         });
     }
+    function formatPhoneNumbersInTable(tableId) {
+        const table = document.getElementById(tableId);
+        const cells = table.getElementsByTagName('td');
 
-    // Sonlarni formatlab beradigan funksiya
+        for (let i = 0; i < cells.length; i++) {
+            const pTags = cells[i].getElementsByTagName('p');
+            for (let j = 0; j < pTags.length; j++) {
+                let phoneNumber = pTags[j].innerText;
+                let formattedNumber = phoneNumber.replace(/(\+998)(\d{2})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5');
+                pTags[j].innerText = formattedNumber;
+            }
+        }
+    }
+
+    // Example usage:
+    formatPhoneNumbersInTable('dataTable');
+
+    function noFormatPhoneNumber(phoneNumber) {
+
+        return phoneNumber.replace(/\s/g, '');
+    }
+
     function formatNumber(number) {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
     function formatPhoneNumber(phoneNumber) {
+
         return phoneNumber.replace(/(\+998)(\d{2})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5');
 
     }
-    
+
+
+
+
+
 </script>
