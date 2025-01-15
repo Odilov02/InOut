@@ -75,7 +75,7 @@
                         <tr class="Search">
                             <th scope="row">@count</th>
                             <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
-                            <td class="price text-center"><span>@item.Price</span></td>
+                            <td class="text-center price"><span>@item.Price</span></td>
                             <td class="text-center">@item.SpendType!.Name</td>
                             <td class="text-center">@item.Reason</td>
                             <td class="text-center">
@@ -122,8 +122,8 @@
     </form>
 <script>
     formatTableNumbers();
+
     $(document).ready(function () {
-        </div>
         function contains(text_one, text_two) {
             return text_one.indexOf(text_two) != -1;
         }
@@ -139,7 +139,6 @@
             $("#hiddenRowsContainer").append(hiddenRows);
 
 
-
             $(".Search").each(function () {
                 if (!contains($(this).text().toLowerCase(), searchtext)) {
                     $(this).hide();
@@ -147,9 +146,10 @@
                     $(this).show();
                 }
             });
-            formatTableNumbers();
+         //   formatTableNumbers();
         });
     });
+
     function exportToExcel() {
         const table = document.getElementById('dataTable');
         const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
@@ -178,12 +178,14 @@
             document.body.removeChild(a);
         }
     }
-    const myInterval = setInterval(myTimer);
+
+   const myInterval = setInterval(myTimer);
 
     function myTimer() {
         const date = new Date();
         document.getElementById("demo").innerHTML = date.toLocaleTimeString();
     }
+
     function formatTableNumbers() {
 
         var totalAmount = 0;
@@ -221,5 +223,5 @@
         var element = document.getElementById("HtmlTeg");
         element.parentNode.removeChild(element);
     }
-    setTimeout(removeTeg, 3000);
+     setTimeout(removeTeg, 3000);
 </script>

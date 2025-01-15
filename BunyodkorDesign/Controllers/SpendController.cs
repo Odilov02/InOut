@@ -331,7 +331,7 @@ public class SpendController : Controller
 
 
         ViewData["constructionId"] = constructionId;
-        var spends = await _appDbContext.Spends.Where(x => x.ConstructionId == constructionId && x.IsConfirmed == false).ToListAsync();
+        var spends = await _appDbContext.Spends.Where(x => x.ConstructionId == constructionId && x.IsConfirmed == false).OrderByDescending(x=> x.Date).ToListAsync();
         return View(spends);
     }
 

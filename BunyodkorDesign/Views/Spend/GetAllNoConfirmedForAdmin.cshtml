@@ -44,7 +44,7 @@
                     <th scope="row">@count</th>
                     <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
                     <td class="text-center price"><span>@item.Price</span></td>
-                    <td class="text-center">@item.SpendType.Name</td>
+                    <td class="text-center">@item.SpendType!.Name</td>
                     <td colspan="2" class ="text-center">@item.Reason</td>
                 </tr>
                 count++;
