@@ -44,7 +44,8 @@
                     <td class="text-center">@item.Date.ToString("HH:mm dd.MM.yyyy")</td>
                     <td class="text-center price"><span>@item.Price</span></td>
                     <td class="text-center" colspan="2">@item.Reason</td>
-                    <td class="text-center"><a asp-controller="In" asp-action="UpdateIn" asp-route-id="@item.Id" class="btn btn-primary">Ўзгартириш</a>
+                    <td class="text-center">
+                    <a asp-controller="In" asp-action="UpdateIn" asp-route-id="@item.Id" class="btn btn-primary">Ўзгартириш</a>
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@item.Id">
                             Ўчириш
                         </button>

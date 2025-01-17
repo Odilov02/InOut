@@ -55,7 +55,7 @@ public class SpendController : Controller
         await _appDbContext.Spends.AddAsync(spend);
         var result = await _appDbContext.SaveChangesAsync();
         ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
- 
+
         ViewData["result"] = result;
         return View();
     }
@@ -283,14 +283,13 @@ public class SpendController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllConfirmedForAdmin(Guid constructionId)
     {
-
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
-
+        ViewData["result"] = HttpContext.Session.GetInt32("result");
+        HttpContext.Session.Remove("result");
         ViewData["constructionId"] = constructionId;
         var construction = await _appDbContext.Constructions.FirstOrDefaultAsync(x => x.Id == constructionId);
         List<AllSpend> allSpends = new List<AllSpend>();
-        var ss = _appDbContext.Spends.ToList();
         List<Spend> spends = await _appDbContext.Spends.Where(x => x.ConstructionId == construction!.Id && x.IsConfirmed == true).ToListAsync();
         if (spends is null)
         {
@@ -300,6 +299,7 @@ public class SpendController : Controller
         {
             AllSpend allSpend = new AllSpend()
             {
+                Id = item.Id,
                 Date = item.Date,
                 Price = item.Price,
                 Reason = item.Reason,
@@ -331,7 +331,7 @@ public class SpendController : Controller
 
 
         ViewData["constructionId"] = constructionId;
-        var spends = await _appDbContext.Spends.Where(x => x.ConstructionId == constructionId && x.IsConfirmed == false).OrderByDescending(x=> x.Date).ToListAsync();
+        var spends = await _appDbContext.Spends.Where(x => x.ConstructionId == constructionId && x.IsConfirmed == false).OrderByDescending(x => x.Date).ToListAsync();
         return View(spends);
     }
 
@@ -377,7 +377,7 @@ public class SpendController : Controller
             resultSpend.Add(inSpend);
         }
 
-        List<In> insFactory = _appDbContext.Ins.Where(x => x.ConstructionId == null&&x.IsCash&&x.Factory!=null).ToList();
+        List<In> insFactory = _appDbContext.Ins.Where(x => x.ConstructionId == null && x.IsCash && x.Factory != null).ToList();
 
         foreach (var item in insFactory)
         {
@@ -559,5 +559,81 @@ public class SpendController : Controller
         ViewData["result"] = 0;
         ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
         return View(adminSpend);
+    }
+
+
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> UpdateSpendForAdmin(Guid id)
+    {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        var spend = await _appDbContext.Spends.FirstOrDefaultAsync(x => x.Id == id);
+        if (spend!.UserId == spend.Construction!.UserId)
+        {
+            HttpContext.Session.SetInt32("result", -2);
+            return RedirectToAction(actionName: "GetAllConfirmedForAdmin", new { constructionId = spend.ConstructionId });
+        }
+        else if (spend.FactoryId is not null)
+        {
+            HttpContext.Session.SetInt32("result", -2);
+            return RedirectToAction(actionName: "GetAllConfirmedForAdmin", new { constructionId = spend.ConstructionId });
+
+        }
+            HttpContext.Session.SetInt32("result", 2);
+            return RedirectToAction(actionName: "GetAllConfirmedForAdmin", new { constructionId = spend.ConstructionId });
+    }
+
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteSpendForAdmin(Guid id)
+    {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        var spend = await _appDbContext.Spends.FirstOrDefaultAsync(x => x.Id == id);
+        var construction = spend!.Construction;
+        var user = spend.User;
+        if (spend!.UserId == construction!.UserId)
+        {
+
+            HttpContext.Session.SetInt32("result", -1);
+            return RedirectToAction(actionName: "GetAllConfirmedForAdmin", new { constructionId = spend.ConstructionId });
+        }
+        else if (spend.FactoryId is not null)
+        {
+                HttpContext.Session.SetInt32("result", -1);
+            return RedirectToAction(actionName: "GetAllConfirmedForAdmin", new { constructionId = spend.ConstructionId });
+        }
+        using (var transaction = _appDbContext.Database.BeginTransaction())
+        {
+            try
+            {
+                construction.Spend -= spend.Price;
+                _appDbContext.Constructions.Update(construction);
+                var result = await _appDbContext.SaveChangesAsync();
+                if (result <= 0)
+                    throw new();
+                if (spend.IsCash)
+                {
+                    user!.Residual += spend.Price;
+                    _appDbContext.Users.Update(user);
+                    result = await _appDbContext.SaveChangesAsync();
+                    if (result <= 0)
+                        throw new();
+                }
+
+                _appDbContext.Spends.Remove(spend);
+                result = await _appDbContext.SaveChangesAsync();
+                if (result <= 0)
+                    throw new();
+
+                transaction.Commit();
+                HttpContext.Session.SetInt32("result", 1);
+                return RedirectToAction(actionName: "GetAllConfirmedForAdmin", new { constructionId = spend.ConstructionId });
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+            }
+        }
+        return RedirectToAction(actionName: "GetAllConfirmedForAdmin", new { constructionId = spend.ConstructionId });
     }
 }

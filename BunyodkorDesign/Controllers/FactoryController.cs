@@ -196,7 +196,7 @@ public class FactoryController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
-        ViewData["Constructions"] = _appDbContext.Constructions.ToList();
+        ViewData["Constructions"] = _appDbContext.Constructions.OrderByDescending(x=>x.CreatedDate).ToList();
         ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
         var spendDto = new AddFactorySpendDto()
         {
@@ -214,7 +214,7 @@ public class FactoryController : Controller
         ViewData["SpendTypes"] = _appDbContext.SpendTypes.ToList();
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
-        ViewData["Constructions"] = _appDbContext.Constructions.ToList();
+        ViewData["Constructions"] = _appDbContext.Constructions.OrderByDescending(x => x.CreatedDate).ToList();
         if (!ModelState.IsValid)
             return View(spendDto);
         var spend = _mapper.Map<Spend>(spendDto);
