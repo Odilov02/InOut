@@ -631,6 +631,7 @@ public class SpendController : Controller
             }
             catch (Exception)
             {
+                HttpContext.Session.SetInt32("result", -1);
                 transaction.Rollback();
             }
         }

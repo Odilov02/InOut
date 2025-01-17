@@ -84,7 +84,8 @@ public class FactoryController : Controller
     {
         ViewData["FullName"] = HttpContext.Session.GetString("FullName");
         ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
-
+        ViewData["result"] = HttpContext.Session.GetInt32("result");
+        HttpContext.Session.Remove("result");
         var spends = _appDbContext.Spends.Where(x => x.FactoryId == factoryId).OrderByDescending(x=>x.Date).ToList();
         ViewData["factoryId"] = factoryId;
         return View(spends);
@@ -258,4 +259,57 @@ public class FactoryController : Controller
         return View(spendDto);
     }
 
+
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> UpdateFactorySpend(Guid id)
+    {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        var spend = await _appDbContext.Spends.FirstOrDefaultAsync(x => x.Id == id);
+        var factory = spend.Factory;
+        HttpContext.Session.SetInt32("result", 2);
+        return RedirectToAction(actionName: "GetAllFactorySpend", new { factoryId = factory!.Id });
+    }
+
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteFactorySpend(Guid id)
+    {
+        ViewData["FullName"] = HttpContext.Session.GetString("FullName");
+        ViewData["PhoneNumber"] = HttpContext.Session.GetString("PhoneNumber");
+        var spend = await _appDbContext.Spends.FirstOrDefaultAsync(x => x.Id == id);
+        var construction = spend!.Construction;
+        var factory = spend.Factory;
+        using (var transaction = _appDbContext.Database.BeginTransaction())
+        {
+            try
+            {
+                construction!.Spend -= spend.Price;
+                _appDbContext.Constructions.Update(construction);
+                var result = await _appDbContext.SaveChangesAsync();
+                if (result <= 0)
+                    throw new();
+
+                factory!.Spend-= spend.Price;
+                _appDbContext.Factories.Update(factory);
+                 result = await _appDbContext.SaveChangesAsync();
+                if (result <= 0)
+                    throw new();
+
+                _appDbContext.Spends.Remove(spend);
+                result = await _appDbContext.SaveChangesAsync();
+                if (result <= 0)
+                    throw new();
+
+                transaction.Commit();
+                HttpContext.Session.SetInt32("result", 1);
+        return RedirectToAction(actionName: "GetAllFactorySpend", new { factoryId = factory!.Id });
+            }
+            catch (Exception)
+            {
+                HttpContext.Session.SetInt32("result", -1);
+                transaction.Rollback();
+            }
+        }
+        return RedirectToAction(actionName: "GetAllFactorySpend", new { factoryId = factory!.Id });
+    }
 }
